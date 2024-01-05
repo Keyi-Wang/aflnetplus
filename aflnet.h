@@ -32,6 +32,12 @@ typedef struct {
   u32 seeds_count;            /* total number of seeds, it must be equal the size of the seeds array */
 } state_info_t;
 
+typedef struct {
+  message_t **messages; // 指向 message_t 指针的指针
+  int count;            // 当前存储的消息数量
+  int capacity;         // 池的容量
+} message_unit_pool_t;
+
 enum {
   /* 00 */ PRO_TCP,
   /* 01 */ PRO_UDP

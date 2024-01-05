@@ -240,6 +240,8 @@ static s32 cpu_aff = -1;       	      /* Selected CPU core                */
 
 static FILE* plot_file;               /* Gnuplot output file              */
 
+message_unit_pool_t message_unit_pool; /* Message Unit Pool */
+
 struct queue_entry {
 
   u8* fname;                          /* File name for the test case      */
@@ -389,6 +391,7 @@ u8 protocol_selected = 0;
 u8 terminate_child = 0;
 u8 corpus_read_or_sync = 0;
 u8 state_aware_mode = 0;
+u8 syntax_aware_mode = 0; /* aflplus adds here. flag for syntax-aware-mode */
 u8 region_level_mutation = 0;
 u8 state_selection_algo = ROUND_ROBIN, seed_selection_algo = RANDOM_SELECTION;
 u8 false_negative_reduction = 0;
@@ -437,6 +440,50 @@ void destroy_ipsm()
   kh_destroy(hms, khms_states);
 
   ck_free(state_ids);
+}
+
+/* aflnetplus : manage message unit pool */
+void init_message_pool(message_unit_pool_t *pool, int capacity) {
+  pool->messages = malloc(capacity * sizeof(message_t*));
+  if(pool->messages==NULL) FATAL("malloc for message_pool failed!");
+  pool->count = 0;
+  pool->capacity = capacity;
+}
+
+void add_message_to_pool(message_unit_pool_t *pool, message_t *message) {
+  if(pool->messages==NULL) FATAL("pool->message==NULL!");
+  if(message==NULL) FATAL("message==NULL!");
+  if (pool->count >= pool->capacity) {
+    // 扩展池容量
+    pool->capacity *= 2;
+    pool->messages = realloc(pool->messages, pool->capacity * sizeof(message_t*));
+  }
+  pool->messages[pool->count++] = message;
+}
+
+message_t *get_message_from_pool(message_unit_pool_t *pool, int index) {
+  if (index >= 0 && index < pool->count) {
+    return pool->messages[index];
+  }
+  return NULL; // 索引无效
+}
+
+void remove_message_from_pool(message_unit_pool_t *pool, int index) {
+  if (index < 0 || index >= pool->count) return;
+
+  free(pool->messages[index]); // 释放消息内存
+
+  for (int i = index; i < pool->count - 1; i++) {
+    pool->messages[i] = pool->messages[i + 1];
+  }
+  pool->count--;
+}
+
+void free_message_pool(message_unit_pool_t *pool) {
+  for (int i = 0; i < pool->count; i++) {
+    free(pool->messages[i]);
+  }
+  free(pool->messages);
 }
 
 /* Get state index in the state IDs list, given a state ID */
@@ -2257,6 +2304,55 @@ static void setup_post(void) {
 
 }
 
+/* aflnetplus: init message unit pool from files */
+void load_message_unit_pool(message_unit_pool_t *pool, u8* fname, u32 len, char* terminator) {
+  FILE *file;
+  char *buffer;
+  u32 buffer_size = len;  // 将缓冲区大小设置为文件大小
+  u32 term_len = strlen(terminator);
+  file = fopen(fname, "rb");
+  if (file == NULL) {
+    perror("Unable to open file");
+    return;
+  }
+  // 动态分配缓冲区
+  buffer = (char*)malloc(buffer_size);
+
+  if (buffer == NULL) {
+    perror("Unable to allocate buffer");
+    fclose(file);
+    return;
+  }
+  size_t total_read = fread(buffer, 1, buffer_size, file);
+  if (total_read != buffer_size) {
+    perror("Could not read the entire file");
+    free(buffer);
+    fclose(file);
+    return;
+  }
+
+  fclose(file);
+  // ACTF("read file success..., buffer is :'%s", buffer);
+  char *msg_start = buffer;
+  char *terminator_pos;
+
+  while ((terminator_pos = (char*)memmem(msg_start, total_read - (msg_start - buffer), terminator, term_len)) != NULL) {
+    int msg_length = terminator_pos - msg_start;
+    message_t *message = malloc(sizeof(message_t));
+    message->mdata = malloc(msg_length + 1);
+    memcpy(message->mdata, msg_start, msg_length);
+    message->mdata[msg_length] = '\0';
+    message->msize = msg_length;
+    // ACTF("memcpy success..., mdata:'%s",message->mdata);
+    add_message_to_pool(&message_unit_pool, message);
+    total_read -= (terminator_pos - buffer) + term_len;
+    memmove(buffer, terminator_pos + term_len, total_read);
+    msg_start = buffer;
+  }
+
+  free(buffer); // 释放动态分配的缓冲区
+}
+
 
 /* Read all testcases from the input directory, then queue them for testing.
    Called at startup. */
@@ -2343,6 +2439,13 @@ static void read_testcases(void) {
 
     add_to_queue(fn, st.st_size, passed_det);
 
+    /* aflnetplus: init message_unit_pool*/
+
+    //TODO: Determine terminator for each protocol. Likely use map. Only implement RTSP terminator now.
+    char terminator[4] = {0x0D, 0x0A, 0x0D, 0x0A};
+
+    load_message_unit_pool(&message_unit_pool,fn,st.st_size,terminator);
+
   }
 
   /* AFLNet: unset this flag to disable request extractions while adding new seed to the queue */
@@ -2365,6 +2468,26 @@ static void read_testcases(void) {
   last_path_time = 0;
   queued_at_start = queued_paths;
 
+}
+
+
+/*aflnetplus: for debug message_unit_pool*/
+void debug_print_message_pool_to_file(const message_unit_pool_t *pool, const char* filename) {
+  FILE *file = fopen(filename, "w");
+  if (file == NULL) {
+    perror("Unable to open file for writing");
+    return;
+  }
+
+  fprintf(file, "Message Unit Pool contains %d messages:\n", pool->count);
+  for (int i = 0; i < pool->count; i++) {
+    message_t *msg = pool->messages[i];
+    fprintf(file, "Message %d: Size = %d, Data = '", i, msg->msize);
+    fwrite(msg->mdata, 1, msg->msize, file);
+    fprintf(file, "'\n");
+  }
+
+  fclose(file);
 }
 
 
@@ -5949,8 +6072,34 @@ AFLNET_REGIONS_SELECTION:;
     if (M2_region_count == 0) M2_region_count++; //Mutate one region at least
   }
 
+
+
   /* Construct the kl_messages linked list and identify boundary pointers (M2_prev and M2_next) */
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
+
+
+/* syntax_aware_mode */
+  if(syntax_aware_mode){
+    //TODO: implement syntax_aware_mode.
+    /*****************************************************************************************
+     * we have 2 mutation levels, one is sequence level and the other is unit level.
+     * sequence level: add some message units from MUP(Message Unit Pool) in random indice or cut some of the message units.
+     * unit level: 1.parse message unit. 2.mutate message fields based type in a certain unit.
+    *****************************************************************************************/
+    /* random sequence/unit level mutate */
+    int add_mess = rand()%2;
+    if(add_mess){
+      /*add message unit from MUP*/
+      /*please implement code here.*/
+    }else{
+      /*delete message unit*/
+      /*please implement code here.*/
+    }
+  }
+  else{
+    //TODO: remain previous code.
+  }
+
 
   kliter_t(lms) *it;
 
@@ -8093,6 +8242,9 @@ static void usage(u8* argv0) {
        "  -n            - fuzz without instrumentation (dumb mode)\n"
        "  -x dir        - optional fuzzer dictionary (see README)\n\n"
 
+       "Setting for AFLNet+:\n\n"
+       "  -Y            - enable syntax aware mode\n"
+
        "Settings for network protocol fuzzing (AFLNet):\n\n"
 
        "  -N netinfo    - server information (e.g., tcp://127.0.0.1/8554)\n"
@@ -8832,7 +8984,7 @@ int main(int argc, char** argv) {
   gettimeofday(&tv, &tz);
   srandom(tv.tv_sec ^ tv.tv_usec ^ getpid());
 
-  while ((opt = getopt(argc, argv, "+i:o:f:m:t:T:dnCB:S:M:x:QN:D:W:w:e:P:KEq:s:RFc:l:")) > 0)
+  while ((opt = getopt(argc, argv, "+i:o:f:m:t:T:dnCB:S:M:x:QN:D:W:w:e:P:KEq:s:RFc:l:Y")) > 0)
 
     switch (opt) {
 
@@ -9136,6 +9288,11 @@ int main(int argc, char** argv) {
 	      if (local_port < 1024 || local_port > 65535) FATAL("Invalid source port number");
         break;
 
+      case 'Y': /* aflplus adds here. syntax-aware mode */
+        if(syntax_aware_mode) FATAL("Multiple -Y options not supported");
+        syntax_aware_mode = 1;
+        break;
+
       default:
 
         usage(argv[0]);
@@ -9215,7 +9372,9 @@ int main(int argc, char** argv) {
   setup_ipsm();
 
   setup_dirs_fds();
+  init_message_pool(&message_unit_pool, 50);
   read_testcases();
+  debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
   load_auto();
 
   pivot_inputs();
