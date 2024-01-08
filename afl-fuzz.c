@@ -44,6 +44,7 @@
 #include "hash.h"
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -415,6 +416,7 @@ kliter_t(lms) *M2_prev, *M2_next;
 unsigned int* (*extract_response_codes)(unsigned char* buf, unsigned int buf_size, unsigned int* state_count_ref) = NULL;
 region_t* (*extract_requests)(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref) = NULL;
 
+char *terminator;
 /* Initialize the implemented state machine as a graphviz graph */
 void setup_ipsm()
 {
@@ -481,9 +483,20 @@ void remove_message_from_pool(message_unit_pool_t *pool, int index) {
 
 void free_message_pool(message_unit_pool_t *pool) {
   for (int i = 0; i < pool->count; i++) {
+    free(pool->messages[i]->mdata);
     free(pool->messages[i]);
   }
   free(pool->messages);
+}
+
+/*aflnetplus: help func*/
+bool isNumberInArray(int i, int *selectedNumbers, int del_cnt) {
+    for (int j = 0; j < del_cnt; j++) {
+        if (selectedNumbers[j] == i) {
+            return true; // 找到了 i，返回 true
+        }
+    }
+    return false; // 未找到 i，返回 false
 }
 
 /* Get state index in the state IDs list, given a state ID */
@@ -2441,8 +2454,7 @@ static void read_testcases(void) {
 
     /* aflnetplus: init message_unit_pool*/
 
-    //TODO: Determine terminator for each protocol. Likely use map. Only implement RTSP terminator now.
-    char terminator[4] = {0x0D, 0x0A, 0x0D, 0x0A};
+    //TODO: Determine terminator for each protocol. dtls12\DICOM\DNS not implement yet.
 
     load_message_unit_pool(&message_unit_pool,fn,st.st_size,terminator);
 
@@ -5537,7 +5549,6 @@ EXP_ST u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
   // update kl_messages linked list
   u32 i;
   kliter_t(lms) *prev_last_message, *cur_last_message;
-  prev_last_message = get_last_message(kl_messages);
 
   // limit the #messages based on max_seed_region_count to reduce overhead
   for (i = 0; i < region_count; i++) {
@@ -5569,7 +5580,6 @@ EXP_ST u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
     if (i == max_seed_region_count) break;
   }
   ck_free(regions);
-
   cur_last_message = get_last_message(kl_messages);
 
   // update the linked list with the new M2 & free the previous M2
@@ -5587,7 +5597,6 @@ EXP_ST u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
     kl_next(cur_last_message) = M2_next;
     kl_next(prev_last_message) = kl_end(kl_messages);
   }
-
   // free the previous M2
   kliter_t(lms) *cur_it, *next_it;
   cur_it = old_M2_start;
@@ -6077,7 +6086,7 @@ AFLNET_REGIONS_SELECTION:;
   /* Construct the kl_messages linked list and identify boundary pointers (M2_prev and M2_next) */
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
-
+  u32 in_buf_size = 0;
 /* syntax_aware_mode */
   if(syntax_aware_mode){
     //TODO: implement syntax_aware_mode.
@@ -6088,58 +6097,193 @@ AFLNET_REGIONS_SELECTION:;
     *****************************************************************************************/
     /* random sequence/unit level mutate */
     int add_mess = rand()%2;
+    u32 cnt = 0;
+    kliter_t(lms) *it;
+    M2_prev = NULL;
+    M2_next = kl_end(kl_messages);
+    for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+      if (cnt == M2_start_region_ID - 1) {
+        M2_prev = it;
+      }
+
+      if (cnt == M2_start_region_ID + M2_region_count) {
+        M2_next = it;
+      }
+      cnt++;
+    }
     if(add_mess){
       /*add message unit from MUP*/
-      /*please implement code here.*/
+      /*add 1 ... region_count-1 messages*/
+
+      int add_cnt = rand()%(queue_cur->region_count);
+      if(add_cnt==0) add_cnt = 1;
+      message_t *new_messages[add_cnt];
+      for(int i=0; i<add_cnt; i++){
+        message_t *new_message = get_message_from_pool(&message_unit_pool,rand()%(message_unit_pool.count));
+        new_messages[i] = new_message;
+      }
+      int *selectedNumbers = (int *)malloc(add_cnt * sizeof(int));
+      int *allNumbers = (int *)malloc((queue_cur->region_count) * sizeof(int));
+      for (int i = 0; i < queue_cur->region_count; i++) {
+        allNumbers[i] = i;
+      }
+      // 选择随机数字
+      for (int i = 0; i < add_cnt; i++) {
+        // 生成随机索引，从allNumbers中选择数字
+        int randomIndex = rand() % (queue_cur->region_count - i);
+        selectedNumbers[i] = allNumbers[randomIndex];
+
+        // 从allNumbers中删除已选择的数字
+        allNumbers[randomIndex] = allNumbers[queue_cur->region_count - i - 1];
+      }
+
+      free(allNumbers); // 释放临时数组
+
+
+      it = kl_begin(kl_messages);
+      u32 count = 0;
+      u32 new_ml_cnt = 0;
+      while (it != kl_end(kl_messages)) {
+        if(isNumberInArray(count,selectedNumbers,add_cnt)){
+          //new message from MUP
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + new_messages[new_ml_cnt]->msize);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], new_messages[new_ml_cnt]->mdata, new_messages[new_ml_cnt]->msize);
+          in_buf_size += new_messages[new_ml_cnt]->msize;
+          new_ml_cnt++;
+
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+          in_buf_size += kl_val(it)->msize;
+          it = kl_next(it);//skip delete indice
+        }
+        else{
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+          in_buf_size += kl_val(it)->msize;
+          it = kl_next(it);
+        }
+        count++;
+      }
+      free(selectedNumbers);
+
     }else{
       /*delete message unit*/
-      /*please implement code here.*/
+      /**************************************
+       * Step1. random count to delete
+       * Step2. random index to delete
+       * Step3. delete kl_message(not put them in in_buf)
+      **************************************/
+      /*delete 1 ... region_count-1 messages*/
+
+      int del_cnt = rand()%(queue_cur->region_count);
+      if(del_cnt==0) del_cnt = 1;
+      int *selectedNumbers = (int *)malloc(del_cnt * sizeof(int));
+      int *allNumbers = (int *)malloc((queue_cur->region_count) * sizeof(int));
+      for (int i = 0; i < queue_cur->region_count; i++) {
+        allNumbers[i] = i;
+      }
+      // 选择随机数字
+      for (int i = 0; i < del_cnt; i++) {
+        // 生成随机索引，从allNumbers中选择数字
+        int randomIndex = rand() % (queue_cur->region_count - i);
+        selectedNumbers[i] = allNumbers[randomIndex];
+
+        // 从allNumbers中删除已选择的数字
+        allNumbers[randomIndex] = allNumbers[queue_cur->region_count - i - 1];
+      }
+
+      free(allNumbers); // 释放临时数组
+
+
+      it = kl_begin(kl_messages);
+      u32 count = 0;
+      while (it != kl_end(kl_messages)) {
+        if(isNumberInArray(count,selectedNumbers,del_cnt)){
+          it = kl_next(it);//skip delete indice
+        }
+        else{
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+
+          in_buf_size += kl_val(it)->msize;
+          it = kl_next(it);
+        }
+        count++;
+      }
+      free(selectedNumbers);
+
     }
   }
   else{
     //TODO: remain previous code.
-  }
+    kliter_t(lms) *it;
 
+    M2_prev = NULL;
+    M2_next = kl_end(kl_messages);
 
-  kliter_t(lms) *it;
+    u32 count = 0;
+    for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+      if (count == M2_start_region_ID - 1) {
+        M2_prev = it;
+      }
 
-  M2_prev = NULL;
-  M2_next = kl_end(kl_messages);
-
-  u32 count = 0;
-  for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
-    if (count == M2_start_region_ID - 1) {
-      M2_prev = it;
+      if (count == M2_start_region_ID + M2_region_count) {
+        M2_next = it;
+      }
+      count++;
     }
 
-    if (count == M2_start_region_ID + M2_region_count) {
-      M2_next = it;
+    /* Construct the buffer to be mutated and update out_buf */
+    if (M2_prev == NULL) {
+      it = kl_begin(kl_messages);
+    } else {
+      it = kl_next(M2_prev);
     }
-    count++;
+
+    while (it != M2_next) {
+      in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+      if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+      //Retrieve data from kl_messages to populate the in_buf
+      memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+
+      in_buf_size += kl_val(it)->msize;
+      it = kl_next(it);
+    }
+
   }
 
-  /* Construct the buffer to be mutated and update out_buf */
-  if (M2_prev == NULL) {
-    it = kl_begin(kl_messages);
-  } else {
-    it = kl_next(M2_prev);
+  FILE *file = fopen("/home/keyi/aflnetplus/buffer.log", "wb");
+    
+  if (file == NULL) {
+    perror("无法打开文件");
+    return 1;
   }
-
-  u32 in_buf_size = 0;
-  while (it != M2_next) {
-    in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-    if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-    //Retrieve data from kl_messages to populate the in_buf
-    memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-
-    in_buf_size += kl_val(it)->msize;
-    it = kl_next(it);
+    
+  // 写入 in_buf 的内容到文件
+  size_t bytes_written = fwrite(in_buf, 1, in_buf_size, file);
+    
+  if (bytes_written != in_buf_size) {
+    perror("写入文件时出错");
+    fclose(file);
+    return 1;
   }
+    
+  // 关闭文件
+  fclose(file);
 
   orig_in = in_buf;
 
   out_buf = ck_alloc_nozero(in_buf_size);
   memcpy(out_buf, in_buf, in_buf_size);
+
 
   //Update len to keep the correct size of the buffer being mutated
   len = in_buf_size;
@@ -9192,9 +9336,17 @@ int main(int argc, char** argv) {
         if (!strcmp(optarg, "RTSP")) {
           extract_requests = &extract_requests_rtsp;
           extract_response_codes = &extract_response_codes_rtsp;
+          terminator = malloc(4 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
+          terminator[2] = 0x0D;
+          terminator[3] = 0x0A;
         } else if (!strcmp(optarg, "FTP")) {
           extract_requests = &extract_requests_ftp;
           extract_response_codes = &extract_response_codes_ftp;
+          terminator = malloc(2 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
         } else if (!strcmp(optarg, "DTLS12")) {
           extract_requests = &extract_requests_dtls12;
           extract_response_codes = &extract_response_codes_dtls12;
@@ -9204,39 +9356,74 @@ int main(int argc, char** argv) {
         } else if (!strcmp(optarg, "DICOM")) {
           extract_requests = &extract_requests_dicom;
           extract_response_codes = &extract_response_codes_dicom;
+
         } else if (!strcmp(optarg, "SMTP")) {
           extract_requests = &extract_requests_smtp;
           extract_response_codes = &extract_response_codes_smtp;
+          terminator = malloc(2 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
         } else if (!strcmp(optarg, "SSH")) {
           extract_requests = &extract_requests_ssh;
           extract_response_codes = &extract_response_codes_ssh;
+          terminator = malloc(4 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
         } else if (!strcmp(optarg, "TLS")) {
           extract_requests = &extract_requests_tls;
           extract_response_codes = &extract_response_codes_tls;
+          terminator = malloc(4 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
         } else if (!strcmp(optarg, "SIP")) {
           extract_requests = &extract_requests_sip;
           extract_response_codes = &extract_response_codes_sip;
+          terminator = malloc(2 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
         } else if (!strcmp(optarg, "HTTP")) {
           extract_requests = &extract_requests_http;
           extract_response_codes = &extract_response_codes_http;
+          terminator = malloc(4 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
+          terminator[2] = 0x0D;
+          terminator[3] = 0x0A;
         } else if (!strcmp(optarg, "IPP")) {
           extract_requests = &extract_requests_ipp;
           extract_response_codes = &extract_response_codes_ipp;
+          terminator = malloc(4 * sizeof(char));
+          terminator[0] = 0x0D;
+          terminator[1] = 0x0A;
+          terminator[2] = 0x0D;
+          terminator[3] = 0x0A;
         } else if (!strcmp(optarg, "TFTP")) {
           extract_requests = &extract_requests_tftp;
           extract_response_codes = &extract_response_codes_tftp;
+          terminator = malloc(2 * sizeof(char));
+          terminator[0] = 0x00;
+          terminator[1] = 0x00;
         }else if (!strcmp(optarg, "DHCP")) {
           extract_requests = &extract_requests_dhcp;
           extract_response_codes = &extract_response_codes_dhcp;
+          terminator = malloc(2 * sizeof(char));
+          terminator[0] = 0xff;
+          terminator[1] = 0xff;
         }else if (!strcmp(optarg, "SNTP")) {
           extract_requests = &extract_requests_SNTP;
           extract_response_codes = &extract_response_codes_SNTP;
+          terminator = malloc(1 * sizeof(char));
+          terminator[0] = 0x0;
         }else if (!strcmp(optarg, "NTP")) {
           extract_requests = &extract_requests_NTP;
           extract_response_codes = &extract_response_codes_NTP;
+          terminator = malloc(1 * sizeof(char));
+          terminator[0] = 0x0;
         }else if (!strcmp(optarg, "SNMP")) {
           extract_requests = &extract_requests_SNMP;
           extract_response_codes = &extract_response_codes_SNMP;
+          terminator = malloc(1 * sizeof(char));
+          terminator[0] = 0x0;
         } else {
           FATAL("%s protocol is not supported yet!", optarg);
         }
@@ -9571,6 +9758,7 @@ stop_fuzzing:
   }
 
   fclose(plot_file);
+  free_message_pool(&message_unit_pool);
   destroy_queue();
   destroy_extras();
   ck_free(target_path);
