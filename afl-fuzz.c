@@ -2350,11 +2350,11 @@ void load_message_unit_pool(message_unit_pool_t *pool, u8* fname, u32 len, char*
   char *terminator_pos;
 
   while ((terminator_pos = (char*)memmem(msg_start, total_read - (msg_start - buffer), terminator, term_len)) != NULL) {
-    int msg_length = terminator_pos - msg_start;
+    int msg_length = terminator_pos - msg_start + term_len;
     message_t *message = malloc(sizeof(message_t));
-    message->mdata = malloc(msg_length + 1);
+    message->mdata = malloc(msg_length+1);
+    message->mdata[msg_length]='\0';
     memcpy(message->mdata, msg_start, msg_length);
-    message->mdata[msg_length] = '\0';
     message->msize = msg_length;
     // ACTF("memcpy success..., mdata:'%s",message->mdata);
     add_message_to_pool(&message_unit_pool, message);
@@ -5549,6 +5549,7 @@ EXP_ST u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
   // update kl_messages linked list
   u32 i;
   kliter_t(lms) *prev_last_message, *cur_last_message;
+  prev_last_message = get_last_message(kl_messages);
 
   // limit the #messages based on max_seed_region_count to reduce overhead
   for (i = 0; i < region_count; i++) {
@@ -5581,7 +5582,6 @@ EXP_ST u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
   }
   ck_free(regions);
   cur_last_message = get_last_message(kl_messages);
-
   // update the linked list with the new M2 & free the previous M2
 
   //detach the head of previous M2 from the list
@@ -6087,6 +6087,7 @@ AFLNET_REGIONS_SELECTION:;
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
   u32 in_buf_size = 0;
+  int add_mess = rand()%2;
 /* syntax_aware_mode */
   if(syntax_aware_mode){
     //TODO: implement syntax_aware_mode.
@@ -6096,11 +6097,14 @@ AFLNET_REGIONS_SELECTION:;
      * unit level: 1.parse message unit. 2.mutate message fields based type in a certain unit.
     *****************************************************************************************/
     /* random sequence/unit level mutate */
-    int add_mess = rand()%2;
+    
+    if(M2_region_count==1) add_mess = 1;
+    // int add_mess = 1;
     u32 cnt = 0;
     kliter_t(lms) *it;
     M2_prev = NULL;
     M2_next = kl_end(kl_messages);
+    
     for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
       if (cnt == M2_start_region_ID - 1) {
         M2_prev = it;
@@ -6111,11 +6115,18 @@ AFLNET_REGIONS_SELECTION:;
       }
       cnt++;
     }
+
+    if (M2_prev == NULL) {
+      it = kl_begin(kl_messages);
+    } else {
+      it = kl_next(M2_prev);
+    }
+
     if(add_mess){
       /*add message unit from MUP*/
       /*add 1 ... region_count-1 messages*/
-
-      int add_cnt = rand()%(queue_cur->region_count);
+      // ACTF("adding message unit...");
+      int add_cnt = rand()%(M2_region_count);
       if(add_cnt==0) add_cnt = 1;
       message_t *new_messages[add_cnt];
       for(int i=0; i<add_cnt; i++){
@@ -6123,18 +6134,18 @@ AFLNET_REGIONS_SELECTION:;
         new_messages[i] = new_message;
       }
       int *selectedNumbers = (int *)malloc(add_cnt * sizeof(int));
-      int *allNumbers = (int *)malloc((queue_cur->region_count) * sizeof(int));
-      for (int i = 0; i < queue_cur->region_count; i++) {
+      int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
+      for (int i = 0; i < M2_region_count; i++) {
         allNumbers[i] = i;
       }
       // 选择随机数字
       for (int i = 0; i < add_cnt; i++) {
         // 生成随机索引，从allNumbers中选择数字
-        int randomIndex = rand() % (queue_cur->region_count - i);
+        int randomIndex = rand() % (M2_region_count - i);
         selectedNumbers[i] = allNumbers[randomIndex];
 
         // 从allNumbers中删除已选择的数字
-        allNumbers[randomIndex] = allNumbers[queue_cur->region_count - i - 1];
+        allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
       }
 
       free(allNumbers); // 释放临时数组
@@ -6143,7 +6154,7 @@ AFLNET_REGIONS_SELECTION:;
       it = kl_begin(kl_messages);
       u32 count = 0;
       u32 new_ml_cnt = 0;
-      while (it != kl_end(kl_messages)) {
+      while (it != M2_next) {
         if(isNumberInArray(count,selectedNumbers,add_cnt)){
           //new message from MUP
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + new_messages[new_ml_cnt]->msize);
@@ -6180,22 +6191,22 @@ AFLNET_REGIONS_SELECTION:;
        * Step3. delete kl_message(not put them in in_buf)
       **************************************/
       /*delete 1 ... region_count-1 messages*/
-
-      int del_cnt = rand()%(queue_cur->region_count);
+      // ACTF("deleting message unit...");
+      int del_cnt = rand()%(M2_region_count);
       if(del_cnt==0) del_cnt = 1;
       int *selectedNumbers = (int *)malloc(del_cnt * sizeof(int));
-      int *allNumbers = (int *)malloc((queue_cur->region_count) * sizeof(int));
-      for (int i = 0; i < queue_cur->region_count; i++) {
+      int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
+      for (int i = 0; i < M2_region_count; i++) {
         allNumbers[i] = i;
       }
       // 选择随机数字
       for (int i = 0; i < del_cnt; i++) {
         // 生成随机索引，从allNumbers中选择数字
-        int randomIndex = rand() % (queue_cur->region_count - i);
+        int randomIndex = rand() % (M2_region_count - i);
         selectedNumbers[i] = allNumbers[randomIndex];
 
         // 从allNumbers中删除已选择的数字
-        allNumbers[randomIndex] = allNumbers[queue_cur->region_count - i - 1];
+        allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
       }
 
       free(allNumbers); // 释放临时数组
@@ -6203,7 +6214,7 @@ AFLNET_REGIONS_SELECTION:;
 
       it = kl_begin(kl_messages);
       u32 count = 0;
-      while (it != kl_end(kl_messages)) {
+      while (it != M2_next) {
         if(isNumberInArray(count,selectedNumbers,del_cnt)){
           it = kl_next(it);//skip delete indice
         }
@@ -6260,29 +6271,31 @@ AFLNET_REGIONS_SELECTION:;
 
   }
 
-  FILE *file = fopen("/home/keyi/aflnetplus/buffer.log", "wb");
-    
-  if (file == NULL) {
-    perror("无法打开文件");
-    return 1;
-  }
-    
-  // 写入 in_buf 的内容到文件
-  size_t bytes_written = fwrite(in_buf, 1, in_buf_size, file);
-    
-  if (bytes_written != in_buf_size) {
-    perror("写入文件时出错");
-    fclose(file);
-    return 1;
-  }
-    
-  // 关闭文件
-  fclose(file);
-
+  
   orig_in = in_buf;
 
   out_buf = ck_alloc_nozero(in_buf_size);
   memcpy(out_buf, in_buf, in_buf_size);
+
+  /*********log out_buf***********/
+  // FILE *file = fopen("/home/keyi/aflnetplus/buffer.log", "wb");
+    
+  // if (file == NULL) {
+  //   perror("无法打开文件");
+  //   return 1;
+  // }
+    
+  // // 写入 out_buf 的内容到文件
+  // size_t bytes_written = fwrite(out_buf, 1, in_buf_size, file);
+    
+  // if (bytes_written != in_buf_size) {
+  //   perror("写入文件时出错");
+  //   fclose(file);
+  //   return 1;
+  // }
+    
+  // // 关闭文件
+  // fclose(file);
 
 
   //Update len to keep the correct size of the buffer being mutated
@@ -6296,7 +6309,18 @@ AFLNET_REGIONS_SELECTION:;
    *********************/
 
   orig_perf = perf_score = calculate_score(queue_cur);
-
+  if(syntax_aware_mode){
+    if(add_mess){
+      stage_name  = "add sequence unit";
+      stage_short = "add";
+    }
+    else{
+      stage_name  = "delete sequence unit";
+      stage_short = "del";
+    }
+    common_fuzz_stuff(argv, out_buf, len);
+    goto abandon_entry;
+  }
   /* Skip right away if -d is given, if we have done deterministic fuzzing on
      this entry ourselves (was_fuzzed), or if it has gone through deterministic
      testing in earlier, resumed runs (passed_det). */
@@ -9561,7 +9585,7 @@ int main(int argc, char** argv) {
   setup_dirs_fds();
   init_message_pool(&message_unit_pool, 50);
   read_testcases();
-  debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
+  // debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
   load_auto();
 
   pivot_inputs();
