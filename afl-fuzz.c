@@ -2501,7 +2501,81 @@ void debug_print_message_pool_to_file(const message_unit_pool_t *pool, const cha
 
   fclose(file);
 }
+// Node for a linked list of strings
+typedef struct string_node {
+    char* str;
+    struct string_node* next;
+} string_node_t;
 
+// Add a new string to the linked list of strings
+string_node_t* add_string(string_node_t* head, const char* str, size_t len) {
+    string_node_t* new_node = (string_node_t*)malloc(sizeof(string_node_t));
+    if (!new_node) {
+        perror("Failed to allocate memory for new node");
+        return head;
+    }
+    new_node->str = (char*)malloc(len + 1);
+    if (!new_node->str) {
+        perror("Failed to allocate memory for string");
+        free(new_node);
+        return head;
+    }
+    strncpy(new_node->str, str, len);
+    new_node->str[len] = '\0';
+    new_node->next = head;
+    return new_node;
+}
+
+// Free the linked list of strings
+void free_strings(string_node_t* head) {
+    string_node_t* tmp;
+    while (head != NULL) {
+        tmp = head;
+        head = head->next;
+        free(tmp->str);
+        free(tmp);
+    }
+}
+
+// Function to parse and print each field of the messages
+string_node_t* parse_message_formats(klist_t(lms) *kl_messages) {
+    kliter_t(lms) *iter;
+    message_t *msg;
+    string_node_t* head = NULL; // Head of the list of strings
+
+    // Iterate over each element in the linked list
+    for (iter = kl_begin(kl_messages); iter != kl_end(kl_messages); iter = kl_next(iter)) {
+        msg = kl_val(iter);
+
+        char *msg_end = msg->mdata + msg->msize; // End of the message
+        char *start = msg->mdata; // Start of a field
+
+        // Iterate through the message character by character
+        for (char *c = msg->mdata; c < msg_end; c++) {
+            // If the character is a space or newline, we found the end of a field
+            if (*c == ' ' || *c == '\n') {
+                if (c > start) { // Make sure the field is not empty
+                    // Print and store the field, from start to the character before the space/newline
+                    printf("%.*s\n", (int)(c - start), start);
+                    head = add_string(head, start, c - start);
+                }
+                start = c + 1; // Set the start of the next field to the character after the space/newline
+            }
+        }
+
+        // Handle the last field in the message (if there's no trailing space/newline)
+        if (start < msg_end) {
+            printf("%.*s\n", (int)(msg_end - start), start);
+            head = add_string(head, start, msg_end - start);
+        }
+    }
+
+    // At this point, 'head' points to a linked list of all the fields in all the messages
+    // Do something with the strings here, or pass the head to another function
+
+    // Finally, free the list of strings
+    return head;
+}
 
 /* Helper function for load_extras. */
 
@@ -6087,9 +6161,10 @@ AFLNET_REGIONS_SELECTION:;
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
   u32 in_buf_size = 0;
+  int seq_level = rand()%2;
   int add_mess = rand()%2;
 /* syntax_aware_mode */
-  if(syntax_aware_mode){
+  if(syntax_aware_mode){   
     //TODO: implement syntax_aware_mode.
     /*****************************************************************************************
      * we have 2 mutation levels, one is sequence level and the other is unit level.
@@ -6098,140 +6173,150 @@ AFLNET_REGIONS_SELECTION:;
     *****************************************************************************************/
     /* random sequence/unit level mutate */
     
-    if(M2_region_count==1) add_mess = 1;
-    // int add_mess = 1;
-    u32 cnt = 0;
-    kliter_t(lms) *it;
-    M2_prev = NULL;
-    M2_next = kl_end(kl_messages);
+    if(seq_level){
+      /*sequence level*/
+      if(M2_region_count==1) add_mess = 1;
+      // int add_mess = 1;
+      u32 cnt = 0;
+      kliter_t(lms) *it;
+      M2_prev = NULL;
+      M2_next = kl_end(kl_messages);
+      
+      for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+        if (cnt == M2_start_region_ID - 1) {
+          M2_prev = it;
+        }
+
+        if (cnt == M2_start_region_ID + M2_region_count) {
+          M2_next = it;
+        }
+        cnt++;
+      }
+
+      if (M2_prev == NULL) {
+        it = kl_begin(kl_messages);
+      } else {
+        it = kl_next(M2_prev);
+      }
+
+      if(add_mess){
+        /*add message unit from MUP*/
+        /*add 1 ... region_count-1 messages*/
+        // ACTF("adding message unit...");
+        int add_cnt = rand()%(M2_region_count);
+        if(add_cnt==0) add_cnt = 1;
+        message_t *new_messages[add_cnt];
+        for(int i=0; i<add_cnt; i++){
+          message_t *new_message = get_message_from_pool(&message_unit_pool,rand()%(message_unit_pool.count));
+          new_messages[i] = new_message;
+        }
+        int *selectedNumbers = (int *)malloc(add_cnt * sizeof(int));
+        int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
+        for (int i = 0; i < M2_region_count; i++) {
+          allNumbers[i] = i;
+        }
+        // 选择随机数字
+        for (int i = 0; i < add_cnt; i++) {
+          // 生成随机索引，从allNumbers中选择数字
+          int randomIndex = rand() % (M2_region_count - i);
+          selectedNumbers[i] = allNumbers[randomIndex];
+
+          // 从allNumbers中删除已选择的数字
+          allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
+        }
+
+        free(allNumbers); // 释放临时数组
+
+
+        it = kl_begin(kl_messages);
+        u32 count = 0;
+        u32 new_ml_cnt = 0;
+        while (it != M2_next) {
+          if(isNumberInArray(count,selectedNumbers,add_cnt)){
+            //new message from MUP
+            in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + new_messages[new_ml_cnt]->msize);
+            if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+            //Retrieve data from kl_messages to populate the in_buf
+            memcpy(&in_buf[in_buf_size], new_messages[new_ml_cnt]->mdata, new_messages[new_ml_cnt]->msize);
+            in_buf_size += new_messages[new_ml_cnt]->msize;
+            new_ml_cnt++;
+
+            in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+            if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+            //Retrieve data from kl_messages to populate the in_buf
+            memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+            in_buf_size += kl_val(it)->msize;
+            it = kl_next(it);//skip delete indice
+          }
+          else{
+            in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+            if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+            //Retrieve data from kl_messages to populate the in_buf
+            memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+            in_buf_size += kl_val(it)->msize;
+            it = kl_next(it);
+          }
+          count++;
+        }
+        free(selectedNumbers);
+
+      }else{
+        /*delete message unit*/
+        /**************************************
+         * Step1. random count to delete
+         * Step2. random index to delete
+         * Step3. delete kl_message(not put them in in_buf)
+        **************************************/
+        /*delete 1 ... region_count-1 messages*/
+        // ACTF("deleting message unit...");
+        int del_cnt = rand()%(M2_region_count);
+        if(del_cnt==0) del_cnt = 1;
+        int *selectedNumbers = (int *)malloc(del_cnt * sizeof(int));
+        int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
+        for (int i = 0; i < M2_region_count; i++) {
+          allNumbers[i] = i;
+        }
+        // 选择随机数字
+        for (int i = 0; i < del_cnt; i++) {
+          // 生成随机索引，从allNumbers中选择数字
+          int randomIndex = rand() % (M2_region_count - i);
+          selectedNumbers[i] = allNumbers[randomIndex];
+
+          // 从allNumbers中删除已选择的数字
+          allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
+        }
+
+        free(allNumbers); // 释放临时数组
+
+
+        it = kl_begin(kl_messages);
+        u32 count = 0;
+        while (it != M2_next) {
+          if(isNumberInArray(count,selectedNumbers,del_cnt)){
+            it = kl_next(it);//skip delete indice
+          }
+          else{
+            in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+            if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+            //Retrieve data from kl_messages to populate the in_buf
+            memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+
+            in_buf_size += kl_val(it)->msize;
+            it = kl_next(it);
+          }
+          count++;
+        }
+        free(selectedNumbers);
+
+      }
+    }
+    else{
+      /*unit level*/
+      string_node_t* fileds = parse_message_formats(kl_messages);
+      mutate_filed();
+      free_strings(fields);
+    }
     
-    for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
-      if (cnt == M2_start_region_ID - 1) {
-        M2_prev = it;
-      }
-
-      if (cnt == M2_start_region_ID + M2_region_count) {
-        M2_next = it;
-      }
-      cnt++;
-    }
-
-    if (M2_prev == NULL) {
-      it = kl_begin(kl_messages);
-    } else {
-      it = kl_next(M2_prev);
-    }
-
-    if(add_mess){
-      /*add message unit from MUP*/
-      /*add 1 ... region_count-1 messages*/
-      // ACTF("adding message unit...");
-      int add_cnt = rand()%(M2_region_count);
-      if(add_cnt==0) add_cnt = 1;
-      message_t *new_messages[add_cnt];
-      for(int i=0; i<add_cnt; i++){
-        message_t *new_message = get_message_from_pool(&message_unit_pool,rand()%(message_unit_pool.count));
-        new_messages[i] = new_message;
-      }
-      int *selectedNumbers = (int *)malloc(add_cnt * sizeof(int));
-      int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
-      for (int i = 0; i < M2_region_count; i++) {
-        allNumbers[i] = i;
-      }
-      // 选择随机数字
-      for (int i = 0; i < add_cnt; i++) {
-        // 生成随机索引，从allNumbers中选择数字
-        int randomIndex = rand() % (M2_region_count - i);
-        selectedNumbers[i] = allNumbers[randomIndex];
-
-        // 从allNumbers中删除已选择的数字
-        allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
-      }
-
-      free(allNumbers); // 释放临时数组
-
-
-      it = kl_begin(kl_messages);
-      u32 count = 0;
-      u32 new_ml_cnt = 0;
-      while (it != M2_next) {
-        if(isNumberInArray(count,selectedNumbers,add_cnt)){
-          //new message from MUP
-          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + new_messages[new_ml_cnt]->msize);
-          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-          //Retrieve data from kl_messages to populate the in_buf
-          memcpy(&in_buf[in_buf_size], new_messages[new_ml_cnt]->mdata, new_messages[new_ml_cnt]->msize);
-          in_buf_size += new_messages[new_ml_cnt]->msize;
-          new_ml_cnt++;
-
-          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-          //Retrieve data from kl_messages to populate the in_buf
-          memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-          in_buf_size += kl_val(it)->msize;
-          it = kl_next(it);//skip delete indice
-        }
-        else{
-          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-          //Retrieve data from kl_messages to populate the in_buf
-          memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-          in_buf_size += kl_val(it)->msize;
-          it = kl_next(it);
-        }
-        count++;
-      }
-      free(selectedNumbers);
-
-    }else{
-      /*delete message unit*/
-      /**************************************
-       * Step1. random count to delete
-       * Step2. random index to delete
-       * Step3. delete kl_message(not put them in in_buf)
-      **************************************/
-      /*delete 1 ... region_count-1 messages*/
-      // ACTF("deleting message unit...");
-      int del_cnt = rand()%(M2_region_count);
-      if(del_cnt==0) del_cnt = 1;
-      int *selectedNumbers = (int *)malloc(del_cnt * sizeof(int));
-      int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
-      for (int i = 0; i < M2_region_count; i++) {
-        allNumbers[i] = i;
-      }
-      // 选择随机数字
-      for (int i = 0; i < del_cnt; i++) {
-        // 生成随机索引，从allNumbers中选择数字
-        int randomIndex = rand() % (M2_region_count - i);
-        selectedNumbers[i] = allNumbers[randomIndex];
-
-        // 从allNumbers中删除已选择的数字
-        allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
-      }
-
-      free(allNumbers); // 释放临时数组
-
-
-      it = kl_begin(kl_messages);
-      u32 count = 0;
-      while (it != M2_next) {
-        if(isNumberInArray(count,selectedNumbers,del_cnt)){
-          it = kl_next(it);//skip delete indice
-        }
-        else{
-          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-          //Retrieve data from kl_messages to populate the in_buf
-          memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-
-          in_buf_size += kl_val(it)->msize;
-          it = kl_next(it);
-        }
-        count++;
-      }
-      free(selectedNumbers);
-
-    }
   }
   else{
     //TODO: remain previous code.
