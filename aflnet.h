@@ -15,6 +15,7 @@ typedef struct {
 } region_t;
 
 typedef struct {
+  u32 id; /*message id*/
   char *mdata; /* Buffer keeping the message data */
   int msize;   /* Message size */
 } message_t;
@@ -110,6 +111,7 @@ int net_recv(int sockfd, struct timeval timeout, int poll_w, char **response_buf
 
 /* Construct a new linked list to store all messages from a list of regions */
 klist_t(lms) *construct_kl_messages(u8* fname, region_t *regions, u32 region_count);
+klist_t(lms) *construct_kl_messages_except_j(u8* fname, region_t *regions, u32 region_count, u32 j);
 
 /* Free all items and delete kl_messages */
 void delete_kl_messages(klist_t(lms) *kl_messages);

@@ -152,6 +152,8 @@ static s32 forksrv_pid,               /* PID of the fork server           */
            out_dir_fd = -1;           /* FD of the lock file              */
 
 EXP_ST u8* trace_bits;                /* SHM with instrumentation bitmap  */
+EXP_ST u8* trace_bits_focus_i;        /* aflnetplus: relation parse, focus on origin i*/
+EXP_ST u8* trace_bits_focus_i_except_j; /* aflnetplus: relation parse, focus on i without privous j*/
 
 EXP_ST u8  virgin_bits[MAP_SIZE],     /* Regions yet untouched by fuzzing */
            virgin_tmout[MAP_SIZE],    /* Bits we haven't seen in tmouts   */
@@ -382,6 +384,7 @@ u32 fuzzed_map_states = 0;
 u32 fuzzed_map_qentries = 0;
 u32 max_seed_region_count = 0;
 u32 local_port;		/* TCP/UDP port number to use as source */
+u32 message_t_id = 0;
 
 /* flags */
 u8 use_net = 0;
@@ -403,6 +406,7 @@ static FILE* ipsm_dot_file;
 
 /* Hash table/map and list */
 klist_t(lms) *kl_messages;
+klist_t(lms) *kl_messages_except_j;
 khash_t(hs32) *khs_ipsm_paths;
 khash_t(hms) *khms_states;
 
@@ -1184,6 +1188,163 @@ HANDLE_RESPONSES:
 }
 /* End of AFLNet-specific variables & functions */
 
+
+int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
+{
+  int n;
+  u8 likely_buggy = 0;
+  struct sockaddr_in serv_addr;
+  struct sockaddr_in local_serv_addr;
+
+  //Clean up the server if needed
+  if (cleanup_script) system(cleanup_script);
+
+  //Wait a bit for the server initialization
+  usleep(server_wait_usecs);
+
+  //Clear the response buffer and reset the response buffer size
+  if (response_buf) {
+    ck_free(response_buf);
+    response_buf = NULL;
+    response_buf_size = 0;
+  }
+
+  if (response_bytes) {
+    ck_free(response_bytes);
+    response_bytes = NULL;
+  }
+
+  //Create a TCP/UDP socket
+  int sockfd = -1;
+  if (net_protocol == PRO_TCP)
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  else if (net_protocol == PRO_UDP)
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+
+  if (sockfd < 0) {
+    PFATAL("Cannot create a socket");
+  }
+
+  //Set timeout for socket data sending/receiving -- otherwise it causes a big delay
+  //if the server is still alive after processing all the requests
+  struct timeval timeout;
+  timeout.tv_sec = 0;
+  timeout.tv_usec = socket_timeout_usecs;
+  setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout));
+
+  memset(&serv_addr, '0', sizeof(serv_addr));
+
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(net_port);
+  serv_addr.sin_addr.s_addr = inet_addr(net_ip);
+
+  //This piece of code is only used for targets that send responses to a specific port number
+  //The Kamailio SIP server is an example. After running this code, the intialized sockfd 
+  //will be bound to the given local port
+  if(local_port > 0) {
+    local_serv_addr.sin_family = AF_INET;
+    local_serv_addr.sin_addr.s_addr = INADDR_ANY;
+    local_serv_addr.sin_port = htons(local_port);
+
+    local_serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    if (bind(sockfd, (struct sockaddr*) &local_serv_addr, sizeof(struct sockaddr_in)))  {
+      FATAL("Unable to bind socket on local source port");
+    }
+  }
+
+  if(connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    //If it cannot connect to the server under test
+    //try it again as the server initial startup time is varied
+    for (n=0; n < 1000; n++) {
+      if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == 0) break;
+      usleep(1000);
+    }
+    if (n== 1000) {
+      close(sockfd);
+      return 1;
+    }
+  }
+
+  //retrieve early server response if needed
+  if (net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size)) goto HANDLE_RESPONSES;
+
+  //write the request messages
+  kliter_t(lms) *it;
+  messages_sent = 0;
+
+  for (it = kl_begin(kl_message); it != kl_end(kl_message); it = kl_next(it)) {
+    n = net_send(sockfd, timeout, kl_val(it)->mdata, kl_val(it)->msize);
+    messages_sent++;
+
+    //Allocate memory to store new accumulated response buffer size
+    response_bytes = (u32 *) ck_realloc(response_bytes, messages_sent * sizeof(u32));
+
+    //Jump out if something wrong leading to incomplete message sent
+    if (n != kl_val(it)->msize) {
+      goto HANDLE_RESPONSES;
+    }
+    
+    if(messages_sent == i+1){
+    /*TODO:get message i's coverage*/
+      memset(trace_bits, 0, MAP_SIZE);
+      memset(trace_bits_focus_i, 0, MAP_SIZE);
+      memset(trace_bits_focus_i_except_j, 0, MAP_SIZE);
+    }
+
+    //retrieve server response
+    u32 prev_buf_size = response_buf_size;
+    if (net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size)) {
+      goto HANDLE_RESPONSES;
+    }
+
+    //Update accumulated response buffer size
+    response_bytes[messages_sent - 1] = response_buf_size;
+
+    //set likely_buggy flag if AFLNet does not receive any feedback from the server
+    //it could be a signal of a potentiall server crash, like the case of CVE-2019-7314
+    if (prev_buf_size == response_buf_size) likely_buggy = 1;
+    else likely_buggy = 0;
+  }
+
+HANDLE_RESPONSES:
+
+  net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size);
+
+  if (messages_sent > 0 && response_bytes != NULL) {
+    response_bytes[messages_sent - 1] = response_buf_size;
+  }
+  ACTF("recv buf: %s",response_buf_size);
+  //wait a bit letting the server to complete its remaining task(s)
+  memset(session_virgin_bits, 255, MAP_SIZE);
+  while(1) {
+    if (has_new_bits(session_virgin_bits) != 2) break;
+  }
+
+  /*we focus on messege i's coverage*/
+  if(flag==1){
+    memcpy(trace_bits_focus_i, trace_bits, MAP_SIZE);
+  }
+  else{
+    memcpy(trace_bits_focus_i_except_j, trace_bits, MAP_SIZE);
+  }
+  
+
+
+  close(sockfd);
+
+  if (likely_buggy && false_negative_reduction) return 0;
+
+  if (terminate_child && (child_pid > 0)) kill(child_pid, SIGTERM);
+
+  //give the server a bit more time to gracefully terminate
+  while(1) {
+    int status = kill(child_pid, 0);
+    if ((status != 0) && (errno == ESRCH)) break;
+  }
+
+  return 0;
+}
+
 /* Get unix time in milliseconds */
 
 static u64 get_cur_time(void) {
@@ -1777,6 +1938,11 @@ EXP_ST void read_bitmap(u8* fname) {
 
 }
 
+/*aflnetplus: update relation table*/
+void update_relation(u8 **relation_table, u32 j, u32 i){
+  relation_table[j][i]=1;
+
+}
 
 /* Check if the current execution path brings anything new to the table.
    Update virgin bits to reflect the finds. Returns 1 if the only change is
@@ -1785,6 +1951,74 @@ EXP_ST void read_bitmap(u8* fname) {
 
    This function is called after every exec() on a fairly large buffer, so
    it needs to be fast. We do this in 32-bit and 64-bit flavors. */
+
+u8 i_has_new_bits(){
+    #ifdef WORD_SIZE_64
+  // ACTF("in i_has_new_bits...");
+  u64* current = (u64*)trace_bits_focus_i_except_j;
+  u64* virgin  = (u64*)trace_bits_focus_i;
+
+  u32  i = (MAP_SIZE >> 3);
+
+#else
+
+  u32* current = (u32*)trace_bits_focus_i_except_j;
+  u32* virgin  = (u32*)trace_bits_focus_i;
+
+  u32  i = (MAP_SIZE >> 2);
+
+#endif /* ^WORD_SIZE_64 */
+  // ACTF("assignment success.");
+  u8  ret = 0;
+
+  while (i--) {
+
+    /* Optimize for (*current & *virgin) == 0 - i.e., no bits in current bitmap
+       that have not been already cleared from the virgin map - since this will
+       almost always be the case. */
+    ACTF("in while loop...");
+    if (unlikely(*current) && unlikely(*current & *virgin)) {
+      // ACTF("here 0.");
+      if (likely(ret < 2)) {
+
+        u8* cur = (u8*)current;
+        u8* vir = (u8*)virgin;
+        ACTF("here 00");
+
+        /* Looks like we have not found any new bytes yet; see if any non-zero
+           bytes in current[] are pristine in virgin[]. */
+
+#ifdef WORD_SIZE_64
+
+        if ((cur[0] && vir[0] == 0xff) || (cur[1] && vir[1] == 0xff) ||
+            (cur[2] && vir[2] == 0xff) || (cur[3] && vir[3] == 0xff) ||
+            (cur[4] && vir[4] == 0xff) || (cur[5] && vir[5] == 0xff) ||
+            (cur[6] && vir[6] == 0xff) || (cur[7] && vir[7] == 0xff)) ret = 2;
+        else ret = 1;
+
+#else
+
+        if ((cur[0] && vir[0] == 0xff) || (cur[1] && vir[1] == 0xff) ||
+            (cur[2] && vir[2] == 0xff) || (cur[3] && vir[3] == 0xff)) ret = 2;
+        else ret = 1;
+
+#endif /* ^WORD_SIZE_64 */
+
+      }
+      ACTF("here 1");
+      *virgin &= ~*current;
+
+    }
+
+    current++;
+    virgin++;
+
+  }
+  ACTF("out i_has_new_bits");
+  return ret;
+
+}
+
 
 static inline u8 has_new_bits(u8* virgin_map) {
 
@@ -2356,6 +2590,7 @@ void load_message_unit_pool(message_unit_pool_t *pool, u8* fname, u32 len, char*
     message->mdata[msg_length]='\0';
     memcpy(message->mdata, msg_start, msg_length);
     message->msize = msg_length;
+    message->id = message_t_id++;
     // ACTF("memcpy success..., mdata:'%s",message->mdata);
     add_message_to_pool(&message_unit_pool, message);
     total_read -= (terminator_pos - buffer) + term_len;
@@ -2494,7 +2729,7 @@ void debug_print_message_pool_to_file(const message_unit_pool_t *pool, const cha
   fprintf(file, "Message Unit Pool contains %d messages:\n", pool->count);
   for (int i = 0; i < pool->count; i++) {
     message_t *msg = pool->messages[i];
-    fprintf(file, "Message %d: Size = %d, Data = '", i, msg->msize);
+    fprintf(file, "Message %d: Size = %d, Data = '", msg->id, msg->msize);
     fwrite(msg->mdata, 1, msg->msize, file);
     fprintf(file, "'\n");
   }
@@ -2575,6 +2810,11 @@ string_node_t* parse_message_formats(klist_t(lms) *kl_messages) {
 
     // Finally, free the list of strings
     return head;
+}
+
+
+void mutate_field(){
+
 }
 
 /* Helper function for load_extras. */
@@ -3755,6 +3995,46 @@ static void check_map_coverage(void) {
 
 }
 
+// 定义函数 debug_trace_bitss，将信息打印到指定的文件中
+void debug_trace_bits_focus_i(const char* filename) {
+  ACTF("in debug..");
+    // 打开文件，以追加的方式写入
+    FILE* file = fopen(filename, "a");
+    if (file == NULL) {
+        perror("Failed to open file");
+        return;
+    }
+ACTF("open file succ.");
+    // 写入 trace_bits_focus_i 的信息
+    fprintf(file, "trace_bits_focus_i:\n");
+    for (int i = 0; i < MAP_SIZE; i++) {
+        fprintf(file, "%u ", trace_bits_focus_i[i]);
+    }
+    fprintf(file, "\n");
+ACTF("write succ.");
+    // 关闭文件
+    fclose(file);
+}
+
+// 定义函数 debug_trace_bitss，将信息打印到指定的文件中
+void debug_trace_bits_focus_i_except_j(const char* filename) {
+    // 打开文件，以追加的方式写入
+    FILE* file = fopen(filename, "a");
+    if (file == NULL) {
+        perror("Failed to open file");
+        return;
+    }
+
+    // 写入 trace_bits_focus_i_except_j 的信息
+    fprintf(file, "trace_bits_focus_i_except_j:\n");
+    for (int i = 0; i < MAP_SIZE; i++) {
+        fprintf(file, "%u ", trace_bits_focus_i_except_j[i]);
+    }
+    fprintf(file, "\n");
+
+    // 关闭文件
+    fclose(file);
+}
 
 /* Perform dry run of all test cases to confirm that the app is working as
    expected. This is done only for the initial inputs, and only once. */
@@ -3800,6 +4080,33 @@ static void perform_dry_run(char** argv) {
     u8 *fn_replay = alloc_printf("%s/replayable-queue/%s", out_dir, basename(q->fname));
     save_kl_messages_to_file(kl_messages, fn_replay, 1, messages_sent);
     ck_free(fn_replay);
+
+    // ACTF("init relation table..");
+    u8 relation_table[message_t_id][message_t_id];
+    memset(relation_table,0,sizeof(relation_table));
+    // ACTF("init relation table success");
+    /*aflnetplus parse relation*/
+    for(u32 i=1;i<q->region_count;i++){
+      // ACTF("send_over_network_focus_i...");
+      send_over_network_focus_i(kl_messages,i,1);
+      // delete_kl_messages(kl_messages);
+      // ACTF("send_over_network_focus_i success");
+      for(u32 j=0;j<i;j++){
+        kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j);
+        // ACTF("send_over_network_focus_i_except_j...");
+        send_over_network_focus_i(kl_messages_except_j,i,0);
+        // ACTF("send_over_network_focus_i_except_j success");
+        delete_kl_messages(kl_messages_except_j);
+        // ACTF("delete_kl_messages success");
+        debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log");
+        debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log");
+        if(i_has_new_bits()){
+          update_relation(relation_table,j,i); /* i relies on j*/
+        }
+        ACTF("update_relation success");
+      }
+    }
+    ACTF("parse relation success.");
 
     /* AFLNet delete the kl_messages */
     delete_kl_messages(kl_messages);
@@ -6161,7 +6468,8 @@ AFLNET_REGIONS_SELECTION:;
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
   u32 in_buf_size = 0;
-  int seq_level = rand()%2;
+  int seq_level = 1;
+  // int seq_level = rand()%2;
   int add_mess = rand()%2;
 /* syntax_aware_mode */
   if(syntax_aware_mode){   
@@ -6312,8 +6620,8 @@ AFLNET_REGIONS_SELECTION:;
     }
     else{
       /*unit level*/
-      string_node_t* fileds = parse_message_formats(kl_messages);
-      mutate_filed();
+      string_node_t* fields = parse_message_formats(kl_messages);
+      mutate_field();
       free_strings(fields);
     }
     
@@ -9670,7 +9978,7 @@ int main(int argc, char** argv) {
   setup_dirs_fds();
   init_message_pool(&message_unit_pool, 50);
   read_testcases();
-  // debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
+  debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
   load_auto();
 
   pivot_inputs();
@@ -9693,7 +10001,7 @@ int main(int argc, char** argv) {
     use_argv = argv + optind;
 
   perform_dry_run(use_argv);
-
+  ACTF("here1");
   cull_queue();
 
   show_init_stats();

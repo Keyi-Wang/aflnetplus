@@ -2237,6 +2237,36 @@ klist_t(lms) *construct_kl_messages(u8* fname, region_t *regions, u32 region_cou
   return kl_messages;
 }
 
+klist_t(lms) *construct_kl_messages_except_j(u8* fname, region_t *regions, u32 region_count, u32 j)
+{
+  FILE *fseed = NULL;
+  fseed = fopen(fname, "rb");
+  if (fseed == NULL) PFATAL("Cannot open seed file %s", fname);
+
+  klist_t(lms) *kl_messages = kl_init(lms);
+  u32 i;
+
+  for (i = 0; i < region_count; i++) {
+    if(i==j) continue;
+    //Identify region size
+    u32 len = regions[i].end_byte - regions[i].start_byte + 1;
+
+    //Create a new message
+    message_t *m = (message_t *) ck_alloc(sizeof(message_t));
+    m->mdata = (char *) ck_alloc(len);
+    m->msize = len;
+    if (m->mdata == NULL) PFATAL("Unable to allocate memory region to store new message");
+    fread(m->mdata, 1, len, fseed);
+
+    //Insert the message to the linked list
+    *kl_pushp(lms, kl_messages) = m;
+  }
+
+  if (fseed != NULL) fclose(fseed);
+  return kl_messages;
+}
+
+
 void delete_kl_messages(klist_t(lms) *kl_messages)
 {
   /* Free all messages in the list before destroying the list itself */
