@@ -1195,7 +1195,7 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
   u8 likely_buggy = 0;
   struct sockaddr_in serv_addr;
   struct sockaddr_in local_serv_addr;
-
+  ACTF("send 0");
   //Clean up the server if needed
   if (cleanup_script) system(cleanup_script);
 
@@ -1283,23 +1283,25 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
     if (n != kl_val(it)->msize) {
       goto HANDLE_RESPONSES;
     }
-    
+
     if(messages_sent == i+1){
     /*TODO:get message i's coverage*/
       memset(trace_bits, 0, MAP_SIZE);
       memset(trace_bits_focus_i, 0, MAP_SIZE);
       memset(trace_bits_focus_i_except_j, 0, MAP_SIZE);
     }
-
+    ACTF("send 1");
     //retrieve server response
     u32 prev_buf_size = response_buf_size;
+    ACTF("send 2");
     if (net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size)) {
+      ACTF("send 3");
       goto HANDLE_RESPONSES;
     }
-
+    ACTF("send 4");
     //Update accumulated response buffer size
     response_bytes[messages_sent - 1] = response_buf_size;
-
+    ACTF("send 4");
     //set likely_buggy flag if AFLNet does not receive any feedback from the server
     //it could be a signal of a potentiall server crash, like the case of CVE-2019-7314
     if (prev_buf_size == response_buf_size) likely_buggy = 1;
@@ -1307,7 +1309,7 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
   }
 
 HANDLE_RESPONSES:
-
+  ACTF("send 10");
   net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size);
 
   if (messages_sent > 0 && response_bytes != NULL) {
@@ -3817,6 +3819,230 @@ static u8 run_target(char** argv, u32 timeout) {
 }
 
 
+static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message, u32 focus_message, u32 flag) {
+
+  static struct itimerval it;
+  static u32 prev_timed_out = 0;
+  static u64 exec_ms = 0;
+
+  int status = 0;
+  u32 tb4;
+
+  child_timed_out = 0;
+
+  /* After this memset, trace_bits[] are effectively volatile, so we
+     must prevent any earlier operations from venturing into that
+     territory. */
+  ACTF("0");
+  memset(trace_bits, 0, MAP_SIZE);
+  MEM_BARRIER();
+  ACTF("1");
+  /* If we're running in "dumb" mode, we can't rely on the fork server
+     logic compiled into the target program, so we will just keep calling
+     execve(). There is a bit of code duplication between here and
+     init_forkserver(), but c'est la vie. */
+
+  if (dumb_mode == 1 || no_forkserver) {
+    ACTF("1.5");
+
+    child_pid = fork();
+
+    if (child_pid < 0) PFATAL("fork() failed");
+
+    if (!child_pid) {
+
+      struct rlimit r;
+
+      if (mem_limit) {
+
+        r.rlim_max = r.rlim_cur = ((rlim_t)mem_limit) << 20;
+    ACTF("2");
+#ifdef RLIMIT_AS
+
+        setrlimit(RLIMIT_AS, &r); /* Ignore errors */
+
+#else
+
+        setrlimit(RLIMIT_DATA, &r); /* Ignore errors */
+
+#endif /* ^RLIMIT_AS */
+
+      }
+
+      r.rlim_max = r.rlim_cur = 0;
+
+      setrlimit(RLIMIT_CORE, &r); /* Ignore errors */
+
+      /* Move the process to the different namespace. */
+
+      if (netns_name)
+        move_process_to_netns();
+
+      /* Isolate the process and configure standard descriptors. If out_file is
+         specified, stdin is /dev/null; otherwise, out_fd is cloned instead. */
+
+      setsid();
+
+      dup2(dev_null_fd, 1);
+      dup2(dev_null_fd, 2);
+
+      if (out_file) {
+
+        dup2(dev_null_fd, 0);
+
+      } else {
+
+        dup2(out_fd, 0);
+        close(out_fd);
+
+      }
+
+      /* On Linux, would be faster to use O_CLOEXEC. Maybe TODO. */
+      ACTF("3");
+      close(dev_null_fd);
+      close(out_dir_fd);
+      close(dev_urandom_fd);
+      close(fileno(plot_file));
+
+      /* Set sane defaults for ASAN if nothing else specified. */
+
+      setenv("ASAN_OPTIONS", "abort_on_error=1:"
+                             "detect_leaks=0:"
+                             "symbolize=0:"
+                             "allocator_may_return_null=1", 0);
+
+      setenv("MSAN_OPTIONS", "exit_code=" STRINGIFY(MSAN_ERROR) ":"
+                             "symbolize=0:"
+                             "msan_track_origins=0", 0);
+
+      execv(target_path, argv);
+
+      /* Use a distinctive bitmap value to tell the parent about execv()
+         falling through. */
+
+      *(u32*)trace_bits = EXEC_FAIL_SIG;
+      exit(0);
+
+    }
+
+  } else {
+
+    s32 res;
+
+    /* In non-dumb mode, we have the fork server up and running, so simply
+       tell it to have at it, and then read back PID. */
+    ACTF("4");
+    if ((res = write(fsrv_ctl_fd, &prev_timed_out, 4)) != 4) {
+
+      if (stop_soon) return 0;
+      RPFATAL(res, "Unable to request new process from fork server (OOM?)");
+
+    }
+
+    if ((res = read(fsrv_st_fd, &child_pid, 4)) != 4) {
+
+      if (stop_soon) return 0;
+      RPFATAL(res, "Unable to request new process from fork server (OOM?)");
+
+    }
+
+    if (child_pid <= 0) FATAL("Fork server is misbehaving (OOM?)");
+
+  }
+
+  /* Configure timeout, as requested by user, then wait for child to terminate. */
+
+  it.it_value.tv_sec = (timeout / 1000);
+  it.it_value.tv_usec = (timeout % 1000) * 1000;
+
+  setitimer(ITIMER_REAL, &it, NULL);
+  ACTF("5");
+  /* The SIGALRM handler simply kills the child_pid and sets child_timed_out. */
+
+  if (dumb_mode == 1 || no_forkserver) {
+      ACTF("6");
+    if (use_net) send_over_network_focus_i(kl_message, focus_message, flag);
+    if (waitpid(child_pid, &status, 0) <= 0) PFATAL("waitpid() failed");
+
+  } else {
+    ACTF("7");
+    if (use_net) send_over_network_focus_i(kl_message, focus_message, flag);
+    s32 res;
+
+    if ((res = read(fsrv_st_fd, &status, 4)) != 4) {
+
+      if (stop_soon) return 0;
+      RPFATAL(res, "Unable to communicate with fork server (OOM?)");
+
+    }
+
+  }
+  ACTF("8");
+  if (!WIFSTOPPED(status)) child_pid = 0;
+
+  getitimer(ITIMER_REAL, &it);
+  exec_ms = (u64) timeout - (it.it_value.tv_sec * 1000 +
+                             it.it_value.tv_usec / 1000);
+
+  it.it_value.tv_sec = 0;
+  it.it_value.tv_usec = 0;
+
+  setitimer(ITIMER_REAL, &it, NULL);
+
+  total_execs++;
+
+  /* Any subsequent operations on trace_bits must not be moved by the
+     compiler below this point. Past this location, trace_bits[] behave
+     very normally and do not have to be treated as volatile. */
+
+  MEM_BARRIER();
+  ACTF("9");
+  tb4 = *(u32*)trace_bits;
+  ACTF("10");
+#ifdef WORD_SIZE_64
+  classify_counts((u64*)trace_bits);
+#else
+  classify_counts((u32*)trace_bits);
+#endif /* ^WORD_SIZE_64 */
+
+  prev_timed_out = child_timed_out;
+
+  /* Report outcome to caller. */
+
+  if (WIFSIGNALED(status) && !stop_soon) {
+
+    kill_signal = WTERMSIG(status);
+
+    if (child_timed_out && kill_signal == SIGKILL) return FAULT_TMOUT;
+
+    if (kill_signal == SIGTERM) return FAULT_NONE;
+
+    return FAULT_CRASH;
+
+  }
+
+  /* A somewhat nasty hack for MSAN, which doesn't support abort_on_error and
+     must use a special exit code. */
+
+  if (uses_asan && WEXITSTATUS(status) == MSAN_ERROR) {
+    kill_signal = 0;
+    return FAULT_CRASH;
+  }
+
+  if ((dumb_mode == 1 || no_forkserver) && tb4 == EXEC_FAIL_SIG)
+    return FAULT_ERROR;
+
+  /* It makes sense to account for the slowest units only if the testcase was run
+  under the user defined timeout. */
+  if (!(timeout > exec_tmout) && (slowest_exec_ms < exec_ms)) {
+    slowest_exec_ms = exec_ms;
+  }
+  ACTF("11");
+  return FAULT_NONE;
+
+}
+
+
 /* Write modified data to file for testing. If out_file is set, the old file
    is unlinked and a new one is created. Otherwise, out_fd is rewound and
    truncated. */
@@ -3979,6 +4205,151 @@ abort_calibration:
 
 }
 
+static u8 relation_parse(char** argv, klist_t(lms) *kl_message, u32 focus_message, u32 flag) {
+
+  // static u8 first_trace[MAP_SIZE];
+  u8  fault = 0;
+  // u8  fault = 0, new_bits = 0, var_detected = 0,
+  //     first_run = (q->exec_cksum == 0);
+
+  // u64 start_us, stop_us;
+
+  // s32 old_sc = stage_cur, old_sm = stage_max;
+  u32 use_tmout = exec_tmout;
+  // u8* old_sn = stage_name;
+
+  /* Be a bit more generous about timeouts when resuming sessions, or when
+     trying to calibrate already-added finds. This helps avoid trouble due
+     to intermittent latency. */
+
+  // if (!from_queue || resuming_fuzz)
+  use_tmout = MAX(exec_tmout + CAL_TMOUT_ADD,
+                    exec_tmout * CAL_TMOUT_PERC / 100);
+
+  // q->cal_failed++;
+
+  // stage_name = "calibration";
+  // stage_max  = fast_cal ? 3 : CAL_CYCLES;
+
+  /* Make sure the forkserver is up before we do anything, and let's not
+     count its spin-up time toward binary calibration. */
+
+  if (dumb_mode != 1 && !no_forkserver && !forksrv_pid)
+    init_forkserver(argv);
+
+  // if (q->exec_cksum) memcpy(first_trace, trace_bits, MAP_SIZE);
+
+  // start_us = get_cur_time_us();
+
+  // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
+
+  //   u32 cksum;
+
+  //   if (!first_run && !(stage_cur % stats_update_freq)) show_stats();
+
+  //   write_to_testcase(use_mem, q->len);
+    ACTF("before run_target_to_parse");
+    fault = run_target_to_parse(argv, use_tmout, kl_message, focus_message, flag);
+    ACTF("after run_target_to_parse");
+    /* stop_soon is set by the handler for Ctrl+C. When it's pressed,
+       we want to bail out quickly. */
+
+    if (stop_soon || fault != crash_mode) goto abort_calibration;
+
+    if (!dumb_mode && !stage_cur && !count_bytes(trace_bits)) {
+      fault = FAULT_NOINST;
+      goto abort_calibration;
+    }
+
+    // cksum = hash32(trace_bits, MAP_SIZE, HASH_CONST);
+
+  //   if (q->exec_cksum != cksum) {
+
+  //     u8 hnb = has_new_bits(virgin_bits);
+  //     if (hnb > new_bits) new_bits = hnb;
+
+  //     if (q->exec_cksum) {
+
+  //       u32 i;
+
+  //       for (i = 0; i < MAP_SIZE; i++) {
+
+  //         if (!var_bytes[i] && first_trace[i] != trace_bits[i]) {
+
+  //           var_bytes[i] = 1;
+  //           stage_max    = CAL_CYCLES_LONG;
+
+  //         }
+
+  //       }
+
+  //       var_detected = 1;
+
+  //     } else {
+
+  //       q->exec_cksum = cksum;
+  //       memcpy(first_trace, trace_bits, MAP_SIZE);
+
+  //     }
+
+  //   }
+
+  // }
+
+  // stop_us = get_cur_time_us();
+
+  // total_cal_us     += stop_us - start_us;
+  // total_cal_cycles += stage_max;
+
+  /* OK, let's collect some stats about the performance of this test case.
+     This is used for fuzzing air time calculations in calculate_score(). */
+
+  // q->exec_us     = (stop_us - start_us) / stage_max;
+  // q->bitmap_size = count_bytes(trace_bits);
+  // q->handicap    = handicap;
+  // q->cal_failed  = 0;
+
+  // total_bitmap_size += q->bitmap_size;
+  // total_bitmap_entries++;
+
+  // update_bitmap_score(q);
+
+  /* If this case didn't result in new output from the instrumentation, tell
+     parent. This is a non-critical problem, but something to warn the user
+     about. */
+
+//   if (!dumb_mode && first_run && !fault && !new_bits) fault = FAULT_NOBITS;
+
+abort_calibration:
+
+//   if (new_bits == 2 && !q->has_new_cov) {
+//     q->has_new_cov = 1;
+//     queued_with_cov++;
+//   }
+
+//   /* Mark variable paths. */
+
+//   if (var_detected) {
+
+//     var_byte_count = count_bytes(var_bytes);
+
+//     if (!q->var_behavior) {
+//       mark_as_variable(q);
+//       queued_variable++;
+//     }
+
+//   }
+
+//   stage_name = old_sn;
+//   stage_cur  = old_sc;
+//   stage_max  = old_sm;
+
+//   if (!first_run) show_stats();
+
+  return fault;
+
+}
+
 
 /* Examine map coverage. Called once, for first test case. */
 
@@ -4070,6 +4441,14 @@ static void perform_dry_run(char** argv) {
     /* AFLNet construct the kl_messages linked list for this queue entry*/
     kl_messages = construct_kl_messages(q->fname, q->regions, q->region_count);
 
+    /*debug kl_messages*/
+    kliter_t(lms) *it;
+    it = kl_begin(kl_messages);
+    for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+      printf("Message content: %s\n", kl_val(it)->mdata);
+    }
+
+
     res = calibrate_case(argv, q, use_mem, 0, 1);
     ck_free(use_mem);
 
@@ -4081,32 +4460,38 @@ static void perform_dry_run(char** argv) {
     save_kl_messages_to_file(kl_messages, fn_replay, 1, messages_sent);
     ck_free(fn_replay);
 
-    // ACTF("init relation table..");
-    u8 relation_table[message_t_id][message_t_id];
-    memset(relation_table,0,sizeof(relation_table));
-    // ACTF("init relation table success");
-    /*aflnetplus parse relation*/
-    for(u32 i=1;i<q->region_count;i++){
-      // ACTF("send_over_network_focus_i...");
-      send_over_network_focus_i(kl_messages,i,1);
-      // delete_kl_messages(kl_messages);
-      // ACTF("send_over_network_focus_i success");
-      for(u32 j=0;j<i;j++){
-        kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j);
-        // ACTF("send_over_network_focus_i_except_j...");
-        send_over_network_focus_i(kl_messages_except_j,i,0);
-        // ACTF("send_over_network_focus_i_except_j success");
-        delete_kl_messages(kl_messages_except_j);
-        // ACTF("delete_kl_messages success");
-        debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log");
-        debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log");
-        if(i_has_new_bits()){
-          update_relation(relation_table,j,i); /* i relies on j*/
+    /* aflnetplus: parse initial relation table*/
+    if(syntax_aware_mode){
+      ACTF("init relation table..");
+      u8 relation_table[message_t_id][message_t_id];
+      memset(relation_table,0,sizeof(relation_table));
+      // ACTF("init relation table success");
+      /*aflnetplus parse relation*/
+      for(u32 i=1;i<q->region_count;i++){
+        ACTF("send_over_network_focus_i...");
+        relation_parse(argv,kl_messages,i,(u32)1);
+
+        // delete_kl_messages(kl_messages);
+        ACTF("send_over_network_focus_i success");
+        for(u32 j=0;j<i;j++){
+          kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j);
+          ACTF("send_over_network_focus_i_except_j...");
+          relation_parse(argv,kl_messages_except_j,i,(u32)0);
+
+          ACTF("send_over_network_focus_i_except_j success");
+          delete_kl_messages(kl_messages_except_j);
+          // ACTF("delete_kl_messages success");
+          debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log");
+          debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log");
+          if(i_has_new_bits()){
+            update_relation(relation_table,j,i); /* i relies on j*/
+          }
+          ACTF("update_relation success");
         }
-        ACTF("update_relation success");
       }
+      ACTF("parse relation success.");
     }
-    ACTF("parse relation success.");
+    
 
     /* AFLNet delete the kl_messages */
     delete_kl_messages(kl_messages);
