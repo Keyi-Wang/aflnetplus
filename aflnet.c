@@ -2237,7 +2237,7 @@ klist_t(lms) *construct_kl_messages(u8* fname, region_t *regions, u32 region_cou
   return kl_messages;
 }
 
-klist_t(lms) *construct_kl_messages_except_j(u8* fname, region_t *regions, u32 region_count, u32 j)
+klist_t(lms) *construct_kl_messages_except_j(u8* fname, region_t *regions, u32 region_count, u32 j, u32 end)
 {
   FILE *fseed = NULL;
   fseed = fopen(fname, "rb");
@@ -2246,8 +2246,8 @@ klist_t(lms) *construct_kl_messages_except_j(u8* fname, region_t *regions, u32 r
   klist_t(lms) *kl_messages = kl_init(lms);
   u32 i;
 
-  for (i = 0; i < region_count; i++) {
-    if(i==j) continue;
+  for (i = 0; i <= end; i++) {
+    
     //Identify region size
     u32 len = regions[i].end_byte - regions[i].start_byte + 1;
 
@@ -2257,7 +2257,7 @@ klist_t(lms) *construct_kl_messages_except_j(u8* fname, region_t *regions, u32 r
     m->msize = len;
     if (m->mdata == NULL) PFATAL("Unable to allocate memory region to store new message");
     fread(m->mdata, 1, len, fseed);
-
+    if(i==j) continue;
     //Insert the message to the linked list
     *kl_pushp(lms, kl_messages) = m;
   }

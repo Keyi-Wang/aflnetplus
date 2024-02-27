@@ -154,6 +154,7 @@ static s32 forksrv_pid,               /* PID of the fork server           */
 EXP_ST u8* trace_bits;                /* SHM with instrumentation bitmap  */
 EXP_ST u8* trace_bits_focus_i;        /* aflnetplus: relation parse, focus on origin i*/
 EXP_ST u8* trace_bits_focus_i_except_j; /* aflnetplus: relation parse, focus on i without privous j*/
+EXP_ST u8** relation_table;           /*aflnetplus: relation table*/
 
 EXP_ST u8  virgin_bits[MAP_SIZE],     /* Regions yet untouched by fuzzing */
            virgin_tmout[MAP_SIZE],    /* Bits we haven't seen in tmouts   */
@@ -446,6 +447,58 @@ void destroy_ipsm()
   kh_destroy(hms, khms_states);
 
   ck_free(state_ids);
+}
+
+/*aflnetplus: init ralation table*/
+void init_relation_table(){
+  /*把这快部分提前初始化，在再加个free的部分*/
+    ACTF("init relation table..");
+    relation_table = (u8**)malloc(message_t_id * sizeof(u8*));
+    if (relation_table == NULL) {
+      fprintf(stderr, "Relation table memory allocation failed\n");
+      return 1;
+    }
+
+    // 分配内存给每行
+    for (u32 i = 0; i < message_t_id; i++) {
+        relation_table[i] = (u8*)malloc(message_t_id * sizeof(u8));
+        if (relation_table[i] == NULL) {
+            fprintf(stderr, "Relation table memory allocation failed\n");
+            // 释放之前分配的内存
+            for (int j = 0; j < i; j++) {
+                free(relation_table[j]);
+            }
+            free(relation_table);
+            return 1;
+        }
+        memset(relation_table[i], 0, message_t_id * sizeof(u8));
+    }
+
+      trace_bits_focus_i = (u8*)malloc(MAP_SIZE * sizeof(u8));
+      trace_bits_focus_i_except_j = (u8*)malloc(MAP_SIZE * sizeof(u8));
+      debug_relation_table();
+      ACTF("print init relation table..");
+}
+
+void debug_relation_table(){
+   FILE *file = fopen("/home/keyi/aflnetplus/relation_table.txt", "w");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+    // 写入数组内容到文件
+    for (u32 num1 = 0; num1 < message_t_id; num1++) {
+        for (u32 num2 = 0; num2 < message_t_id; num2++) {
+
+            fprintf(file, "%u ", relation_table[num1][num2]);
+        }
+
+        fprintf(file, "\n");
+    }
+
+    // 关闭文件
+    fclose(file);
+
 }
 
 /* aflnetplus : manage message unit pool */
@@ -1195,7 +1248,7 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
   u8 likely_buggy = 0;
   struct sockaddr_in serv_addr;
   struct sockaddr_in local_serv_addr;
-  ACTF("send 0");
+  // ACTF("send 0");
   //Clean up the server if needed
   if (cleanup_script) system(cleanup_script);
 
@@ -1274,6 +1327,10 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
 
   for (it = kl_begin(kl_message); it != kl_end(kl_message); it = kl_next(it)) {
     n = net_send(sockfd, timeout, kl_val(it)->mdata, kl_val(it)->msize);
+    ACTF("send %u: %s",messages_sent, kl_val(it)->mdata);
+    if(messages_sent == i+1){
+      break;
+    }
     messages_sent++;
 
     //Allocate memory to store new accumulated response buffer size
@@ -1281,27 +1338,30 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
 
     //Jump out if something wrong leading to incomplete message sent
     if (n != kl_val(it)->msize) {
+      // ACTF("n != kl_val(it)->msize");
       goto HANDLE_RESPONSES;
     }
 
     if(messages_sent == i+1){
     /*TODO:get message i's coverage*/
+      // ACTF("before memset,i==%u",i);
       memset(trace_bits, 0, MAP_SIZE);
       memset(trace_bits_focus_i, 0, MAP_SIZE);
       memset(trace_bits_focus_i_except_j, 0, MAP_SIZE);
+      // ACTF("after memset");
     }
-    ACTF("send 1");
+    // ACTF("send 1");
     //retrieve server response
     u32 prev_buf_size = response_buf_size;
-    ACTF("send 2");
+    // ACTF("send 2");
     if (net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size)) {
-      ACTF("send 3");
+      // ACTF("send 3");
       goto HANDLE_RESPONSES;
     }
-    ACTF("send 4");
+    // ACTF("send 4");
     //Update accumulated response buffer size
     response_bytes[messages_sent - 1] = response_buf_size;
-    ACTF("send 4");
+    // ACTF("send 5");
     //set likely_buggy flag if AFLNet does not receive any feedback from the server
     //it could be a signal of a potentiall server crash, like the case of CVE-2019-7314
     if (prev_buf_size == response_buf_size) likely_buggy = 1;
@@ -1309,13 +1369,13 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
   }
 
 HANDLE_RESPONSES:
-  ACTF("send 10");
+  // ACTF("send 6");
   net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size);
 
   if (messages_sent > 0 && response_bytes != NULL) {
     response_bytes[messages_sent - 1] = response_buf_size;
   }
-  ACTF("recv buf: %s",response_buf_size);
+  ACTF("recv buf: %s", response_buf);
   //wait a bit letting the server to complete its remaining task(s)
   memset(session_virgin_bits, 255, MAP_SIZE);
   while(1) {
@@ -1333,7 +1393,7 @@ HANDLE_RESPONSES:
 
 
   close(sockfd);
-
+  // ACTF("send 7");
   if (likely_buggy && false_negative_reduction) return 0;
 
   if (terminate_child && (child_pid > 0)) kill(child_pid, SIGTERM);
@@ -1956,7 +2016,7 @@ void update_relation(u8 **relation_table, u32 j, u32 i){
 
 u8 i_has_new_bits(){
     #ifdef WORD_SIZE_64
-  // ACTF("in i_has_new_bits...");
+  ACTF("in i_has_new_bits...");
   u64* current = (u64*)trace_bits_focus_i_except_j;
   u64* virgin  = (u64*)trace_bits_focus_i;
 
@@ -1978,14 +2038,14 @@ u8 i_has_new_bits(){
     /* Optimize for (*current & *virgin) == 0 - i.e., no bits in current bitmap
        that have not been already cleared from the virgin map - since this will
        almost always be the case. */
-    ACTF("in while loop...");
+    // ACTF("in while loop...");
     if (unlikely(*current) && unlikely(*current & *virgin)) {
       // ACTF("here 0.");
       if (likely(ret < 2)) {
 
         u8* cur = (u8*)current;
         u8* vir = (u8*)virgin;
-        ACTF("here 00");
+        // ACTF("here 00");
 
         /* Looks like we have not found any new bytes yet; see if any non-zero
            bytes in current[] are pristine in virgin[]. */
@@ -2007,7 +2067,7 @@ u8 i_has_new_bits(){
 #endif /* ^WORD_SIZE_64 */
 
       }
-      ACTF("here 1");
+      // ACTF("here 1");
       *virgin &= ~*current;
 
     }
@@ -2592,9 +2652,10 @@ void load_message_unit_pool(message_unit_pool_t *pool, u8* fname, u32 len, char*
     message->mdata[msg_length]='\0';
     memcpy(message->mdata, msg_start, msg_length);
     message->msize = msg_length;
-    message->id = message_t_id++;
+    message->id = message_t_id;
     // ACTF("memcpy success..., mdata:'%s",message->mdata);
     add_message_to_pool(&message_unit_pool, message);
+    message_t_id++;
     total_read -= (terminator_pos - buffer) + term_len;
     memmove(buffer, terminator_pos + term_len, total_read);
     msg_start = buffer;
@@ -3833,17 +3894,17 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
   /* After this memset, trace_bits[] are effectively volatile, so we
      must prevent any earlier operations from venturing into that
      territory. */
-  ACTF("0");
+
   memset(trace_bits, 0, MAP_SIZE);
   MEM_BARRIER();
-  ACTF("1");
+
   /* If we're running in "dumb" mode, we can't rely on the fork server
      logic compiled into the target program, so we will just keep calling
      execve(). There is a bit of code duplication between here and
      init_forkserver(), but c'est la vie. */
 
   if (dumb_mode == 1 || no_forkserver) {
-    ACTF("1.5");
+
 
     child_pid = fork();
 
@@ -3856,7 +3917,7 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
       if (mem_limit) {
 
         r.rlim_max = r.rlim_cur = ((rlim_t)mem_limit) << 20;
-    ACTF("2");
+
 #ifdef RLIMIT_AS
 
         setrlimit(RLIMIT_AS, &r); /* Ignore errors */
@@ -3898,7 +3959,7 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
       }
 
       /* On Linux, would be faster to use O_CLOEXEC. Maybe TODO. */
-      ACTF("3");
+
       close(dev_null_fd);
       close(out_dir_fd);
       close(dev_urandom_fd);
@@ -3931,7 +3992,7 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
 
     /* In non-dumb mode, we have the fork server up and running, so simply
        tell it to have at it, and then read back PID. */
-    ACTF("4");
+
     if ((res = write(fsrv_ctl_fd, &prev_timed_out, 4)) != 4) {
 
       if (stop_soon) return 0;
@@ -3956,16 +4017,16 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
   it.it_value.tv_usec = (timeout % 1000) * 1000;
 
   setitimer(ITIMER_REAL, &it, NULL);
-  ACTF("5");
+
   /* The SIGALRM handler simply kills the child_pid and sets child_timed_out. */
 
   if (dumb_mode == 1 || no_forkserver) {
-      ACTF("6");
+
     if (use_net) send_over_network_focus_i(kl_message, focus_message, flag);
     if (waitpid(child_pid, &status, 0) <= 0) PFATAL("waitpid() failed");
 
   } else {
-    ACTF("7");
+
     if (use_net) send_over_network_focus_i(kl_message, focus_message, flag);
     s32 res;
 
@@ -3977,7 +4038,7 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
     }
 
   }
-  ACTF("8");
+
   if (!WIFSTOPPED(status)) child_pid = 0;
 
   getitimer(ITIMER_REAL, &it);
@@ -3996,9 +4057,9 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
      very normally and do not have to be treated as volatile. */
 
   MEM_BARRIER();
-  ACTF("9");
+
   tb4 = *(u32*)trace_bits;
-  ACTF("10");
+
 #ifdef WORD_SIZE_64
   classify_counts((u64*)trace_bits);
 #else
@@ -4037,7 +4098,7 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
   if (!(timeout > exec_tmout) && (slowest_exec_ms < exec_ms)) {
     slowest_exec_ms = exec_ms;
   }
-  ACTF("11");
+
   return FAULT_NONE;
 
 }
@@ -4206,7 +4267,7 @@ abort_calibration:
 }
 
 static u8 relation_parse(char** argv, klist_t(lms) *kl_message, u32 focus_message, u32 flag) {
-
+  ACTF("in relation parse...");
   // static u8 first_trace[MAP_SIZE];
   u8  fault = 0;
   // u8  fault = 0, new_bits = 0, var_detected = 0,
@@ -4223,8 +4284,8 @@ static u8 relation_parse(char** argv, klist_t(lms) *kl_message, u32 focus_messag
      to intermittent latency. */
 
   // if (!from_queue || resuming_fuzz)
-  use_tmout = MAX(exec_tmout + CAL_TMOUT_ADD,
-                    exec_tmout * CAL_TMOUT_PERC / 100);
+  // use_tmout = MAX(exec_tmout + CAL_TMOUT_ADD,
+  //                   exec_tmout * CAL_TMOUT_PERC / 100);
 
   // q->cal_failed++;
 
@@ -4367,28 +4428,28 @@ static void check_map_coverage(void) {
 }
 
 // 定义函数 debug_trace_bitss，将信息打印到指定的文件中
-void debug_trace_bits_focus_i(const char* filename) {
-  ACTF("in debug..");
+void debug_trace_bits_focus_i(const char* filename, u32 focus_mes) {
+
     // 打开文件，以追加的方式写入
     FILE* file = fopen(filename, "a");
     if (file == NULL) {
         perror("Failed to open file");
         return;
     }
-ACTF("open file succ.");
+
     // 写入 trace_bits_focus_i 的信息
-    fprintf(file, "trace_bits_focus_i:\n");
+    fprintf(file, "trace_bits_focus_%u:\n", focus_mes);
     for (int i = 0; i < MAP_SIZE; i++) {
         fprintf(file, "%u ", trace_bits_focus_i[i]);
     }
     fprintf(file, "\n");
-ACTF("write succ.");
+
     // 关闭文件
     fclose(file);
 }
 
 // 定义函数 debug_trace_bitss，将信息打印到指定的文件中
-void debug_trace_bits_focus_i_except_j(const char* filename) {
+void debug_trace_bits_focus_i_except_j(const char* filename, u32 focus_mes, u32 except_mes) {
     // 打开文件，以追加的方式写入
     FILE* file = fopen(filename, "a");
     if (file == NULL) {
@@ -4397,7 +4458,7 @@ void debug_trace_bits_focus_i_except_j(const char* filename) {
     }
 
     // 写入 trace_bits_focus_i_except_j 的信息
-    fprintf(file, "trace_bits_focus_i_except_j:\n");
+    fprintf(file, "trace_bits_focus_%u_except_%u:\n", focus_mes, except_mes);
     for (int i = 0; i < MAP_SIZE; i++) {
         fprintf(file, "%u ", trace_bits_focus_i_except_j[i]);
     }
@@ -4415,7 +4476,7 @@ static void perform_dry_run(char** argv) {
   struct queue_entry* q = queue;
   u32 cal_failures = 0;
   u8* skip_crashes = getenv("AFL_SKIP_CRASHES");
-
+  u32 temp_id_start = 0;
   while (q) {
 
     u8* use_mem;
@@ -4458,37 +4519,46 @@ static void perform_dry_run(char** argv) {
     /* save the seed to file for replaying */
     u8 *fn_replay = alloc_printf("%s/replayable-queue/%s", out_dir, basename(q->fname));
     save_kl_messages_to_file(kl_messages, fn_replay, 1, messages_sent);
+    ACTF("save_kl_messages_to_file success.");
     ck_free(fn_replay);
 
     /* aflnetplus: parse initial relation table*/
     if(syntax_aware_mode){
-      ACTF("init relation table..");
-      u8 relation_table[message_t_id][message_t_id];
-      memset(relation_table,0,sizeof(relation_table));
-      // ACTF("init relation table success");
+
       /*aflnetplus parse relation*/
       for(u32 i=1;i<q->region_count;i++){
-        ACTF("send_over_network_focus_i...");
+        ACTF("before relation_parse");
         relation_parse(argv,kl_messages,i,(u32)1);
-
+        debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log",i);
         // delete_kl_messages(kl_messages);
         ACTF("send_over_network_focus_i success");
         for(u32 j=0;j<i;j++){
-          kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j);
-          ACTF("send_over_network_focus_i_except_j...");
+
+          kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j,i);
+
+          /*debug kl_messages_except_j*/
+          it = kl_begin(kl_messages_except_j);
+          for (it = kl_begin(kl_messages_except_j); it != kl_end(kl_messages_except_j); it = kl_next(it)) {
+            printf("kl_messages_except_j content: %s\n", kl_val(it)->mdata);
+          }
+
           relation_parse(argv,kl_messages_except_j,i,(u32)0);
 
           ACTF("send_over_network_focus_i_except_j success");
           delete_kl_messages(kl_messages_except_j);
           // ACTF("delete_kl_messages success");
-          debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log");
-          debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log");
+          
+          debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log",i,j);
           if(i_has_new_bits()){
-            update_relation(relation_table,j,i); /* i relies on j*/
+            
+            update_relation(relation_table, temp_id_start + j,temp_id_start + i); /* i relies on j*/
           }
-          ACTF("update_relation success");
+
         }
+    
       }
+
+
       ACTF("parse relation success.");
     }
     
@@ -4644,10 +4714,15 @@ static void perform_dry_run(char** argv) {
     }
 
     if (q->var_behavior) WARNF("Instrumentation output varies across runs.");
-
+    
+    temp_id_start += q->region_count;
     q = q->next;
 
   }
+
+  free(trace_bits_focus_i);
+  free(trace_bits_focus_i_except_j);
+  debug_relation_table();
 
   if (cal_failures) {
 
@@ -10384,9 +10459,13 @@ int main(int argc, char** argv) {
     use_argv = get_qemu_argv(argv[0], argv + optind, argc - optind);
   else
     use_argv = argv + optind;
+    
+  if(syntax_aware_mode) {
+    init_relation_table();
+  }
 
   perform_dry_run(use_argv);
-  ACTF("here1");
+
   cull_queue();
 
   show_init_stats();
