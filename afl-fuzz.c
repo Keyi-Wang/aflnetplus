@@ -2792,9 +2792,9 @@ void debug_print_message_pool_to_file(const message_unit_pool_t *pool, const cha
   fprintf(file, "Message Unit Pool contains %d messages:\n", pool->count);
   for (int i = 0; i < pool->count; i++) {
     message_t *msg = pool->messages[i];
-    fprintf(file, "Message %d: Size = %d, Data = '", msg->id, msg->msize);
+    fprintf(file, "Message %d: Size = %d, Data = ", msg->id, msg->msize);
     fwrite(msg->mdata, 1, msg->msize, file);
-    fprintf(file, "'\n");
+    fprintf(file, "\n");
   }
 
   fclose(file);
@@ -2807,22 +2807,50 @@ u32 get_id_from_message_unit_pool(message_unit_pool_t *pool, char *m_data){
   for (int i = 0; i < pool->count; i++) {
     message_t *msg = pool->messages[i];
     char *msg_data = msg->mdata;
-    if(strcmp(m_data,msg_data)==0){
+    int len = msg->msize;
+    if(strncmp(m_data,msg_data,len)==0){
       id_for_m_data = msg->id;
       break;
     }
   }
+  
   return id_for_m_data;
+}
+
+
+bool is_in_array(u32 j,u32 *m_ids){
+  for(int i = 0;i<sizeof(m_ids);i++){
+    if(j==m_ids[i]) return 1;
+  }
+  return 0;
+}
+
+
+bool msg_is_isolated(u32 *m_ids,int i){
+  for(u32 j = 0; j < message_t_id;j++){
+    if(is_in_array(j,m_ids)){
+      if(relation_table[i][j]==1||relation_table[j][i]==1){
+        return 0; //has relation with any other msg.
+      }
+    }
+    
+  }
+  return 1;
 }
 
 message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
   message_t *new_msg;
   u32 id_for_m_data = get_id_from_message_unit_pool(pool, m_data);
-  debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data);
+  
   int weights[pool->count];
   int total_weight = 0;
   for(int i = 0; i < pool->count; i++) {
-    weights[i] = (id_for_m_data==UINT32_MAX) ? 1 : ((relation_table[i][id_for_m_data]==1) ? 9 : 1);
+    if(id_for_m_data==UINT32_MAX){
+      weights[i] = 1;
+    }
+    else{
+      weights[i] = (relation_table[i][id_for_m_data]==1) ? 9 : 1;
+    }
     total_weight += weights[i];
   }
   int random_num = rand() % total_weight;
@@ -2830,14 +2858,28 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
   for (int i = 0; i < pool->count; i++) {
     cumulative_weight += weights[i];
     if (random_num < cumulative_weight) {
-      if(i>0 && i<pool->count){
+      if(i>=0 && i<pool->count){
         new_msg = pool->messages[i];
+         // 打开文件，以追加的方式写入
+        FILE* file = fopen("/home/keyi/aflnetplus/id_from_MUP.log", "a");
+        if (file == NULL) {
+            perror("Failed to open file");
+            return;
+        }
+        fprintf(file, "random num:\n%d\nweights:\n", random_num);
+        for(int i = 0; i < pool->count; i++){
+          fprintf(file, "%d ", weights[i]);
+        }
+        // 关闭文件
+        fclose(file);
+        debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data, m_data, new_msg->id, new_msg->mdata);
         return new_msg;
       }
       
     }
   }
   new_msg = pool->messages[pool->count-1];
+  debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data, m_data, new_msg->id, new_msg->mdata);
   return new_msg; // 如果随机数超出了权重之和，则返回最后一个元素的索引
 }
 
@@ -4470,7 +4512,7 @@ static void check_map_coverage(void) {
 }
 
 // 定义函数 debug_trace_bitss，将信息打印到指定的文件中
-void debug_id_from_MUP(const char* filename, int msg_id) {
+void debug_id_from_MUP(const char* filename, int msg_id, char *m_data, int new_msg_id, char *new_m_data) {
 
     // 打开文件，以追加的方式写入
     FILE* file = fopen(filename, "a");
@@ -4480,7 +4522,11 @@ void debug_id_from_MUP(const char* filename, int msg_id) {
     }
 
     // 写入 trace_bits_focus_i 的信息
-    fprintf(file, "msg_id%d:\n", msg_id);
+    fprintf(file, "msg_id:%d\n", msg_id);
+    fprintf(file, "msg_info:%s\n", m_data);
+    fprintf(file, "msg_id:%d\n", new_msg_id);
+    fprintf(file, "msg_info:%s\n\n", new_m_data);
+
 
     // 关闭文件
     fclose(file);
@@ -6989,8 +7035,8 @@ AFLNET_REGIONS_SELECTION:;
   u32 in_buf_size = 0;
   int seq_level = 1;
   // int seq_level = rand()%2;
-  // int add_mess = rand()%2;
-  int add_mess = 1;
+  int add_mess = rand()%10;
+  // int add_mess = 1;
 /* syntax_aware_mode */
   if(syntax_aware_mode){   
     //TODO: implement syntax_aware_mode.
@@ -7027,7 +7073,7 @@ AFLNET_REGIONS_SELECTION:;
         it = kl_next(M2_prev);
       }
 
-      if(add_mess){
+      if(add_mess>0){
         /*add message unit from MUP*/
         /*add 1 ... region_count-1 messages*/
         // int add_cnt = rand()%(M2_region_count);
@@ -7107,7 +7153,6 @@ AFLNET_REGIONS_SELECTION:;
 
         free(allNumbers); // 释放临时数组
 
-        it = kl_begin(kl_messages);
         u32 count = 0;
         while (it != M2_next) {
           if(isNumberInArray(count,selectedNumbers,add_cnt)){
@@ -7191,12 +7236,46 @@ AFLNET_REGIONS_SELECTION:;
         // free(selectedNumbers);
 
         /*advanced method: use relation table*/
-        it = kl_begin(kl_messages);
+        kl1_lms *itt;
+        itt = it;
         u32 count = 0;
-        while (it != M2_next) {
-          u32 m_id = get_id_from_message_unit_pool(&message_unit_pool, kl_val(it)->mdata);
+        u32 m_ids[M2_region_count];
+        bool deleted = 0;
+
+        while (itt != M2_next) {
+          m_ids[count++] = get_id_from_message_unit_pool(&message_unit_pool, kl_val(itt)->mdata);
+          itt = kl_next(itt);
         }
 
+        for(int i = 0; i < M2_region_count; i++){
+          if(msg_is_isolated(m_ids,i)){
+            m_ids[i] = UINT32_MAX; // flag to delete;
+          }
+        }
+        count = 0;
+        while(it != M2_next){
+
+          if(m_ids[count++] == UINT32_MAX && M2_region_count != 1){
+            it = kl_next(it);//skip delete indice
+            deleted = 1;
+          }
+          else{
+            if(count == M2_region_count && !deleted && M2_region_count != 1)//Already the last message in M2_region and haven't delete any thing, delete the last one
+            {
+              it = kl_next(it);//skip delete indice
+              deleted = 1;
+            }
+            else{
+              in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+              if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+              //Retrieve data from kl_messages to populate the in_buf
+              memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+
+              in_buf_size += kl_val(it)->msize;
+              it = kl_next(it);
+            }
+          }
+        }
       }
     }
     else{
@@ -7208,7 +7287,7 @@ AFLNET_REGIONS_SELECTION:;
     
   }
   else{
-    //TODO: remain previous code.
+    //remain previous code.
     kliter_t(lms) *it;
 
     M2_prev = NULL;
