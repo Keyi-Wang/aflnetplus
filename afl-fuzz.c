@@ -36,6 +36,8 @@
 #define _GNU_SOURCE
 #endif
 #define _FILE_OFFSET_BITS 64
+#define MAX_STR_LEN 256
+#define MAX_STR_NUM 1000
 
 #include "config.h"
 #include "types.h"
@@ -421,7 +423,37 @@ kliter_t(lms) *M2_prev, *M2_next;
 unsigned int* (*extract_response_codes)(unsigned char* buf, unsigned int buf_size, unsigned int* state_count_ref) = NULL;
 region_t* (*extract_requests)(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref) = NULL;
 
+//aflnetplus: extract fields
+fields_t* (*extract_fields)(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref) = NULL;
+
+//aflnetplus: for message unit pool
 char *terminator;
+
+// 保存文件中的字符串的数据结构
+typedef struct {
+    char strs[MAX_STR_NUM][MAX_STR_LEN]; // 字符串数组
+    int count;                            // 字符串数量
+} StringList;
+
+extern StringList str_list;
+
+void read_strings_from_file(const u8 *filename, StringList *str_list) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        fprintf(stderr, "Cannot open file %s\n", filename);
+        exit(1);
+    }
+    
+    char line[MAX_STR_LEN];
+    while (fgets(line, sizeof(line), file)) {
+        line[strcspn(line, "\n")] = '\0'; // 移除行尾的换行符
+        strcpy(str_list->strs[str_list->count++], line); // 保存字符串到 StringList 中
+    }
+    
+    fclose(file);
+}
+
+
 /* Initialize the implemented state machine as a graphviz graph */
 void setup_ipsm()
 {
@@ -452,7 +484,7 @@ void destroy_ipsm()
 /*aflnetplus: init ralation table*/
 void init_relation_table(){
   /*把这快部分提前初始化，在再加个free的部分*/
-    ACTF("init relation table..");
+    // ACTF("init relation table..");
     relation_table = (u8**)malloc(message_t_id * sizeof(u8*));
     if (relation_table == NULL) {
       fprintf(stderr, "Relation table memory allocation failed\n");
@@ -1327,7 +1359,7 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
 
   for (it = kl_begin(kl_message); it != kl_end(kl_message); it = kl_next(it)) {
     n = net_send(sockfd, timeout, kl_val(it)->mdata, kl_val(it)->msize);
-    ACTF("send %u: %s",messages_sent, kl_val(it)->mdata);
+    // ACTF("send %u: %s",messages_sent, kl_val(it)->mdata);
     if(messages_sent == i+1){
       break;
     }
@@ -1375,7 +1407,7 @@ HANDLE_RESPONSES:
   if (messages_sent > 0 && response_bytes != NULL) {
     response_bytes[messages_sent - 1] = response_buf_size;
   }
-  ACTF("recv buf: %s", response_buf);
+  // ACTF("recv buf: %s", response_buf);
   //wait a bit letting the server to complete its remaining task(s)
   memset(session_virgin_bits, 255, MAP_SIZE);
   while(1) {
@@ -2861,25 +2893,25 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
       if(i>=0 && i<pool->count){
         new_msg = pool->messages[i];
          // 打开文件，以追加的方式写入
-        FILE* file = fopen("/home/keyi/aflnetplus/id_from_MUP.log", "a");
-        if (file == NULL) {
-            perror("Failed to open file");
-            return;
-        }
-        fprintf(file, "random num:\n%d\nweights:\n", random_num);
-        for(int i = 0; i < pool->count; i++){
-          fprintf(file, "%d ", weights[i]);
-        }
-        // 关闭文件
-        fclose(file);
-        debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data, m_data, new_msg->id, new_msg->mdata);
+        // FILE* file = fopen("/home/keyi/aflnetplus/id_from_MUP.log", "a");
+        // if (file == NULL) {
+        //     perror("Failed to open file");
+        //     return;
+        // }
+        // fprintf(file, "random num:\n%d\nweights:\n", random_num);
+        // for(int i = 0; i < pool->count; i++){
+        //   fprintf(file, "%d ", weights[i]);
+        // }
+        // // 关闭文件
+        // fclose(file);
+        // debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data, m_data, new_msg->id, new_msg->mdata);
         return new_msg;
       }
       
     }
   }
   new_msg = pool->messages[pool->count-1];
-  debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data, m_data, new_msg->id, new_msg->mdata);
+  // debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data, m_data, new_msg->id, new_msg->mdata);
   return new_msg; // 如果随机数超出了权重之和，则返回最后一个元素的索引
 }
 
@@ -2908,15 +2940,9 @@ string_node_t* add_string(string_node_t* head, const char* str, size_t len) {
     return new_node;
 }
 
-// Free the linked list of strings
-void free_strings(string_node_t* head) {
-    string_node_t* tmp;
-    while (head != NULL) {
-        tmp = head;
-        head = head->next;
-        free(tmp->str);
-        free(tmp);
-    }
+// Free the linked fields
+void free_fields(field_t* fields) {
+    //TODO
 }
 
 // Function to parse and print each field of the messages
@@ -2959,8 +2985,11 @@ string_node_t* parse_message_formats(klist_t(lms) *kl_messages) {
     return head;
 }
 
+//mutate fields and write in to buf
+void mutate_fields(field_t *fields, u8 *in_buf){
+  //mutate fields
 
-void mutate_field(){
+  //write to buf
 
 }
 
@@ -3197,6 +3226,7 @@ static void load_extras(u8* dir) {
   }
 
   closedir(d);
+  read_strings_from_file(dir, &str_list);
 
 check_and_sort:
 
@@ -4351,7 +4381,7 @@ abort_calibration:
 }
 
 static u8 relation_parse(char** argv, klist_t(lms) *kl_message, u32 focus_message, u32 flag) {
-  ACTF("in relation parse...");
+  // ACTF("in relation parse...");
   // static u8 first_trace[MAP_SIZE];
   u8  fault = 0;
   // u8  fault = 0, new_bits = 0, var_detected = 0,
@@ -4393,9 +4423,9 @@ static u8 relation_parse(char** argv, klist_t(lms) *kl_message, u32 focus_messag
   //   if (!first_run && !(stage_cur % stats_update_freq)) show_stats();
 
   //   write_to_testcase(use_mem, q->len);
-    ACTF("before run_target_to_parse");
+    // ACTF("before run_target_to_parse");
     fault = run_target_to_parse(argv, use_tmout, kl_message, focus_message, flag);
-    ACTF("after run_target_to_parse");
+    // ACTF("after run_target_to_parse");
     /* stop_soon is set by the handler for Ctrl+C. When it's pressed,
        we want to bail out quickly. */
 
@@ -4610,9 +4640,9 @@ static void perform_dry_run(char** argv) {
     /*debug kl_messages*/
     kliter_t(lms) *it;
     it = kl_begin(kl_messages);
-    for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
-      printf("Message content: %s\n", kl_val(it)->mdata);
-    }
+    // for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+    //   printf("Message content: %s\n", kl_val(it)->mdata);
+    // }
 
 
     res = calibrate_case(argv, q, use_mem, 0, 1);
@@ -4624,7 +4654,7 @@ static void perform_dry_run(char** argv) {
     /* save the seed to file for replaying */
     u8 *fn_replay = alloc_printf("%s/replayable-queue/%s", out_dir, basename(q->fname));
     save_kl_messages_to_file(kl_messages, fn_replay, 1, messages_sent);
-    ACTF("save_kl_messages_to_file success.");
+    // ACTF("save_kl_messages_to_file success.");
     ck_free(fn_replay);
 
     /* aflnetplus: parse initial relation table*/
@@ -4632,28 +4662,28 @@ static void perform_dry_run(char** argv) {
 
       /*aflnetplus parse relation*/
       for(u32 i=1;i<q->region_count;i++){
-        ACTF("before relation_parse");
+        // ACTF("before relation_parse");
         relation_parse(argv,kl_messages,i,(u32)1);
-        debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log",i);
+        // debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log",i);
         // delete_kl_messages(kl_messages);
-        ACTF("send_over_network_focus_i success");
+        // ACTF("send_over_network_focus_i success");
         for(u32 j=0;j<i;j++){
 
           kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j,i);
 
           /*debug kl_messages_except_j*/
           it = kl_begin(kl_messages_except_j);
-          for (it = kl_begin(kl_messages_except_j); it != kl_end(kl_messages_except_j); it = kl_next(it)) {
-            printf("kl_messages_except_j content: %s\n", kl_val(it)->mdata);
-          }
+          // for (it = kl_begin(kl_messages_except_j); it != kl_end(kl_messages_except_j); it = kl_next(it)) {
+          //   printf("kl_messages_except_j content: %s\n", kl_val(it)->mdata);
+          // }
 
           relation_parse(argv,kl_messages_except_j,i,(u32)0);
 
-          ACTF("send_over_network_focus_i_except_j success");
+          // ACTF("send_over_network_focus_i_except_j success");
           delete_kl_messages(kl_messages_except_j);
           // ACTF("delete_kl_messages success");
           
-          debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log",i,j);
+          // debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log",i,j);
           if(i_has_new_bits()){
             
             update_relation(relation_table, temp_id_start + j,temp_id_start + i); /* i relies on j*/
@@ -4664,7 +4694,7 @@ static void perform_dry_run(char** argv) {
       }
 
 
-      ACTF("parse relation success.");
+      // ACTF("parse relation success.");
     }
     
 
@@ -7280,9 +7310,19 @@ AFLNET_REGIONS_SELECTION:;
     }
     else{
       /*unit level*/
-      string_node_t* fields = parse_message_formats(kl_messages);
-      mutate_field();
-      free_strings(fields);
+      /*parse fileds, like aflnet regions*/
+      kliter_t(lms) *it;
+      for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+        u32 field_count = 0;
+        field_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
+        
+        debug_fields(fields);
+        /*mutate fields, according to field types*/
+        mutate_fields(fields, in_buf);
+        /*free*/
+        free_fields(fields);
+      }
+      
     }
     
   }
@@ -7362,18 +7402,28 @@ AFLNET_REGIONS_SELECTION:;
    *********************/
 
   orig_perf = perf_score = calculate_score(queue_cur);
+
+  // First try 
   if(syntax_aware_mode){
-    if(add_mess){
-      stage_name  = "add sequence unit";
-      stage_short = "add";
+    if(seq_level){
+      if(add_mess){
+        stage_name  = "add sequence unit";
+        stage_short = "add";
+      }
+      else{
+        stage_name  = "delete sequence unit";
+        stage_short = "del";
+      }
     }
     else{
-      stage_name  = "delete sequence unit";
-      stage_short = "del";
+      stage_name  = "syntax-aware mutation";
+      stage_short = "sam";
     }
+    
     common_fuzz_stuff(argv, out_buf, len);
     goto abandon_entry;
   }
+
   /* Skip right away if -d is given, if we have done deterministic fuzzing on
      this entry ourselves (was_fuzzed), or if it has gone through deterministic
      testing in earlier, resumed runs (passed_det). */
@@ -10413,6 +10463,7 @@ int main(int argc, char** argv) {
         if (!strcmp(optarg, "RTSP")) {
           extract_requests = &extract_requests_rtsp;
           extract_response_codes = &extract_response_codes_rtsp;
+          extract_fields = &extract_fields_rtsp;
           terminator = malloc(4 * sizeof(char));
           terminator[0] = 0x0D;
           terminator[1] = 0x0A;
@@ -10638,7 +10689,7 @@ int main(int argc, char** argv) {
   setup_dirs_fds();
   init_message_pool(&message_unit_pool, 50);
   read_testcases();
-  debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
+  // debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
   load_auto();
 
   pivot_inputs();

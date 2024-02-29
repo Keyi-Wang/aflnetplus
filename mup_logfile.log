@@ -1,5 +1,6 @@
 Message Unit Pool contains 29 messages:
-Message 0: Size = 158, Data = DESCRIBE rtsp://127.0.0.1:8554/aacAudioTest RTSP/1.0
+Message 0: Size = 158, Data = 
+DESCRIBE rtsp://127.0.0.1:8554/aacAudioTest RTSP/1.0
 CSeq: 2
 User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
 Accept: application/sdp

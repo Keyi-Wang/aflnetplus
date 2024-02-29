@@ -14,6 +14,20 @@ typedef struct {
   unsigned int state_count;       /* Number of states stored in state_sequence. */
 } region_t;
 
+enum field_type_t{
+  /* 00 */ SRTING_FIELD,
+  /* 01 */ ENUM_FIELD,
+  /* 02 */ INT_FIELD,
+  /* 03 */ SEPARATOR /* blank space, enter, comma...*/
+};
+
+typedef struct {
+  int start_byte;                 /* The start byte, negative if unknown. */
+  int end_byte;                   /* The last byte, negative if unknown. */
+  enum field_type_t field_type;        /* The filed type, STRING_TYPE as default*/
+} fields_t;
+
+
 typedef struct {
   u32 id; /*message id*/
   char *mdata; /* Buffer keeping the message data */
@@ -100,6 +114,9 @@ region_t* extract_requests_SNTP(unsigned char* buf, unsigned int buf_size, unsig
 region_t* extract_requests_NTP(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref);
 region_t* extract_requests_SNMP(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref);
 extern region_t* (*extract_requests)(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref);
+
+fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
+extern fields_t* (*extract_fields)(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref) ;
 
 // Network communication functions
 

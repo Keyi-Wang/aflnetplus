@@ -11,6 +11,16 @@
 #include "alloc-inl.h"
 #include "aflnet.h"
 
+#define MAX_STR_LEN 256
+#define MAX_STR_NUM 1000
+
+typedef struct {
+    char strs[MAX_STR_NUM][MAX_STR_LEN]; // 字符串数组
+    int count;                            // 字符串数量
+} StringList;
+
+StringList str_list = { .count = 0 };
+
 // Protocol-specific functions for extracting requests and responses
 
 region_t* extract_requests_tftp(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref)
@@ -2590,4 +2600,151 @@ u32 read_bytes_to_uint32(unsigned char* buf, unsigned int offset, int num_bytes)
     val = (val << 8) + buf[i+offset];
   }
   return val;
+}
+
+int is_numeric(const char *str) {
+    // 遍历字符串中的每个字符
+    while (*str) {
+        // 如果字符不是数字字符，则返回 0
+        if (!isdigit(*str)) {
+            return 0;
+        }
+        str++;  // 移动到下一个字符
+    }
+    // 如果所有字符都是数字字符，则返回非零值
+    return 1;
+}
+
+int is_in_string_list(const StringList *str_list, const char *target) {
+    for (int i = 0; i < str_list->count; i++) {
+        if (strcmp(str_list->strs[i], target) == 0) {
+            return 1; // 目标字符串在 StringList 中找到
+        }
+    }
+    return 0; // 目标字符串未在 StringList 中找到
+}
+
+enum field_type_t get_field_type(unsigned char* buf, unsigned int start, unsigned int end, unsigned len){
+  enum field_type_t field_type = SRTING_FIELD;
+  char cur_field[len];
+  buf += start;
+  memcpy(cur_field,buf,len);
+  if(is_in_string_list(&str_list, cur_field)){ /* check according to dict */
+    field_type = ENUM_FIELD;
+  }else if(is_numeric(cur_field)){ /* check if is int*/
+    field_type = INT_FIELD;
+  }
+  return field_type;
+}
+
+/* Request format for RTSP:
+  METHOD rtsp://hostname[:port]/[abs-path] RTSP/1.0
+  CSeq: sequence_number
+  [Header1: value1]
+  [Header2: value2]
+  ...
+  [HeaderN: valueN]
+  [message-body]
+
+*/
+fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref)
+{
+  char *mem;
+  unsigned int byte_count = 0;
+  unsigned int mem_count = 0;
+  unsigned int mem_size = 1024;
+  unsigned int field_count = 0;
+  fields_t *fields = NULL;
+  char terminator0[4] = {0x0D, 0x0A, 0x0D, 0x0A};
+  char terminator1[2] = {0x0D, 0x0A}; /* 'enter' */
+  char terminator2[2] = {0x3A, 0x20}; /* ': ' */
+  mem=(char *)ck_alloc(mem_size);
+
+  unsigned int cur_start = 0;
+  unsigned int cur_end = 0;
+  while (byte_count < buf_size) {
+
+    memcpy(&mem[mem_count], buf + byte_count++, 1);
+
+    //Check if the last four bytes are 0x0D0A0D0A
+    if (field_count < 3 && mem[mem_count]==' ') {
+      field_count++;
+      fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
+      fields[field_count - 1].start_byte = cur_start;
+      fields[field_count - 1].end_byte = cur_end-1;
+      fields[field_count - 1].field_type = get_field_type(buf, cur_start, cur_end-1, cur_end-cur_start);
+      field_count++;
+      fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
+      fields[field_count - 1].start_byte = cur_end;
+      fields[field_count - 1].end_byte = cur_end;
+      fields[field_count - 1].field_type = SEPARATOR;
+
+      mem_count = 0;
+      cur_start = cur_end + 1;
+      cur_end = cur_start;
+    } else if (field_count >=3 && memcmp(&mem[mem_count-3],terminator0,4)==0)
+    {
+      field_count++;
+      fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
+      fields[field_count - 1].start_byte = cur_start;
+      fields[field_count - 1].end_byte = cur_end-4;
+
+      field_count++;
+      fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
+      fields[field_count - 1].start_byte = cur_end-3;
+      fields[field_count - 1].end_byte = cur_end;
+      fields[field_count - 1].field_type = SEPARATOR;
+
+      mem_count = 0;
+      cur_start = cur_end + 1;
+      cur_end = cur_start;
+    }else if (field_count >=3 && (memcmp(&mem[mem_count-1],terminator1,2)==0 || memcmp(&mem[mem_count-1],terminator2,2)==0 ))
+    {
+      field_count++;
+      fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
+      fields[field_count - 1].start_byte = cur_start;
+      fields[field_count - 1].end_byte = cur_end-2;
+
+      field_count++;
+      fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
+      fields[field_count - 1].start_byte = cur_end-1;
+      fields[field_count - 1].end_byte = cur_end;
+      fields[field_count - 1].field_type = SEPARATOR;
+
+      mem_count = 0;
+      cur_start = cur_end + 1;
+      cur_end = cur_start;
+    }else {
+      mem_count++;
+      cur_end++;
+
+      //Check if the last byte has been reached
+      if (cur_end == buf_size - 1) {
+        field_count++;
+        fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
+        fields[field_count - 1].start_byte = cur_start;
+        fields[field_count - 1].end_byte = cur_end;
+      }
+
+      if (mem_count == mem_size) {
+        //enlarge the mem buffer
+        mem_size = mem_size * 2;
+        mem=(char *)ck_realloc(mem, mem_size);
+      }
+    }
+  }
+  if (mem) ck_free(mem);
+
+  //in case field_count equals zero, it means that the structure of the buffer is broken
+  //hence we create one region for the whole buffer
+  if ((field_count == 0) && (buf_size > 0)) {
+    fields = (fields_t *)ck_realloc(fields, sizeof(fields_t));
+    fields[0].start_byte = 0;
+    fields[0].end_byte = buf_size - 1;
+
+    field_count = 1;
+  }
+
+  *field_count_ref = field_count;
+  return fields;
 }
