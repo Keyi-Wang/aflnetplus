@@ -2625,7 +2625,7 @@ int is_in_string_list(const StringList *str_list, const char *target) {
 }
 
 enum field_type_t get_field_type(unsigned char* buf, unsigned int start, unsigned int end, unsigned len){
-  enum field_type_t field_type = SRTING_FIELD;
+  enum field_type_t field_type = STRING_FIELD;
   char cur_field[len];
   buf += start;
   memcpy(cur_field,buf,len);
@@ -2667,7 +2667,7 @@ fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigne
     memcpy(&mem[mem_count], buf + byte_count++, 1);
 
     //Check if the last four bytes are 0x0D0A0D0A
-    if (field_count < 3 && mem[mem_count]==' ') {
+    if (field_count < 4 && mem[mem_count]==' ') {
       field_count++;
       fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
       fields[field_count - 1].start_byte = cur_start;
@@ -2682,12 +2682,13 @@ fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigne
       mem_count = 0;
       cur_start = cur_end + 1;
       cur_end = cur_start;
-    } else if (field_count >=3 && memcmp(&mem[mem_count-3],terminator0,4)==0)
+    } else if (field_count >= 4 && mem_count>3 && memcmp(&mem[mem_count-3],terminator0,4)==0)
     {
       field_count++;
       fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
       fields[field_count - 1].start_byte = cur_start;
       fields[field_count - 1].end_byte = cur_end-4;
+      fields[field_count - 1].field_type = get_field_type(buf, cur_start, cur_end-4, cur_end-cur_start-3);
 
       field_count++;
       fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
@@ -2698,12 +2699,14 @@ fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigne
       mem_count = 0;
       cur_start = cur_end + 1;
       cur_end = cur_start;
-    }else if (field_count >=3 && (memcmp(&mem[mem_count-1],terminator1,2)==0 || memcmp(&mem[mem_count-1],terminator2,2)==0 ))
+    }else if (field_count >= 4 && mem_count>1 && (memcmp(&mem[mem_count-1],terminator1,2)==0 || memcmp(&mem[mem_count-1],terminator2,2)==0 ))
     {
+      //actually didn't work
       field_count++;
       fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
       fields[field_count - 1].start_byte = cur_start;
       fields[field_count - 1].end_byte = cur_end-2;
+      fields[field_count - 1].field_type = get_field_type(buf, cur_start, cur_end-2, cur_end-cur_start-1);
 
       field_count++;
       fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
@@ -2724,6 +2727,7 @@ fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigne
         fields = (fields_t *)ck_realloc(fields, field_count * sizeof(fields_t));
         fields[field_count - 1].start_byte = cur_start;
         fields[field_count - 1].end_byte = cur_end;
+        fields[field_count - 1].field_type = get_field_type(buf, cur_start, cur_end, cur_end-cur_start+1);
       }
 
       if (mem_count == mem_size) {

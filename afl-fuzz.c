@@ -2812,6 +2812,33 @@ static void read_testcases(void) {
 
 }
 
+/*aflnetplus: free fileds*/
+void free_fields(fields_t *fields) {
+    // 检查指针是否为空
+    if (fields == NULL) {
+        return;
+    }
+    // 释放 fields 指针指向的内存空间
+    ck_free(fields);
+}
+
+/*aflnetplus: for debug field parse*/
+void debug_fields(fields_t *fields, u32 field_count, char *buf){
+  //print fields to file 
+  FILE *file = fopen("/home/keyi/aflnetplus/fields.log", "a"); //append
+  if (file == NULL) {
+    perror("Unable to open file for writing");
+    return;
+  }
+  fprintf(file, "The message contains %d fields:\n", field_count);
+  for(u32 i = 0; i < field_count; i++){
+    fprintf(file, "field %d:", i);
+    fwrite(&buf[fields[i].start_byte], 1, fields[i].end_byte-fields[i].start_byte+1, file);
+    fprintf(file, "\n");
+  }
+
+}
+
 
 /*aflnetplus: for debug message_unit_pool*/
 void debug_print_message_pool_to_file(const message_unit_pool_t *pool, const char* filename) {
@@ -2915,81 +2942,111 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
   return new_msg; // 如果随机数超出了权重之和，则返回最后一个元素的索引
 }
 
-// Node for a linked list of strings
-typedef struct string_node {
-    char* str;
-    struct string_node* next;
-} string_node_t;
 
-// Add a new string to the linked list of strings
-string_node_t* add_string(string_node_t* head, const char* str, size_t len) {
-    string_node_t* new_node = (string_node_t*)malloc(sizeof(string_node_t));
-    if (!new_node) {
-        perror("Failed to allocate memory for new node");
-        return head;
+u8 *mutate_integer(u8 *int_str, int* size){
+
+  int num = atoi(int_str);
+  if (num == 0 && int_str[0] != '0') {
+    printf("Error: Failed to convert string to integer.\n");
+    return int_str;
+  }
+  u8 mutated_int_str[16];
+
+  if (rand() % 10 == 0) {
+    int ran_num = rand() % 5;
+    switch(ran_num){
+      case 0:
+        num = INT_MAX;
+        break;
+      case 1:
+        num = INT_MIN;
+        break;
+      case 2:
+        num = 0;
+        break;
+      case 3:
+        num = 1;
+        break;
+      case 4:
+        num = -1;
+        break;
     }
-    new_node->str = (char*)malloc(len + 1);
-    if (!new_node->str) {
-        perror("Failed to allocate memory for string");
-        free(new_node);
-        return head;
+  }
+  else{
+    if (rand() % 2 == 0) {
+      num++;
     }
-    strncpy(new_node->str, str, len);
-    new_node->str[len] = '\0';
-    new_node->next = head;
-    return new_node;
-}
-
-// Free the linked fields
-void free_fields(field_t* fields) {
-    //TODO
-}
-
-// Function to parse and print each field of the messages
-string_node_t* parse_message_formats(klist_t(lms) *kl_messages) {
-    kliter_t(lms) *iter;
-    message_t *msg;
-    string_node_t* head = NULL; // Head of the list of strings
-
-    // Iterate over each element in the linked list
-    for (iter = kl_begin(kl_messages); iter != kl_end(kl_messages); iter = kl_next(iter)) {
-        msg = kl_val(iter);
-
-        char *msg_end = msg->mdata + msg->msize; // End of the message
-        char *start = msg->mdata; // Start of a field
-
-        // Iterate through the message character by character
-        for (char *c = msg->mdata; c < msg_end; c++) {
-            // If the character is a space or newline, we found the end of a field
-            if (*c == ' ' || *c == '\n') {
-                if (c > start) { // Make sure the field is not empty
-                    // Print and store the field, from start to the character before the space/newline
-                    printf("%.*s\n", (int)(c - start), start);
-                    head = add_string(head, start, c - start);
-                }
-                start = c + 1; // Set the start of the next field to the character after the space/newline
-            }
-        }
-
-        // Handle the last field in the message (if there's no trailing space/newline)
-        if (start < msg_end) {
-            printf("%.*s\n", (int)(msg_end - start), start);
-            head = add_string(head, start, msg_end - start);
-        }
+    else{
+      num--;
     }
+  }
+  int length = strlen(mutated_int_str);
+  if (num < 0) {
+    length++;
+  }
+  *size = length;
+  sprintf(mutated_int_str, "%d", num);
+  return mutated_int_str;
 
-    // At this point, 'head' points to a linked list of all the fields in all the messages
-    // Do something with the strings here, or pass the head to another function
-
-    // Finally, free the list of strings
-    return head;
 }
 
 //mutate fields and write in to buf
-void mutate_fields(field_t *fields, u8 *in_buf){
+u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u32* in_buf_size_ref){
   //mutate fields
+  u32 in_buf_size = 0;
+  for(u32 i = 0; i < field_count; i++)
+  {
+    
+    if (fields[i].field_type == SEPARATOR) {
+        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+        //Retrieve data from kl_messages to populate the in_buf
+        memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
 
+        in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+
+    } else if (fields[i].field_type == INT_FIELD) {
+        u8 temp_buf[fields[i].end_byte - fields[i].start_byte + 2];
+        memcpy(temp_buf, &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+        temp_buf[fields[i].end_byte - fields[i].start_byte + 1] = '\0';
+        int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
+        u8 *mutated_int_str = mutate_integer(temp_buf, &mutated_size);
+        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + mutated_size);
+        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+        //Retrieve data from kl_messages to populate the in_buf
+        memcpy(&in_buf[in_buf_size], mutated_int_str, mutated_size);
+
+        in_buf_size += mutated_size;
+
+    } else if (fields[i].field_type == ENUM_FIELD) {
+        // 处理 ENUM_FIELD 类型的逻辑
+        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+        //Retrieve data from kl_messages to populate the in_buf
+        memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+    } else if (fields[i].field_type == STRING_FIELD) {
+        // 处理 STRING_FIELD 类型的逻辑
+        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+        //Retrieve data from kl_messages to populate the in_buf
+        memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+        in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+
+    } else {
+        // 处理其他情况
+        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+        //Retrieve data from kl_messages to populate the in_buf
+        memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+        in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+        
+    }
+
+    
+  }
+  *in_buf_size_ref = in_buf_size;
   //write to buf
+  return in_buf;
 
 }
 
@@ -7063,7 +7120,7 @@ AFLNET_REGIONS_SELECTION:;
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
   u32 in_buf_size = 0;
-  int seq_level = 1;
+  int seq_level = 0;
   // int seq_level = rand()%2;
   int add_mess = rand()%10;
   // int add_mess = 1;
@@ -7076,32 +7133,32 @@ AFLNET_REGIONS_SELECTION:;
      * unit level: 1.parse message unit. 2.mutate message fields based type in a certain unit.
     *****************************************************************************************/
     /* random sequence/unit level mutate */
-    
+    u32 cnt = 0;
+    kliter_t(lms) *it;
+    M2_prev = NULL;
+    M2_next = kl_end(kl_messages);
+      
+    for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+      if (cnt == M2_start_region_ID - 1) {
+        M2_prev = it;
+      }
+      if (cnt == M2_start_region_ID + M2_region_count) {
+        M2_next = it;
+      }
+      cnt++;
+    }
+
+    if (M2_prev == NULL) {
+      it = kl_begin(kl_messages);
+    } else {
+      it = kl_next(M2_prev);
+    }  
+
     if(seq_level){
       /*sequence level*/
       // if(M2_region_count==1) add_mess = 1;
       
-      u32 cnt = 0;
-      kliter_t(lms) *it;
-      M2_prev = NULL;
-      M2_next = kl_end(kl_messages);
       
-      for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
-        if (cnt == M2_start_region_ID - 1) {
-          M2_prev = it;
-        }
-
-        if (cnt == M2_start_region_ID + M2_region_count) {
-          M2_next = it;
-        }
-        cnt++;
-      }
-
-      if (M2_prev == NULL) {
-        it = kl_begin(kl_messages);
-      } else {
-        it = kl_next(M2_prev);
-      }
 
       if(add_mess>0){
         /*add message unit from MUP*/
@@ -7311,16 +7368,17 @@ AFLNET_REGIONS_SELECTION:;
     else{
       /*unit level*/
       /*parse fileds, like aflnet regions*/
-      kliter_t(lms) *it;
-      for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+      while (it != M2_next) {
         u32 field_count = 0;
-        field_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
+        fields_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
         
-        debug_fields(fields);
+        debug_fields(fields, field_count, kl_val(it)->mdata);
         /*mutate fields, according to field types*/
-        mutate_fields(fields, in_buf);
+        in_buf = mutate_fields(fields, field_count, kl_val(it)->mdata, in_buf, &in_buf_size);
+        // ACTF("in_buf_size = %d; in_buf:\n%s\n",in_buf_size,in_buf);
         /*free*/
         free_fields(fields);
+        it = kl_next(it);
       }
       
     }
@@ -7419,7 +7477,7 @@ AFLNET_REGIONS_SELECTION:;
       stage_name  = "syntax-aware mutation";
       stage_short = "sam";
     }
-    
+    // ACTF("here1");
     common_fuzz_stuff(argv, out_buf, len);
     goto abandon_entry;
   }

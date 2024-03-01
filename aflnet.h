@@ -15,7 +15,7 @@ typedef struct {
 } region_t;
 
 enum field_type_t{
-  /* 00 */ SRTING_FIELD,
+  /* 00 */ STRING_FIELD,
   /* 01 */ ENUM_FIELD,
   /* 02 */ INT_FIELD,
   /* 03 */ SEPARATOR /* blank space, enter, comma...*/
