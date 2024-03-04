@@ -2602,14 +2602,18 @@ u32 read_bytes_to_uint32(unsigned char* buf, unsigned int offset, int num_bytes)
   return val;
 }
 
-int is_numeric(const char *str) {
+int is_numeric(char *str, unsigned len) {
+    unsigned length = len;
     // 遍历字符串中的每个字符
-    while (*str) {
+    while (length>0) {
         // 如果字符不是数字字符，则返回 0
-        if (!isdigit(*str)) {
-            return 0;
+        if(length == 1 && len > 1 && str[length-1] == '-'){
+          return 1;
         }
-        str++;  // 移动到下一个字符
+        if ((str[length-1] < '0') || (str[length-1] > '9') ) {
+          return 0;
+        }
+        length--;  // 移动到下一个字符
     }
     // 如果所有字符都是数字字符，则返回非零值
     return 1;
@@ -2626,12 +2630,12 @@ int is_in_string_list(const StringList *str_list, const char *target) {
 
 enum field_type_t get_field_type(unsigned char* buf, unsigned int start, unsigned int end, unsigned len){
   enum field_type_t field_type = STRING_FIELD;
-  char cur_field[len];
-  buf += start;
-  memcpy(cur_field,buf,len);
+  char cur_field[len+1];
+  memcpy(cur_field, &buf[start], len);
+  cur_field[len]='\0';
   if(is_in_string_list(&str_list, cur_field)){ /* check according to dict */
     field_type = ENUM_FIELD;
-  }else if(is_numeric(cur_field)){ /* check if is int*/
+  }else if(is_numeric(cur_field, len)){ /* check if is int*/
     field_type = INT_FIELD;
   }
   return field_type;

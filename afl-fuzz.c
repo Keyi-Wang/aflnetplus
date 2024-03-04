@@ -438,6 +438,7 @@ typedef struct {
 extern StringList str_list;
 
 void read_strings_from_file(const u8 *filename, StringList *str_list) {
+  ACTF("in reading strs...");
     FILE *file = fopen(filename, "r");
     if (!file) {
         fprintf(stderr, "Cannot open file %s\n", filename);
@@ -446,13 +447,34 @@ void read_strings_from_file(const u8 *filename, StringList *str_list) {
     
     char line[MAX_STR_LEN];
     while (fgets(line, sizeof(line), file)) {
-        line[strcspn(line, "\n")] = '\0'; // 移除行尾的换行符
-        strcpy(str_list->strs[str_list->count++], line); // 保存字符串到 StringList 中
+      char *token = strtok(line, "\"");  // 使用双引号作为分隔符
+        while (token != NULL) {
+            // 如果找到了双引号内的字符串，则将其存储到数组中
+            if (token[0] != '\0' && token[0] != '\n') {
+                strcpy(str_list->strs[str_list->count++], strdup(token));
+            }
+            token = strtok(NULL, "\"");
+        }
+
+        // line[strcspn(line, "\n")] = '\0'; // 移除行尾的换行符
+        // strncpy(str_list->strs[str_list->count++], &line[1], sizeof(line)-2); // 保存字符串到 StringList 中
     }
-    
+    debug_dic_strings(str_list);
     fclose(file);
+
 }
 
+void debug_dic_strings(StringList *str_list){
+  FILE *file = fopen("/home/keyi/aflnetplus/dic_strings.log","w");
+  if (!file) {
+    fprintf(stderr, "Cannot open file %s\n", file);
+    exit(1);
+  }
+  for(int i = 0; i < str_list->count; i++){
+    fprintf(file, "str %d:%s\n",i,str_list->strs[i]);
+  }
+  fclose(file);
+}
 
 /* Initialize the implemented state machine as a graphviz graph */
 void setup_ipsm()
@@ -2832,7 +2854,8 @@ void debug_fields(fields_t *fields, u32 field_count, char *buf){
   }
   fprintf(file, "The message contains %d fields:\n", field_count);
   for(u32 i = 0; i < field_count; i++){
-    fprintf(file, "field %d:", i);
+    fprintf(file, "field %d:\n", i);
+    fprintf(file, "field type %d:\n", fields[i].field_type);
     fwrite(&buf[fields[i].start_byte], 1, fields[i].end_byte-fields[i].start_byte+1, file);
     fprintf(file, "\n");
   }
@@ -2943,14 +2966,13 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
 }
 
 
-u8 *mutate_integer(u8 *int_str, int* size){
+u8 *mutate_integer(u8 *mutated_int_str, u8 *int_str, int* size){
 
   int num = atoi(int_str);
   if (num == 0 && int_str[0] != '0') {
     printf("Error: Failed to convert string to integer.\n");
     return int_str;
   }
-  u8 mutated_int_str[16];
 
   if (rand() % 10 == 0) {
     int ran_num = rand() % 5;
@@ -2990,6 +3012,25 @@ u8 *mutate_integer(u8 *int_str, int* size){
 
 }
 
+u8 *mutate_enum(u8 *mutated_enum_str, int *mutated_size){
+  int ran = rand() % str_list.count;
+  strcpy(mutated_enum_str, str_list.strs[ran]);
+  *mutated_size = strlen(str_list.strs[ran]);
+  return mutated_enum_str;
+}
+
+u8 *mutate_string(int* size){
+  u8 *mutated_string = NULL;
+  u32 mutated_string_cnt = 0;
+  mutated_string_cnt = rand() % (1 << 16);
+  mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
+  for (u32 i = 0; i < mutated_string_cnt-1; i++) {
+        mutated_string[i] = 'A' + rand() % 26; // 生成'A'到'Z'之间的随机字符
+    }
+    mutated_string[mutated_string_cnt-1] = '\0'; // 字符串结尾添加'\0'
+  return mutated_string;
+}
+
 //mutate fields and write in to buf
 u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u32* in_buf_size_ref){
   //mutate fields
@@ -3006,11 +3047,20 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
 
     } else if (fields[i].field_type == INT_FIELD) {
+      //  in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+      //   if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+      //   //Retrieve data from kl_messages to populate the in_buf
+      //   memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+
+      //   in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+
         u8 temp_buf[fields[i].end_byte - fields[i].start_byte + 2];
         memcpy(temp_buf, &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
         temp_buf[fields[i].end_byte - fields[i].start_byte + 1] = '\0';
         int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
-        u8 *mutated_int_str = mutate_integer(temp_buf, &mutated_size);
+        u8 mutated_int_str[16];
+        u8 *mutated_int_str_ptr = mutate_integer(mutated_int_str, temp_buf, &mutated_size);
+
         in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + mutated_size);
         if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
         //Retrieve data from kl_messages to populate the in_buf
@@ -3019,18 +3069,54 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         in_buf_size += mutated_size;
 
     } else if (fields[i].field_type == ENUM_FIELD) {
-        // 处理 ENUM_FIELD 类型的逻辑
-        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
-        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-        //Retrieve data from kl_messages to populate the in_buf
-        memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+
+        // 大概率不变enum字段，10%概率根据字典变异
+        if(rand()%10 > 0){
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+          in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+        }
+        else{
+          int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
+          u8 mutated_enum_str[32];
+          u8 *mutated_enum_str_ptr = mutate_enum(mutated_enum_str, &mutated_size);
+
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + mutated_size);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], mutated_enum_str, mutated_size);
+
+          in_buf_size += mutated_size;
+        }
+        
+
+        
+
+
     } else if (fields[i].field_type == STRING_FIELD) {
         // 处理 STRING_FIELD 类型的逻辑
-        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
-        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-        //Retrieve data from kl_messages to populate the in_buf
-        memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
-        in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+        if(rand()%10 > 0){
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+          in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+        }
+        else{
+          int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
+
+          u8 *mutated_str_ptr = mutate_string(&mutated_size);
+
+          in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + mutated_size);
+          if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+          //Retrieve data from kl_messages to populate the in_buf
+          memcpy(&in_buf[in_buf_size], mutated_str_ptr, mutated_size);
+          ck_free(mutated_str_ptr);
+          in_buf_size += mutated_size;
+        }
+        
 
     } else {
         // 处理其他情况
@@ -3039,7 +3125,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         //Retrieve data from kl_messages to populate the in_buf
         memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
         in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
-        
+
     }
 
     
@@ -3223,7 +3309,7 @@ static void load_extras(u8* dir) {
   }
 
   ACTF("Loading extra dictionary from '%s' (level %u)...", dir, dict_level);
-
+  read_strings_from_file(dir, &str_list);
   d = opendir(dir);
 
   if (!d) {
@@ -3281,9 +3367,9 @@ static void load_extras(u8* dir) {
     extras_cnt++;
 
   }
-
+  
   closedir(d);
-  read_strings_from_file(dir, &str_list);
+  
 
 check_and_sort:
 
@@ -7120,8 +7206,8 @@ AFLNET_REGIONS_SELECTION:;
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
   u32 in_buf_size = 0;
-  int seq_level = 0;
-  // int seq_level = rand()%2;
+  // int seq_level = 0;
+  int seq_level = rand()%2;
   int add_mess = rand()%10;
   // int add_mess = 1;
 /* syntax_aware_mode */
