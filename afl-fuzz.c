@@ -3028,6 +3028,7 @@ u8 *mutate_string(int* size){
         mutated_string[i] = 'A' + rand() % 26; // 生成'A'到'Z'之间的随机字符
     }
     mutated_string[mutated_string_cnt-1] = '\0'; // 字符串结尾添加'\0'
+  *size = mutated_string_cnt;
   return mutated_string;
 }
 
@@ -7206,8 +7207,8 @@ AFLNET_REGIONS_SELECTION:;
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
   u32 in_buf_size = 0;
-  // int seq_level = 0;
-  int seq_level = rand()%2;
+  // int seq_level = 1;
+  int seq_level = rand()%3;
   int add_mess = rand()%10;
   // int add_mess = 1;
 /* syntax_aware_mode */
@@ -7221,6 +7222,7 @@ AFLNET_REGIONS_SELECTION:;
     /* random sequence/unit level mutate */
     u32 cnt = 0;
     kliter_t(lms) *it;
+    kliter_t(lms) *it2;
     M2_prev = NULL;
     M2_next = kl_end(kl_messages);
       
@@ -7239,6 +7241,7 @@ AFLNET_REGIONS_SELECTION:;
     } else {
       it = kl_next(M2_prev);
     }  
+    it2 = it;
 
     if(seq_level){
       /*sequence level*/
@@ -7248,63 +7251,16 @@ AFLNET_REGIONS_SELECTION:;
 
       if(add_mess>0){
         /*add message unit from MUP*/
-        /*add 1 ... region_count-1 messages*/
-        // int add_cnt = rand()%(M2_region_count);
-        // if(add_cnt==0) add_cnt = 1;
-        // message_t *new_messages[add_cnt];
-        // for(int i=0; i<add_cnt; i++){
-        //   message_t *new_message = get_message_from_pool(&message_unit_pool,rand()%(message_unit_pool.count));
-        //   new_messages[i] = new_message;
-        // }
-        // int *selectedNumbers = (int *)malloc(add_cnt * sizeof(int));
-        // int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
-        // for (int i = 0; i < M2_region_count; i++) {
-        //   allNumbers[i] = i;
-        // }
-        // // 选择随机数字
-        // for (int i = 0; i < add_cnt; i++) {
-        //   // 生成随机索引，从allNumbers中选择数字
-        //   int randomIndex = rand() % (M2_region_count - i);
-        //   selectedNumbers[i] = allNumbers[randomIndex];
+        stage_name  = "add sequence unit";
+        stage_max   = M2_region_count << 3;
+        stage_short = "add";
 
-        //   // 从allNumbers中删除已选择的数字
-        //   allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
-        // }
+        /*********************
+         * PERFORMANCE SCORE *
+         *********************/
+        orig_perf = perf_score = calculate_score(queue_cur);
 
-        // free(allNumbers); // 释放临时数组
-
-
-        // it = kl_begin(kl_messages);
-        // u32 count = 0;
-        // u32 new_ml_cnt = 0;
-        // while (it != M2_next) {
-        //   if(isNumberInArray(count,selectedNumbers,add_cnt)){
-        //     //new message from MUP
-        //     in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + new_messages[new_ml_cnt]->msize);
-        //     if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-        //     //Retrieve data from kl_messages to populate the in_buf
-        //     memcpy(&in_buf[in_buf_size], new_messages[new_ml_cnt]->mdata, new_messages[new_ml_cnt]->msize);
-        //     in_buf_size += new_messages[new_ml_cnt]->msize;
-        //     new_ml_cnt++;
-
-        //     in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-        //     if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-        //     //Retrieve data from kl_messages to populate the in_buf
-        //     memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-        //     in_buf_size += kl_val(it)->msize;
-        //     it = kl_next(it);//skip delete indice
-        //   }
-        //   else{
-        //     in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-        //     if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-        //     //Retrieve data from kl_messages to populate the in_buf
-        //     memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-        //     in_buf_size += kl_val(it)->msize;
-        //     it = kl_next(it);
-        //   }
-        //   count++;
-        // }
-        // free(selectedNumbers);
+        // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
         /*advanced method: using relation table to assign weight for each message unit*/
         int add_cnt = (rand()%(M2_region_count))/2;
@@ -7358,117 +7314,156 @@ AFLNET_REGIONS_SELECTION:;
           }
           count++;
         }
-        free(selectedNumbers);
+          free(selectedNumbers);
+
+          orig_in = in_buf;
+
+          out_buf = ck_alloc_nozero(in_buf_size);
+          memcpy(out_buf, in_buf, in_buf_size);
+
+          //Update len to keep the correct size of the buffer being mutated
+          len = in_buf_size;
+
+          //Save the len for later use
+          M2_len = len;
+
+          // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+          // if(stage_cur < stage_max - 1){
+          //   it = it2;
+          //   if(out_buf != NULL) ck_free(out_buf);
+          //   if(in_buf != NULL) {
+          //     ck_free(in_buf);
+          //     in_buf = NULL;
+          //   }
+          //   in_buf_size = 0;
+          // }
+          
+
+
+        // }
+
+        
+
+        
 
       }else{
         /*delete message unit*/
-        /**************************************
-         * Step1. random count to delete
-         * Step2. random index to delete
-         * Step3. delete kl_message(not put them in in_buf)
-        **************************************/
-        /*delete 1 ... region_count-1 messages*/
-        // ACTF("deleting message unit...");
-        // int del_cnt = rand()%(M2_region_count);
-        // if(del_cnt==0) del_cnt = 1;
-        // int *selectedNumbers = (int *)malloc(del_cnt * sizeof(int));
-        // int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
-        // for (int i = 0; i < M2_region_count; i++) {
-        //   allNumbers[i] = i;
-        // }
-        // // 选择随机数字
-        // for (int i = 0; i < del_cnt; i++) {
-        //   // 生成随机索引，从allNumbers中选择数字
-        //   int randomIndex = rand() % (M2_region_count - i);
-        //   selectedNumbers[i] = allNumbers[randomIndex];
+        stage_name  = "delete sequence unit";
+        stage_max   = M2_region_count;
+        stage_short = "del";
 
-        //   // 从allNumbers中删除已选择的数字
-        //   allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
-        // }
+        /*********************
+         * PERFORMANCE SCORE *
+         *********************/
+        orig_perf = perf_score = calculate_score(queue_cur);
+        // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
-        // free(allNumbers); // 释放临时数组
+          /*advanced method: use relation table*/
+          kl1_lms *itt;
+          itt = it;
+          u32 count = 0;
+          u32 m_ids[M2_region_count];
+          bool deleted = 0;
 
-
-        // it = kl_begin(kl_messages);
-        // u32 count = 0;
-        // while (it != M2_next) {
-        //   if(isNumberInArray(count,selectedNumbers,del_cnt)){
-        //     it = kl_next(it);//skip delete indice
-        //   }
-        //   else{
-        //     in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-        //     if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-        //     //Retrieve data from kl_messages to populate the in_buf
-        //     memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-
-        //     in_buf_size += kl_val(it)->msize;
-        //     it = kl_next(it);
-        //   }
-        //   count++;
-        // }
-        // free(selectedNumbers);
-
-        /*advanced method: use relation table*/
-        kl1_lms *itt;
-        itt = it;
-        u32 count = 0;
-        u32 m_ids[M2_region_count];
-        bool deleted = 0;
-
-        while (itt != M2_next) {
-          m_ids[count++] = get_id_from_message_unit_pool(&message_unit_pool, kl_val(itt)->mdata);
-          itt = kl_next(itt);
-        }
-
-        for(int i = 0; i < M2_region_count; i++){
-          if(msg_is_isolated(m_ids,i)){
-            m_ids[i] = UINT32_MAX; // flag to delete;
+          while (itt != M2_next) {
+            m_ids[count++] = get_id_from_message_unit_pool(&message_unit_pool, kl_val(itt)->mdata);
+            itt = kl_next(itt);
           }
-        }
-        count = 0;
-        while(it != M2_next){
 
-          if(m_ids[count++] == UINT32_MAX && M2_region_count != 1){
-            it = kl_next(it);//skip delete indice
-            deleted = 1;
+          for(int i = 0; i < M2_region_count; i++){
+            if(msg_is_isolated(m_ids,i)){
+              m_ids[i] = UINT32_MAX; // flag to delete;
+            }
           }
-          else{
-            if(count == M2_region_count && !deleted && M2_region_count != 1)//Already the last message in M2_region and haven't delete any thing, delete the last one
-            {
+          count = 0;
+          while(it != M2_next){
+
+            if(m_ids[count++] == UINT32_MAX && M2_region_count != 1){
               it = kl_next(it);//skip delete indice
               deleted = 1;
             }
             else{
-              in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-              if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-              //Retrieve data from kl_messages to populate the in_buf
-              memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+              if(count == M2_region_count && !deleted && M2_region_count != 1)//Already the last message in M2_region and haven't delete any thing, delete the last one
+              {
+                it = kl_next(it);//skip delete indice
+                deleted = 1;
+              }
+              else{
+                in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+                if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+                //Retrieve data from kl_messages to populate the in_buf
+                memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
 
-              in_buf_size += kl_val(it)->msize;
-              it = kl_next(it);
+                in_buf_size += kl_val(it)->msize;
+                it = kl_next(it);
+              }
             }
           }
-        }
+          orig_in = in_buf;
+
+          out_buf = ck_alloc_nozero(in_buf_size);
+          memcpy(out_buf, in_buf, in_buf_size);
+
+          //Update len to keep the correct size of the buffer being mutated
+          len = in_buf_size;
+
+          //Save the len for later use
+          M2_len = len;
+
+          // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+          
+        // }
+      
+      
       }
+      
+
     }
     else{
       /*unit level*/
+      stage_name  = "syntax-aware mutation";
+      stage_max   = M2_region_count << 3;
+      stage_short = "sam";
+
+        /*********************
+         * PERFORMANCE SCORE *
+         *********************/
+      orig_perf = perf_score = calculate_score(queue_cur);
+      // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
       /*parse fileds, like aflnet regions*/
-      while (it != M2_next) {
-        u32 field_count = 0;
-        fields_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
+        while (it != M2_next) {
+          u32 field_count = 0;
+          fields_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
+          
+          debug_fields(fields, field_count, kl_val(it)->mdata);
+          /*mutate fields, according to field types*/
+          in_buf = mutate_fields(fields, field_count, kl_val(it)->mdata, in_buf, &in_buf_size);
+          // ACTF("in_buf_size = %d; in_buf:\n%s\n",in_buf_size,in_buf);
+          /*free*/
+          free_fields(fields);
+          it = kl_next(it);
+        }
+        orig_in = in_buf;
+
+        out_buf = ck_alloc_nozero(in_buf_size);
+        memcpy(out_buf, in_buf, in_buf_size);
+
+        //Update len to keep the correct size of the buffer being mutated
+        len = in_buf_size;
+
+        //Save the len for later use
+        M2_len = len;
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         
-        debug_fields(fields, field_count, kl_val(it)->mdata);
-        /*mutate fields, according to field types*/
-        in_buf = mutate_fields(fields, field_count, kl_val(it)->mdata, in_buf, &in_buf_size);
-        // ACTF("in_buf_size = %d; in_buf:\n%s\n",in_buf_size,in_buf);
-        /*free*/
-        free_fields(fields);
-        it = kl_next(it);
-      }
+
+      // }
       
     }
     
+    
+
+
   }
   else{
     //remain previous code.
@@ -7505,48 +7500,28 @@ AFLNET_REGIONS_SELECTION:;
       in_buf_size += kl_val(it)->msize;
       it = kl_next(it);
     }
+    orig_in = in_buf;
+
+    out_buf = ck_alloc_nozero(in_buf_size);
+    memcpy(out_buf, in_buf, in_buf_size);
+
+    //Update len to keep the correct size of the buffer being mutated
+    len = in_buf_size;
+
+    //Save the len for later use
+    M2_len = len;
+
+    /*********************
+     * PERFORMANCE SCORE *
+     *********************/
+
+    orig_perf = perf_score = calculate_score(queue_cur);
+
 
   }
 
   
-  orig_in = in_buf;
-
-  out_buf = ck_alloc_nozero(in_buf_size);
-  memcpy(out_buf, in_buf, in_buf_size);
-
-  /*********log out_buf***********/
-  // FILE *file = fopen("/home/keyi/aflnetplus/buffer.log", "wb");
-    
-  // if (file == NULL) {
-  //   perror("无法打开文件");
-  //   return 1;
-  // }
-    
-  // // 写入 out_buf 的内容到文件
-  // size_t bytes_written = fwrite(out_buf, 1, in_buf_size, file);
-    
-  // if (bytes_written != in_buf_size) {
-  //   perror("写入文件时出错");
-  //   fclose(file);
-  //   return 1;
-  // }
-    
-  // // 关闭文件
-  // fclose(file);
-
-
-  //Update len to keep the correct size of the buffer being mutated
-  len = in_buf_size;
-
-  //Save the len for later use
-  M2_len = len;
-
-  /*********************
-   * PERFORMANCE SCORE *
-   *********************/
-
-  orig_perf = perf_score = calculate_score(queue_cur);
-
+ 
   // First try 
   if(syntax_aware_mode){
     if(seq_level){
@@ -7558,15 +7533,19 @@ AFLNET_REGIONS_SELECTION:;
         stage_name  = "delete sequence unit";
         stage_short = "del";
       }
+      common_fuzz_stuff(argv, out_buf, len);
+      goto abandon_entry;
     }
     else{
       stage_name  = "syntax-aware mutation";
       stage_short = "sam";
+      common_fuzz_stuff(argv, out_buf, len);
+      goto abandon_entry;
     }
-    // ACTF("here1");
-    common_fuzz_stuff(argv, out_buf, len);
-    goto abandon_entry;
   }
+  //   // ACTF("here1");
+    
+  
 
   /* Skip right away if -d is given, if we have done deterministic fuzzing on
      this entry ourselves (was_fuzzed), or if it has gone through deterministic
@@ -10616,6 +10595,7 @@ int main(int argc, char** argv) {
         } else if (!strcmp(optarg, "FTP")) {
           extract_requests = &extract_requests_ftp;
           extract_response_codes = &extract_response_codes_ftp;
+          extract_fields = &extract_fields_ftp;
           terminator = malloc(2 * sizeof(char));
           terminator[0] = 0x0D;
           terminator[1] = 0x0A;
