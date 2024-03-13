@@ -36598,3 +36598,13722 @@ field 18:
 field type 0:
 
 
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37952-37953
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest-track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CCeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+4 ÷ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTCPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+User-Agent
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37952-3w953
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+*
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8556/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWuq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+ac3AudioTest
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClieft (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/shp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Z
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8556/ac3AUdioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CGuq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’öˆ
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+ac3AudioTest
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClieft (LAVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+a0plication/shp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+çZ
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+PAUSE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsr://127.0.0.0:8556/ac3AUdioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+cGuq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ›öˆ
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+ac3AudioTest
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClheft (LAVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+a0pliCation/shp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+ç^
+The message contains 33 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+SETUP rtsp://127.0.0.1:8554/ac3AudioTest/track1 RTSP/1.0
+field 19:
+field type 3:
+
+
+field 20:
+field type 0:
+CSeq
+field 21:
+field type 3:
+: 
+field 22:
+field type 2:
+3
+field 23:
+field type 3:
+
+
+field 24:
+field type 1:
+User-Agent
+field 25:
+field type 3:
+: 
+field 26:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 27:
+field type 3:
+
+
+field 28:
+field type 1:
+Transport
+field 29:
+field type 3:
+: 
+field 30:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 31:
+field type 3:
+
+
+field 32:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/trakk1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+User-Agent
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CReq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+4 ÷ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+PAUSE
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LI÷E555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/A÷P;unicast;client_port=33900-33901
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+*
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37952-37953
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/·c3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CReq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+5 €ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+PLAY
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.∞8.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+[ession
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000m
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+6
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/·c3AudioDest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+C“eq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+= €ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+PLAY
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Eedia v2018.∞8.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+[essiof
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npu=0.000m
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+OPTIONS
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp:'/127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ÿö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+AVP
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+..testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client^port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Sessaon
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matro3kaFileTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSEq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+5 ÿö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClkent (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Sessimn
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+ç
+
+The message contains 33 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+DESCRIBE rtsp://127.0.0.1:8554/ac3AudioTest RTSP/1.0
+field 19:
+field type 3:
+
+
+field 20:
+field type 0:
+CSeq
+field 21:
+field type 3:
+: 
+field 22:
+field type 2:
+2
+field 23:
+field type 3:
+
+
+field 24:
+field type 1:
+User-Agent
+field 25:
+field type 3:
+: 
+field 26:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 27:
+field type 3:
+
+
+field 28:
+field type 1:
+Accept
+field 29:
+field type 3:
+: 
+field 30:
+field type 0:
+application/sdp
+field 31:
+field type 3:
+
+
+field 32:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudIoTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSes
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+6 ‹ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Me$ia v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+-
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+Útsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSmq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+5 ⁄ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+.ØtestRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP:unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Sdssion
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+M
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37952-37953
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 33 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+SETUP rtsp://127.0.0.1:8554/ac3AudioTest/track1 RTSP/1.0
+field 19:
+field type 3:
+
+
+field 20:
+field type 0:
+CSeq
+field 21:
+field type 3:
+: 
+field 22:
+field type 2:
+3
+field 23:
+field type 3:
+
+
+field 24:
+field type 1:
+User-Agent
+field 25:
+field type 3:
+: 
+field 26:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 27:
+field type 3:
+
+
+field 28:
+field type 1:
+Transport
+field 29:
+field type 3:
+: 
+field 30:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 31:
+field type 3:
+
+
+field 32:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=45546-45547
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 33 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+SETUP rtsp://127.0.0.1:8554/ac3AudioTest/track1 RTSP/1.0
+field 19:
+field type 3:
+
+
+field 20:
+field type 0:
+CSeq
+field 21:
+field type 3:
+: 
+field 22:
+field type 2:
+3
+field 23:
+field type 3:
+
+
+field 24:
+field type 1:
+User-Agent
+field 25:
+field type 3:
+: 
+field 26:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 27:
+field type 3:
+
+
+field 28:
+field type 1:
+Transport
+field 29:
+field type 3:
+: 
+field 30:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 31:
+field type 3:
+
+
+field 32:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=50778-50779
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudIoTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSes
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+6 ‹ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Me$ia v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+-
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wav@udioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSgq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+4 ‹ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+OPTIONS
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVG555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicastªclient_port=37952-37953
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=43712-43713
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=43712-43713
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+6
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 33 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+SETUP rtsp://127.0.0.1:8554/ac3AudioTest/track1 RTSP/1.0
+field 19:
+field type 3:
+
+
+field 20:
+field type 0:
+CSeq
+field 21:
+field type 3:
+: 
+field 22:
+field type 2:
+3
+field 23:
+field type 3:
+
+
+field 24:
+field type 1:
+User-Agent
+field 25:
+field type 3:
+: 
+field 26:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 27:
+field type 3:
+
+
+field 28:
+field type 1:
+Transport
+field 29:
+field type 3:
+: 
+field 30:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 31:
+field type 3:
+
+
+field 32:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=45546-45547
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:9554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeu
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ÿö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streamijg Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+·pplication/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+M
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+6
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 33 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+SETUP rtsp://127.0.0.1:8554/ac3AudioTest/track1 RTSP/1.0
+field 19:
+field type 3:
+
+
+field 20:
+field type 0:
+CSeq
+field 21:
+field type 3:
+: 
+field 22:
+field type 2:
+3
+field 23:
+field type 3:
+
+
+field 24:
+field type 1:
+User-Agent
+field 25:
+field type 3:
+: 
+field 26:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 27:
+field type 3:
+
+
+field 28:
+field type 1:
+Transport
+field 29:
+field type 3:
+: 
+field 30:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 31:
+field type 3:
+
+
+field 32:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8556/ac3AUdioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CGuq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’öˆ
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+ac3AudioTest
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClieft (LAVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+a0plication/shp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+çZ
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudIoTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSes
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+6 ‹ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Me$ia v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+-
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8556/ac3AUdioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CGuq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’öˆ
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+ac3AudioTest
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClieft (LAVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+a0plication/shp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+çZ
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 33 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.0:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ’ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming!Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/s`p
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+SETUP rtsp://127.0.0.1:8554/ac3AudioTest/track1 RTSP/1.0
+field 19:
+field type 3:
+
+
+field 20:
+field type 0:
+CSeq
+field 21:
+field type 3:
+: 
+field 22:
+field type 2:
+3
+field 23:
+field type 3:
+
+
+field 24:
+field type 1:
+User-Agent
+field 25:
+field type 3:
+: 
+field 26:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 27:
+field type 3:
+
+
+field 28:
+field type 1:
+Transport
+field 29:
+field type 3:
+: 
+field 30:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 31:
+field type 3:
+
+
+field 32:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest-track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CCeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+4 ÷ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTCPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+User-Agent
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37952-3w953
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+*
+The message contains 23 fields:
+field 0:
+field type 1:
+OPTIONS
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp:'/127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CWeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 ÿö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+AVP
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+..testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client^port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Sessaon
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp*//127.0.0.1:8554/matroskaFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeu
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+5 ‘ö÷U
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPKlient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;ulicast;client_port=49022-49023
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Sersion
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=50494-50495
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudIoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSey
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 'ˆUU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPCliend (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+a`plication/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFkleTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CCeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+1 )ˆUU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPCnient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;clientOport=50494-50495
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216-37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=50778-50779
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 0:
+Range:
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+npt=9
+field 3:
+field type 3:
+ 
+field 4:
+field type 0:
+rtsp://127.0.0.1:8554/aacIudioTest RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeÒ
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 )ˆUU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPCmient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+·pplication/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+-
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/m·troskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeÒ
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+4 *ˆUU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./test“TSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=37216=37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtst://127.0.0.1:8554/m·troskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CeÒ
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+4 *ˆU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./tes4“TSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;clÈent_port=37216=37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rpst://127.0.0.1:8554/m·troskaFileTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+C3eÒ
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+5 *ˆU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./tes4“TSPClient (LIVE555 StreaminG Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP3unicast;clÈent_port=37216=37217
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/ac3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=33900-33901
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 0:
+“ange:
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+np4=9
+field 3:
+field type 3:
+ 
+field 4:
+field type 0:
+rtsp://127.0.0.1:8554/aacIudioTest RTSR/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CCeÒ
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 )vUU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPCmient (LIVE555 Stream)ng Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+·ppliaation/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127&0.0.1:8554/mp3AudIoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CRey
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+3 'ÚUU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPCliend (LIVE555 Stre`ming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+RTP
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+a@plication/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=43712-43713
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/webmFileTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=60854-60855
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/wavAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mp3AudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=43712-43713
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest/track1
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+3
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=38784-38785
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/aacAudioTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+DESCRIBE
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+2
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Accept
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+application/sdp
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+6
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+PLAY
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/matroskaFileTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+5
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Session
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 1:
+Range
+field 19:
+field type 3:
+: 
+field 20:
+field type 0:
+npt=0.000-
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+
+The message contains 19 fields:
+field 0:
+field type 1:
+TEARDOWN
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp:?/127.0.0.1:8554/mpeg1or2AudioVideoTest/
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+SSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 0:
+5 /ˆUU
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE755 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 0:
+Sessiol
+field 15:
+field type 3:
+: 
+field 16:
+field type 1:
+000022B8
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+
+
+The message contains 23 fields:
+field 0:
+field type 1:
+SETUP
+field 1:
+field type 3:
+ 
+field 2:
+field type 0:
+rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/track2
+field 3:
+field type 3:
+ 
+field 4:
+field type 1:
+RTSP/1.0
+field 5:
+field type 3:
+
+
+field 6:
+field type 0:
+CSeq
+field 7:
+field type 3:
+: 
+field 8:
+field type 2:
+4
+field 9:
+field type 3:
+
+
+field 10:
+field type 1:
+User-Agent
+field 11:
+field type 3:
+: 
+field 12:
+field type 0:
+./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+field 13:
+field type 3:
+
+
+field 14:
+field type 1:
+Transport
+field 15:
+field type 3:
+: 
+field 16:
+field type 0:
+RTP/AVP;unicast;client_port=45546-45547
+field 17:
+field type 3:
+
+
+field 18:
+field type 0:
+Session
+field 19:
+field type 3:
+: 
+field 20:
+field type 1:
+000022B8
+field 21:
+field type 3:
+
+
+field 22:
+field type 0:
+
+

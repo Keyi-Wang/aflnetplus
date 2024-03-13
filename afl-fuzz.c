@@ -2980,7 +2980,7 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
     _arf[(_bf) >> 3] ^= (128 >> ((_bf) & 7)); \
   } while (0)
 /* aflnetplus: overwrite AFLNet's mutation strategy */
-void flipbit1(u8 *field_buf, int mutated_buf_size){
+void bitflip1(u8 *field_buf, int mutated_buf_size){
 
 
   /* Single walking bit. */
@@ -3080,6 +3080,76 @@ void flipbit1(u8 *field_buf, int mutated_buf_size){
 
 }
 
+void bitflip2(u8 *field_buf, int mutated_buf_size){
+/* Two walking bits. */
+
+  stage_name  = "bitflip 2/1";
+  stage_short = "flip2";
+  stage_max   = (mutated_buf_size << 3) - 1;
+
+  orig_hit_cnt = new_hit_cnt;
+  stage_cur = rand()%stage_max;
+  // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
+
+    stage_cur_byte = stage_cur >> 3;
+
+    FLIP_BIT(field_buf, stage_cur);
+    FLIP_BIT(field_buf, stage_cur + 1);
+
+
+  // }
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_FLIP2]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_FLIP2] += stage_max;
+
+
+}
+
+
+void bitflip4(u8 *field_buf, int mutated_buf_size){
+/* Four walking bits. */
+
+  stage_name  = "bitflip 4/1";
+  stage_short = "flip4";
+  stage_max   = (len << 3) - 3;
+
+  orig_hit_cnt = new_hit_cnt;
+  stage_cur = rand()%stage_max;
+  // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
+
+    stage_cur_byte = stage_cur >> 3;
+
+    FLIP_BIT(field_buf, stage_cur);
+    FLIP_BIT(field_buf, stage_cur + 1);
+    FLIP_BIT(field_buf, stage_cur + 2);
+    FLIP_BIT(field_buf, stage_cur + 3);
+
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_FLIP4]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_FLIP4] += stage_max;
+
+}
+
+
+void bitflip8(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+void bitflip16(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+void bitflip32(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
 
 
 u8 *mutate_integer(u8 *mutated_int_str, u8 *int_str, int* size){
@@ -3156,12 +3226,26 @@ u8 *mutate_string(char *buf, int* size){
     memcpy(mutated_string, buf, mutated_string_cnt);
     switch (mutater_dispatcher)
     {
-    case 0:
-      flipbit1(mutated_string, mutated_string_cnt);
-      break;
-    
-    default:
-      break;
+      case 0:
+        bitflip1(mutated_string, mutated_string_cnt);
+        break;
+      case 1:
+        bitflip2(mutated_string, mutated_string_cnt);
+        break;
+      case 2:
+        bitflip4(mutated_string, mutated_string_cnt);
+        break;
+      case 4:
+        bitflip8(mutated_string, mutated_string_cnt);
+        break;
+      case 5:
+        bitflip16(mutated_string, mutated_string_cnt);
+        break;
+      case 6:
+        bitflip32(mutated_string, mutated_string_cnt);
+        break;
+      default:
+        break;
     }
   }
   
