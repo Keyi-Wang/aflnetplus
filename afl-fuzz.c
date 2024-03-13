@@ -428,7 +428,16 @@ fields_t* (*extract_fields)(unsigned char* buf, unsigned int buf_size, unsigned 
 
 //aflnetplus: for message unit pool
 char *terminator;
+s32 len, fd, temp_len, i, j;
+u8  *out_buf, *orig_in, *ex_tmp, *eff_map = 0;
+u64 havoc_queued,  orig_hit_cnt, new_hit_cnt;
+u32 splice_cycle = 0, perf_score = 100, orig_perf, prev_cksum, eff_cnt = 1, M2_len;
 
+u8  ret_val = 1, doing_det = 0;
+
+u8  a_collect[MAX_AUTO_EXTRA];
+u32 a_len = 0;
+static void maybe_add_auto(u8* mem, u32 len);
 // 保存文件中的字符串的数据结构
 typedef struct {
     char strs[MAX_STR_NUM][MAX_STR_LEN]; // 字符串数组
@@ -2965,6 +2974,113 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
   return new_msg; // 如果随机数超出了权重之和，则返回最后一个元素的索引
 }
 
+#define FLIP_BIT(_ar, _b) do { \
+    u8* _arf = (u8*)(_ar); \
+    u32 _bf = (_b); \
+    _arf[(_bf) >> 3] ^= (128 >> ((_bf) & 7)); \
+  } while (0)
+/* aflnetplus: overwrite AFLNet's mutation strategy */
+void flipbit1(u8 *field_buf, int mutated_buf_size){
+
+
+  /* Single walking bit. */
+
+  stage_short = "flip1";
+  stage_max   = mutated_buf_size << 3;
+  stage_name  = "bitflip 1/1";
+
+  stage_val_type = STAGE_VAL_NONE;
+
+  orig_hit_cnt = queued_paths + unique_crashes;
+
+  prev_cksum = queue_cur->exec_cksum;
+  stage_cur = rand()%stage_max;
+  
+
+    stage_cur_byte = stage_cur >> 3;
+
+
+
+
+    FLIP_BIT(field_buf, stage_cur);
+
+    /* While flipping the least significant bit in every byte, pull of an extra
+       trick to detect possible syntax tokens. In essence, the idea is that if
+       you have a binary blob like this:
+
+       xxxxxxxxIHDRxxxxxxxx
+
+       ...and changing the leading and trailing bytes causes variable or no
+       changes in program flow, but touching any character in the "IHDR" string
+       always produces the same, distinctive path, it's highly likely that
+       "IHDR" is an atomically-checked magic value of special significance to
+       the fuzzed format.
+
+       We do this here, rather than as a separate stage, because it's a nice
+       way to keep the operation approximately "free" (i.e., no extra execs).
+
+       Empirically, performing the check when flipping the least significant bit
+       is advantageous, compared to doing it at the time of more disruptive
+       changes, where the program flow may be affected in more violent ways.
+
+       The caveat is that we won't generate dictionaries in the -d mode or -S
+       mode - but that's probably a fair trade-off.
+
+       This won't work particularly well with paths that exhibit variable
+       behavior, but fails gracefully, so we'll carry out the checks anyway.
+
+      */
+
+    if (!dumb_mode && (stage_cur & 7) == 7) {
+
+      u32 cksum = hash32(trace_bits, MAP_SIZE, HASH_CONST);
+
+      if (stage_cur == stage_max - 1 && cksum == prev_cksum) {
+
+        /* If at end of file and we are still collecting a string, grab the
+           final character and force output. */
+
+        if (a_len < MAX_AUTO_EXTRA) a_collect[a_len] = field_buf[stage_cur >> 3];
+        a_len++;
+
+        if (a_len >= MIN_AUTO_EXTRA && a_len <= MAX_AUTO_EXTRA)
+          maybe_add_auto(a_collect, a_len);
+
+      } else if (cksum != prev_cksum) {
+
+        /* Otherwise, if the checksum has changed, see if we have something
+           worthwhile queued up, and collect that if the answer is yes. */
+
+        if (a_len >= MIN_AUTO_EXTRA && a_len <= MAX_AUTO_EXTRA)
+          maybe_add_auto(a_collect, a_len);
+
+        a_len = 0;
+        prev_cksum = cksum;
+
+      }
+
+      /* Continue collecting string, but only if the bit flip actually made
+         any difference - we don't want no-op tokens. */
+
+      if (cksum != queue_cur->exec_cksum) {
+
+        if (a_len < MAX_AUTO_EXTRA) a_collect[a_len] = field_buf[stage_cur >> 3];
+        a_len++;
+
+      }
+
+    
+
+  }
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_FLIP1]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_FLIP1] += stage_max;
+
+}
+
+
 
 u8 *mutate_integer(u8 *mutated_int_str, u8 *int_str, int* size){
 
@@ -3019,16 +3135,37 @@ u8 *mutate_enum(u8 *mutated_enum_str, int *mutated_size){
   return mutated_enum_str;
 }
 
-u8 *mutate_string(int* size){
+u8 *mutate_string(char *buf, int* size){
   u8 *mutated_string = NULL;
   u32 mutated_string_cnt = 0;
-  mutated_string_cnt = rand() % (1 << 16);
-  mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
-  for (u32 i = 0; i < mutated_string_cnt-1; i++) {
-        mutated_string[i] = 'A' + rand() % 26; // 生成'A'到'Z'之间的随机字符
+  if(rand()%2<0){
+  
+    mutated_string_cnt = rand() % (1 << 16);
+    mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
+    for (u32 i = 0; i < mutated_string_cnt-1; i++) {
+          mutated_string[i] = 'A' + rand() % 26; // 生成'A'到'Z'之间的随机字符
+      }
+      mutated_string[mutated_string_cnt-1] = '\0'; // 字符串结尾添加'\0'
+    *size = mutated_string_cnt;
+  }
+  else{
+    /*use AFLNet's mutation strategy*/
+    mutated_string_cnt = *size;
+    mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
+    int mutater_dispatcher = 0;
+    memcpy(mutated_string, buf, mutated_string_cnt);
+    switch (mutater_dispatcher)
+    {
+    case 0:
+      flipbit1(mutated_string, mutated_string_cnt);
+      break;
+    
+    default:
+      break;
     }
-    mutated_string[mutated_string_cnt-1] = '\0'; // 字符串结尾添加'\0'
-  *size = mutated_string_cnt;
+  }
+  
+
   return mutated_string;
 }
 
@@ -3098,7 +3235,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
 
     } else if (fields[i].field_type == STRING_FIELD) {
         // 处理 STRING_FIELD 类型的逻辑
-        if(rand()%10 > 0){
+        if(rand()%10 < 0){
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
           if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
           //Retrieve data from kl_messages to populate the in_buf
@@ -3108,7 +3245,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         else{
           int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
 
-          u8 *mutated_str_ptr = mutate_string(&mutated_size);
+          u8 *mutated_str_ptr = mutate_string(&mdata[fields[i].start_byte], &mutated_size);
 
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + mutated_size);
           if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
@@ -7077,16 +7214,8 @@ static u8 could_be_interest(u32 old_val, u32 new_val, u8 blen, u8 check_le) {
    skipped or bailed out. */
 
 static u8 fuzz_one(char** argv) {
+  u8 *in_buf = NULL;
 
-  s32 len, fd, temp_len, i, j;
-  u8  *in_buf = NULL, *out_buf, *orig_in, *ex_tmp, *eff_map = 0;
-  u64 havoc_queued,  orig_hit_cnt, new_hit_cnt;
-  u32 splice_cycle = 0, perf_score = 100, orig_perf, prev_cksum, eff_cnt = 1, M2_len;
-
-  u8  ret_val = 1, doing_det = 0;
-
-  u8  a_collect[MAX_AUTO_EXTRA];
-  u32 a_len = 0;
 
 #ifdef IGNORE_FINDS
 
@@ -7422,7 +7551,7 @@ AFLNET_REGIONS_SELECTION:;
     else{
       /*unit level*/
       stage_name  = "syntax-aware mutation";
-      stage_max   = M2_region_count << 3;
+      stage_max   = M2_region_count;
       stage_short = "sam";
 
         /*********************
