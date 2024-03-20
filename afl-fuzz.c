@@ -429,7 +429,7 @@ fields_t* (*extract_fields)(unsigned char* buf, unsigned int buf_size, unsigned 
 //aflnetplus: for message unit pool
 char *terminator;
 s32 len, fd, temp_len, i, j;
-u8  *out_buf, *orig_in, *ex_tmp, *eff_map = 0;
+
 u64 havoc_queued,  orig_hit_cnt, new_hit_cnt;
 u32 splice_cycle = 0, perf_score = 100, orig_perf, prev_cksum, eff_cnt = 1, M2_len;
 
@@ -437,7 +437,9 @@ u8  ret_val = 1, doing_det = 0;
 
 u8  a_collect[MAX_AUTO_EXTRA];
 u32 a_len = 0;
+u8 *eff_map = 0;
 static void maybe_add_auto(u8* mem, u32 len);
+static u8 could_be_bitflip(u32 xor_val);
 // 保存文件中的字符串的数据结构
 typedef struct {
     char strs[MAX_STR_NUM][MAX_STR_LEN]; // 字符串数组
@@ -468,7 +470,7 @@ void read_strings_from_file(const u8 *filename, StringList *str_list) {
         // line[strcspn(line, "\n")] = '\0'; // 移除行尾的换行符
         // strncpy(str_list->strs[str_list->count++], &line[1], sizeof(line)-2); // 保存字符串到 StringList 中
     }
-    debug_dic_strings(str_list);
+    // debug_dic_strings(str_list);
     fclose(file);
 
 }
@@ -539,7 +541,7 @@ void init_relation_table(){
 
       trace_bits_focus_i = (u8*)malloc(MAP_SIZE * sizeof(u8));
       trace_bits_focus_i_except_j = (u8*)malloc(MAP_SIZE * sizeof(u8));
-      debug_relation_table();
+      // debug_relation_table();
       ACTF("print init relation table..");
 }
 
@@ -2979,6 +2981,29 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
     u32 _bf = (_b); \
     _arf[(_bf) >> 3] ^= (128 >> ((_bf) & 7)); \
   } while (0)
+
+
+#define EFF_APOS(_p)          ((_p) >> EFF_MAP_SCALE2)
+#define EFF_REM(_x)           ((_x) & ((1 << EFF_MAP_SCALE2) - 1))
+#define EFF_ALEN(_l)          (EFF_APOS(_l) + !!EFF_REM(_l))
+#define EFF_SPAN_ALEN(_p, _l) (EFF_APOS((_p) + (_l) - 1) - EFF_APOS(_p) + 1)
+
+
+void init_eff_map(u8 *field_buf, int mutated_buf_size){
+  if((*eff_map) != 0){
+    ck_free(eff_map);
+  }
+  eff_map    = ck_alloc(EFF_ALEN(len));
+  eff_map[0] = 1;
+
+  if (EFF_APOS(len - 1) != 0) {
+    eff_map[EFF_APOS(len - 1)] = 1;
+    eff_cnt++;
+  }
+
+
+}
+
 /* aflnetplus: overwrite AFLNet's mutation strategy */
 void bitflip1(u8 *field_buf, int mutated_buf_size){
 
@@ -3113,7 +3138,7 @@ void bitflip4(u8 *field_buf, int mutated_buf_size){
 
   stage_name  = "bitflip 4/1";
   stage_short = "flip4";
-  stage_max   = (len << 3) - 3;
+  stage_max   = (mutated_buf_size << 3) - 3;
 
   orig_hit_cnt = new_hit_cnt;
   stage_cur = rand()%stage_max;
@@ -3136,16 +3161,431 @@ void bitflip4(u8 *field_buf, int mutated_buf_size){
 
 
 void bitflip8(u8 *field_buf, int mutated_buf_size){
+  /* Walking byte. */
+  init_eff_map(field_buf, mutated_buf_size);
 
+  stage_name  = "bitflip 8/8";
+  stage_short = "flip8";
+  stage_max   = mutated_buf_size;
+
+  orig_hit_cnt = new_hit_cnt;
+  stage_cur = rand() % mutated_buf_size;
+  
+    stage_cur_byte = stage_cur;
+
+    field_buf[stage_cur] ^= 0xFF;
+
+
+    /* We also use this stage to pull off a simple trick: we identify
+       bytes that seem to have no effect on the current execution path
+       even when fully flipped - and we skip them during more expensive
+       deterministic stages, such as arithmetics or known ints. */
+
+    if (!eff_map[EFF_APOS(stage_cur)]) {
+
+      u32 cksum;
+
+      /* If in dumb mode or if the file is very short, just flag everything
+         without wasting time on checksums. */
+
+      if (!dumb_mode && mutated_buf_size >= EFF_MIN_LEN)
+        cksum = hash32(trace_bits, MAP_SIZE, HASH_CONST);
+      else
+        cksum = ~queue_cur->exec_cksum;
+
+      if (cksum != queue_cur->exec_cksum) {
+        eff_map[EFF_APOS(stage_cur)] = 1;
+        eff_cnt++;
+      }
+
+    }
+
+  
+
+
+
+  /* If the effector map is more than EFF_MAX_PERC dense, just flag the
+     whole thing as worth fuzzing, since we wouldn't be saving much time
+     anyway. */
+
+  if (eff_cnt != EFF_ALEN(len) &&
+      eff_cnt * 100 / EFF_ALEN(len) > EFF_MAX_PERC) {
+
+    memset(eff_map, 1, EFF_ALEN(len));
+
+    blocks_eff_select += EFF_ALEN(len);
+
+  } else {
+
+    blocks_eff_select += eff_cnt;
+
+  }
+
+  blocks_eff_total += EFF_ALEN(len);
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_FLIP8]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_FLIP8] += stage_max;
 
 }
 
 void bitflip16(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "bitflip 16/8";
+  stage_short = "flip16";
+  stage_cur   = 0;
+  stage_max   = mutated_buf_size - 1;
 
+  orig_hit_cnt = new_hit_cnt;
+
+  for (i = 0; i < mutated_buf_size - 1; i++) {
+
+    /* Let's consult the effector map... */
+
+    if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)]) {
+      stage_max--;
+      continue;
+    }
+
+    stage_cur_byte = i;
+
+    *(u16*)(field_buf + i) ^= 0xFFFF;
+
+    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+    stage_cur++;
+
+    *(u16*)(field_buf + i) ^= 0xFFFF;
+
+
+  }
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_FLIP16]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_FLIP16] += stage_max;
 
 }
 
 void bitflip32(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "bitflip 32/8";
+  stage_short = "flip32";
+  stage_cur   = 0;
+  stage_max   = mutated_buf_size - 3;
+
+  orig_hit_cnt = new_hit_cnt;
+
+  for (i = 0; i < mutated_buf_size - 3; i++) {
+
+    /* Let's consult the effector map... */
+    if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)] &&
+        !eff_map[EFF_APOS(i + 2)] && !eff_map[EFF_APOS(i + 3)]) {
+      stage_max--;
+      continue;
+    }
+
+    stage_cur_byte = i;
+
+    *(u32*)(field_buf + i) ^= 0xFFFFFFFF;
+
+    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+    stage_cur++;
+
+    *(u32*)(field_buf + i) ^= 0xFFFFFFFF;
+
+  }
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_FLIP32]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_FLIP32] += stage_max;
+
+}
+
+void arith8(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "arith 8/8";
+  stage_short = "arith8";
+  stage_cur   = 0;
+  stage_max   = 2 * mutated_buf_size * ARITH_MAX;
+
+  stage_val_type = STAGE_VAL_LE;
+
+  orig_hit_cnt = new_hit_cnt;
+
+  for (i = 0; i < mutated_buf_size; i++) {
+
+    u8 orig = field_buf[i];
+
+    /* Let's consult the effector map... */
+
+    if (!eff_map[EFF_APOS(i)]) {
+      stage_max -= 2 * ARITH_MAX;
+      continue;
+    }
+
+    stage_cur_byte = i;
+
+    for (j = 1; j <= ARITH_MAX; j++) {
+
+      u8 r = orig ^ (orig + j);
+
+      /* Do arithmetic operations only if the result couldn't be a product
+         of a bitflip. */
+
+      if (!could_be_bitflip(r)) {
+
+        stage_cur_val = j;
+        field_buf[i] = orig + j;
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      r =  orig ^ (orig - j);
+
+      if (!could_be_bitflip(r)) {
+
+        stage_cur_val = -j;
+        field_buf[i] = orig - j;
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      field_buf[i] = orig;
+
+    }
+
+  }
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_ARITH8]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_ARITH8] += stage_max;
+
+}
+
+
+void arith16(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "arith 16/8";
+  stage_short = "arith16";
+  stage_cur   = 0;
+  stage_max   = 4 * (mutated_buf_size - 1) * ARITH_MAX;
+
+  orig_hit_cnt = new_hit_cnt;
+
+  for (i = 0; i < mutated_buf_size - 1; i++) {
+
+    u16 orig = *(u16*)(field_buf + i);
+
+    /* Let's consult the effector map... */
+
+    if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)]) {
+      stage_max -= 4 * ARITH_MAX;
+      continue;
+    }
+
+    stage_cur_byte = i;
+
+    for (j = 1; j <= ARITH_MAX; j++) {
+
+      u16 r1 = orig ^ (orig + j),
+          r2 = orig ^ (orig - j),
+          r3 = orig ^ SWAP16(SWAP16(orig) + j),
+          r4 = orig ^ SWAP16(SWAP16(orig) - j);
+
+      /* Try little endian addition and subtraction first. Do it only
+         if the operation would affect more than one byte (hence the
+         & 0xff overflow checks) and if it couldn't be a product of
+         a bitflip. */
+
+      stage_val_type = STAGE_VAL_LE;
+
+      if ((orig & 0xff) + j > 0xff && !could_be_bitflip(r1)) {
+
+        stage_cur_val = j;
+        *(u16*)(field_buf + i) = orig + j;
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      if ((orig & 0xff) < j && !could_be_bitflip(r2)) {
+
+        stage_cur_val = -j;
+        *(u16*)(field_buf + i) = orig - j;
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      /* Big endian comes next. Same deal. */
+
+      stage_val_type = STAGE_VAL_BE;
+
+
+      if ((orig >> 8) + j > 0xff && !could_be_bitflip(r3)) {
+
+        stage_cur_val = j;
+        *(u16*)(field_buf + i) = SWAP16(SWAP16(orig) + j);
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      if ((orig >> 8) < j && !could_be_bitflip(r4)) {
+
+        stage_cur_val = -j;
+        *(u16*)(field_buf + i) = SWAP16(SWAP16(orig) - j);
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      *(u16*)(field_buf + i) = orig;
+
+    }
+
+  }
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_ARITH16]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_ARITH16] += stage_max;
+
+
+}
+
+void arith32(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "arith 32/8";
+  stage_short = "arith32";
+  stage_cur   = 0;
+  stage_max   = 4 * (mutated_buf_size - 3) * ARITH_MAX;
+
+  orig_hit_cnt = new_hit_cnt;
+
+  for (i = 0; i < mutated_buf_size - 3; i++) {
+
+    u32 orig = *(u32*)(field_buf + i);
+
+    /* Let's consult the effector map... */
+
+    if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)] &&
+        !eff_map[EFF_APOS(i + 2)] && !eff_map[EFF_APOS(i + 3)]) {
+      stage_max -= 4 * ARITH_MAX;
+      continue;
+    }
+
+    stage_cur_byte = i;
+
+    for (j = 1; j <= ARITH_MAX; j++) {
+
+      u32 r1 = orig ^ (orig + j),
+          r2 = orig ^ (orig - j),
+          r3 = orig ^ SWAP32(SWAP32(orig) + j),
+          r4 = orig ^ SWAP32(SWAP32(orig) - j);
+
+      /* Little endian first. Same deal as with 16-bit: we only want to
+         try if the operation would have effect on more than two bytes. */
+
+      stage_val_type = STAGE_VAL_LE;
+
+      if ((orig & 0xffff) + j > 0xffff && !could_be_bitflip(r1)) {
+
+        stage_cur_val = j;
+        *(u32*)(field_buf + i) = orig + j;
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      if ((orig & 0xffff) < j && !could_be_bitflip(r2)) {
+
+        stage_cur_val = -j;
+        *(u32*)(field_buf + i) = orig - j;
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      /* Big endian next. */
+
+      stage_val_type = STAGE_VAL_BE;
+
+      if ((SWAP32(orig) & 0xffff) + j > 0xffff && !could_be_bitflip(r3)) {
+
+        stage_cur_val = j;
+        *(u32*)(field_buf + i) = SWAP32(SWAP32(orig) + j);
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      if ((SWAP32(orig) & 0xffff) < j && !could_be_bitflip(r4)) {
+
+        stage_cur_val = -j;
+        *(u32*)(field_buf + i) = SWAP32(SWAP32(orig) - j);
+
+        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+        stage_cur++;
+
+      } else stage_max--;
+
+      *(u32*)(field_buf + i) = orig;
+
+    }
+
+  }
+
+  new_hit_cnt = queued_paths + unique_crashes;
+
+  stage_finds[STAGE_ARITH32]  += new_hit_cnt - orig_hit_cnt;
+  stage_cycles[STAGE_ARITH32] += stage_max;
+
+}
+
+
+void int8(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+
+void int16(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+void int32(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+
+void ext_UI(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+void ext_AO(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+void _havoc(u8 *field_buf, int mutated_buf_size){
+
+
+}
+
+void _splice(u8 *field_buf, int mutated_buf_size){
 
 
 }
@@ -3222,7 +3662,7 @@ u8 *mutate_string(char *buf, int* size){
     /*use AFLNet's mutation strategy*/
     mutated_string_cnt = *size;
     mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
-    int mutater_dispatcher = 0;
+    int mutater_dispatcher = rand()%3;
     memcpy(mutated_string, buf, mutated_string_cnt);
     switch (mutater_dispatcher)
     {
@@ -5222,7 +5662,7 @@ static void perform_dry_run(char** argv) {
 
   free(trace_bits_focus_i);
   free(trace_bits_focus_i_except_j);
-  debug_relation_table();
+  // debug_relation_table();
 
   if (cal_failures) {
 
@@ -6885,7 +7325,12 @@ EXP_ST u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
   // parse the out_buf into messages
   u32 region_count = 0;
   region_t *regions = (*extract_requests)(out_buf, len, &region_count);
-  if (!region_count) PFATAL("AFLNet Region count cannot be Zero");
+  if (!region_count) {
+    return 0;
+    ACTF("out_buf:%s,%d", out_buf,len);
+    PFATAL("AFLNet Region count cannot be Zero");
+    
+  }
 
   // update kl_messages linked list
   u32 i;
@@ -7299,7 +7744,7 @@ static u8 could_be_interest(u32 old_val, u32 new_val, u8 blen, u8 check_le) {
 
 static u8 fuzz_one(char** argv) {
   u8 *in_buf = NULL;
-
+  u8  *out_buf, *orig_in, *ex_tmp = 0;
 
 #ifdef IGNORE_FINDS
 
@@ -7421,8 +7866,8 @@ AFLNET_REGIONS_SELECTION:;
 
   u32 in_buf_size = 0;
   // int seq_level = 1;
-  int seq_level = rand()%3;
-  int add_mess = rand()%10;
+  int seq_level = rand()%2;
+  int add_mess = rand()%2;
   // int add_mess = 1;
 /* syntax_aware_mode */
   if(syntax_aware_mode){   
@@ -7465,7 +7910,7 @@ AFLNET_REGIONS_SELECTION:;
       if(add_mess>0){
         /*add message unit from MUP*/
         stage_name  = "add sequence unit";
-        stage_max   = M2_region_count << 3;
+        stage_max   = M2_region_count * 2;
         stage_short = "add";
 
         /*********************
@@ -7473,60 +7918,65 @@ AFLNET_REGIONS_SELECTION:;
          *********************/
         orig_perf = perf_score = calculate_score(queue_cur);
 
-        // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
+        for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
-        /*advanced method: using relation table to assign weight for each message unit*/
-        int add_cnt = (rand()%(M2_region_count))/2;
-        if(add_cnt==0) add_cnt = 1;
-        int *selectedNumbers = (int *)malloc(add_cnt * sizeof(int));
-        int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
-        for (int i = 0; i < M2_region_count; i++) {
-          allNumbers[i] = i;
-        }
-        // 选择随机数字,在这些位置之前插入新的消息单元
-        for (int i = 0; i < add_cnt; i++) {
-          // 生成随机索引，从allNumbers中选择数字
-          int randomIndex = rand() % (M2_region_count - i);
-          selectedNumbers[i] = allNumbers[randomIndex];
-
-          // 从allNumbers中删除已选择的数字
-          allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
-        }
-
-        free(allNumbers); // 释放临时数组
-
-        u32 count = 0;
-        while (it != M2_next) {
-          if(isNumberInArray(count,selectedNumbers,add_cnt)){
-            //choode message unit
-            message_t *new_messages;
-            new_messages = get_message_unit(&message_unit_pool, kl_val(it)->mdata);
-
-            //new message from MUP
-            in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + new_messages->msize);
-            if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-            //Retrieve data from kl_messages to populate the in_buf
-            memcpy(&in_buf[in_buf_size], new_messages->mdata, new_messages->msize);
-            in_buf_size += new_messages->msize;
-
-
-            in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
-            if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-            //Retrieve data from kl_messages to populate the in_buf
-            memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
-            in_buf_size += kl_val(it)->msize;
-            it = kl_next(it);//skip delete indice
+          /*advanced method: using relation table to assign weight for each message unit*/
+          int add_cnt = (rand()%(M2_region_count))/2;
+          if(add_cnt==0) add_cnt = 1;
+          int *selectedNumbers = (int *)malloc(add_cnt * sizeof(int));
+          int *allNumbers = (int *)malloc((M2_region_count) * sizeof(int));
+          for (int i = 0; i < M2_region_count; i++) {
+            allNumbers[i] = i;
           }
-          else{
+          // 选择随机数字,在这些位置之前插入新的消息单元
+          for (int i = 0; i < add_cnt; i++) {
+            // 生成随机索引，从allNumbers中选择数字
+            int randomIndex = rand() % (M2_region_count - i);
+            selectedNumbers[i] = allNumbers[randomIndex];
+
+            // 从allNumbers中删除已选择的数字
+            allNumbers[randomIndex] = allNumbers[M2_region_count - i - 1];
+          }
+
+          free(allNumbers); // 释放临时数组
+
+          u32 count = 0;
+          while (it != M2_next) {
+            if(isNumberInArray(count,selectedNumbers,add_cnt)){
+              //choode message unit
+              message_t *new_messages;
+              char *msg_data = kl_val(it)->mdata;
+
+              new_messages = get_message_unit(&message_unit_pool, msg_data);
+         
+              
+
+              //new message from MUP
+
+              in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + new_messages->msize);
+              if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+              //Retrieve data from kl_messages to populate the in_buf
+              memcpy(&in_buf[in_buf_size], new_messages->mdata, new_messages->msize);
+              in_buf_size += new_messages->msize;
+
+
               in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
               if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
               //Retrieve data from kl_messages to populate the in_buf
               memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
               in_buf_size += kl_val(it)->msize;
-              it = kl_next(it);
+              it = kl_next(it);//skip delete indice
+            }
+            else{
+                in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+                if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+                //Retrieve data from kl_messages to populate the in_buf
+                memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+                in_buf_size += kl_val(it)->msize;
+                it = kl_next(it);
+            }
+            count++;
           }
-          count++;
-        }
           free(selectedNumbers);
 
           orig_in = in_buf;
@@ -7540,21 +7990,27 @@ AFLNET_REGIONS_SELECTION:;
           //Save the len for later use
           M2_len = len;
 
-          // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
-          // if(stage_cur < stage_max - 1){
-          //   it = it2;
-          //   if(out_buf != NULL) ck_free(out_buf);
-          //   if(in_buf != NULL) {
-          //     ck_free(in_buf);
-          //     in_buf = NULL;
-          //   }
-          //   in_buf_size = 0;
-          // }
+          if(common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+          ck_free(orig_in);
+
+          if (in_buf != orig_in) ck_free(in_buf);
+          ck_free(out_buf);
+          ck_free(eff_map);
+          in_buf = NULL;
+          out_buf = 0;
+          orig_in = 0;
+          if (M2_prev == NULL) {
+            it = kl_begin(kl_messages);
+          } else {
+            it = kl_next(M2_prev);
+          }  
+          in_buf_size = 0;
+
           
 
 
-        // }
-
+        }
+        goto abandon_entry;
         
 
         
@@ -7569,14 +8025,14 @@ AFLNET_REGIONS_SELECTION:;
          * PERFORMANCE SCORE *
          *********************/
         orig_perf = perf_score = calculate_score(queue_cur);
-        // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
+        for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
           /*advanced method: use relation table*/
           kl1_lms *itt;
           itt = it;
           u32 count = 0;
           u32 m_ids[M2_region_count];
-          bool deleted = 0;
+          u32 deleted = 0;
 
           while (itt != M2_next) {
             m_ids[count++] = get_id_from_message_unit_pool(&message_unit_pool, kl_val(itt)->mdata);
@@ -7591,15 +8047,15 @@ AFLNET_REGIONS_SELECTION:;
           count = 0;
           while(it != M2_next){
 
-            if(m_ids[count++] == UINT32_MAX && M2_region_count != 1){
+            if((m_ids[count++] == UINT32_MAX) && (M2_region_count-deleted > 1)){
               it = kl_next(it);//skip delete indice
-              deleted = 1;
+              deleted++;
             }
             else{
-              if(count == M2_region_count && !deleted && M2_region_count != 1)//Already the last message in M2_region and haven't delete any thing, delete the last one
+              if((count == M2_region_count) && (!deleted) && (M2_region_count-deleted > 1))//Already the last message in M2_region and haven't delete any thing, delete the last one
               {
                 it = kl_next(it);//skip delete indice
-                deleted = 1;
+                deleted++;
               }
               else{
                 in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
@@ -7622,11 +8078,27 @@ AFLNET_REGIONS_SELECTION:;
 
           //Save the len for later use
           M2_len = len;
+          if(common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+          ck_free(orig_in);
 
-          // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+          if (in_buf != orig_in) ck_free(in_buf);
+          ck_free(out_buf);
+          ck_free(eff_map);
+          in_buf = NULL;
+          out_buf = 0;
+          orig_in = 0;
+          if (M2_prev == NULL) {
+            it = kl_begin(kl_messages);
+            itt = kl_begin(kl_messages);
+          } else {
+            it = kl_next(M2_prev);
+            itt = kl_next(M2_prev);
+          }  
+          in_buf_size = 0;
           
-        // }
-      
+         
+        }
+        goto abandon_entry;
       
       }
       
@@ -7648,7 +8120,7 @@ AFLNET_REGIONS_SELECTION:;
           u32 field_count = 0;
           fields_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
           
-          debug_fields(fields, field_count, kl_val(it)->mdata);
+          // debug_fields(fields, field_count, kl_val(it)->mdata);
           /*mutate fields, according to field types*/
           in_buf = mutate_fields(fields, field_count, kl_val(it)->mdata, in_buf, &in_buf_size);
           // ACTF("in_buf_size = %d; in_buf:\n%s\n",in_buf_size,in_buf);
@@ -7666,8 +8138,11 @@ AFLNET_REGIONS_SELECTION:;
 
         //Save the len for later use
         M2_len = len;
+        common_fuzz_stuff(argv, out_buf, len);
+        goto abandon_entry;
+ 
 
-        // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+
         
 
       // }
@@ -7735,27 +8210,7 @@ AFLNET_REGIONS_SELECTION:;
 
   
  
-  // First try 
-  if(syntax_aware_mode){
-    if(seq_level){
-      if(add_mess){
-        stage_name  = "add sequence unit";
-        stage_short = "add";
-      }
-      else{
-        stage_name  = "delete sequence unit";
-        stage_short = "del";
-      }
-      common_fuzz_stuff(argv, out_buf, len);
-      goto abandon_entry;
-    }
-    else{
-      stage_name  = "syntax-aware mutation";
-      stage_short = "sam";
-      common_fuzz_stuff(argv, out_buf, len);
-      goto abandon_entry;
-    }
-  }
+
   //   // ACTF("here1");
     
   
