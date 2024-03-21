@@ -437,7 +437,19 @@ u8  ret_val = 1, doing_det = 0;
 
 u8  a_collect[MAX_AUTO_EXTRA];
 u32 a_len = 0;
+
+enum{
+  /* 00 */ NOT_AFL,
+  /* 01 */ BITFLIP,
+  /* 02 */ ARTHIMETIC,
+  /* 03 */ INTERESTING,
+  /* 04 */ EXTRA,
+  /* 05 */ HAVOC
+};
+
+u8 field_mutator = NOT_AFL;
 static void maybe_add_auto(u8* mem, u32 len);
+
 // 保存文件中的字符串的数据结构
 typedef struct {
     char strs[MAX_STR_NUM][MAX_STR_LEN]; // 字符串数组
@@ -3073,10 +3085,10 @@ void bitflip1(u8 *field_buf, int mutated_buf_size){
 
   }
 
-  new_hit_cnt = queued_paths + unique_crashes;
+  // new_hit_cnt = queued_paths + unique_crashes;
 
-  stage_finds[STAGE_FLIP1]  += new_hit_cnt - orig_hit_cnt;
-  stage_cycles[STAGE_FLIP1] += stage_max;
+  // stage_finds[STAGE_FLIP1]  += new_hit_cnt - orig_hit_cnt;
+  // stage_cycles[STAGE_FLIP1] += stage_max;
 
 }
 
@@ -3099,10 +3111,10 @@ void bitflip2(u8 *field_buf, int mutated_buf_size){
 
   // }
 
-  new_hit_cnt = queued_paths + unique_crashes;
+  // new_hit_cnt = queued_paths + unique_crashes;
 
-  stage_finds[STAGE_FLIP2]  += new_hit_cnt - orig_hit_cnt;
-  stage_cycles[STAGE_FLIP2] += stage_max;
+  // stage_finds[STAGE_FLIP2]  += new_hit_cnt - orig_hit_cnt;
+  // stage_cycles[STAGE_FLIP2] += stage_max;
 
 
 }
@@ -3127,28 +3139,163 @@ void bitflip4(u8 *field_buf, int mutated_buf_size){
     FLIP_BIT(field_buf, stage_cur + 3);
 
 
-  new_hit_cnt = queued_paths + unique_crashes;
+  // new_hit_cnt = queued_paths + unique_crashes;
 
-  stage_finds[STAGE_FLIP4]  += new_hit_cnt - orig_hit_cnt;
-  stage_cycles[STAGE_FLIP4] += stage_max;
+  // stage_finds[STAGE_FLIP4]  += new_hit_cnt - orig_hit_cnt;
+  // stage_cycles[STAGE_FLIP4] += stage_max;
 
 }
 
 
 void bitflip8(u8 *field_buf, int mutated_buf_size){
 
+  stage_name  = "bitflip 8/8";
+  stage_short = "flip8";
+  stage_max   = mutated_buf_size;
+
+  orig_hit_cnt = new_hit_cnt;
+  stage_cur = rand()%stage_max;
+  // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
+
+    stage_cur_byte = stage_cur;
+
+    field_buf[stage_cur] ^= 0xFF;
+
+    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+
+    /* We also use this stage to pull off a simple trick: we identify
+       bytes that seem to have no effect on the current execution path
+       even when fully flipped - and we skip them during more expensive
+       deterministic stages, such as arithmetics or known ints. */
+
+    // if (!eff_map[EFF_APOS(stage_cur)]) {
+
+    //   u32 cksum;
+
+    //   /* If in dumb mode or if the file is very short, just flag everything
+    //      without wasting time on checksums. */
+
+    //   if (!dumb_mode && len >= EFF_MIN_LEN)
+    //     cksum = hash32(trace_bits, MAP_SIZE, HASH_CONST);
+    //   else
+    //     cksum = ~queue_cur->exec_cksum;
+
+    //   if (cksum != queue_cur->exec_cksum) {
+    //     eff_map[EFF_APOS(stage_cur)] = 1;
+    //     eff_cnt++;
+    //   }
+
+    // }
+
+    // field_buf[stage_cur] ^= 0xFF;
+
+  // }
+
+  /* If the effector map is more than EFF_MAX_PERC dense, just flag the
+     whole thing as worth fuzzing, since we wouldn't be saving much time
+     anyway. */
+
+  // if (eff_cnt != EFF_ALEN(len) &&
+  //     eff_cnt * 100 / EFF_ALEN(len) > EFF_MAX_PERC) {
+
+  //   memset(eff_map, 1, EFF_ALEN(len));
+
+  //   blocks_eff_select += EFF_ALEN(len);
+
+  // } else {
+
+  //   blocks_eff_select += eff_cnt;
+
+  // }
+
+  // blocks_eff_total += EFF_ALEN(len);
+
+  // new_hit_cnt = queued_paths + unique_crashes;
+
+  // stage_finds[STAGE_FLIP8]  += new_hit_cnt - orig_hit_cnt;
+  // stage_cycles[STAGE_FLIP8] += stage_max;
 
 }
 
 void bitflip16(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "bitflip 16/8";
+  stage_short = "flip16";
+  stage_cur   = rand()%stage_max;
+  stage_max   = mutated_buf_size - 1;
 
+  orig_hit_cnt = new_hit_cnt;
 
+  // for (i = 0; i < mutated_buf_size - 1; i++) {
+
+    /* Let's consult the effector map... */
+
+    // if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)]) {
+    //   stage_max--;
+    //   continue;
+    // }
+
+    stage_cur_byte = stage_cur;
+
+    *(u16*)(field_buf + stage_cur) ^= 0xFFFF;
+
+    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+    // stage_cur++;
+
+    // *(u16*)(out_buf + i) ^= 0xFFFF;
+  // new_hit_cnt = queued_paths + unique_crashes;
+
+  // stage_finds[STAGE_FLIP16]  += new_hit_cnt - orig_hit_cnt;
+  // stage_cycles[STAGE_FLIP16] += stage_max;
 }
 
 void bitflip32(u8 *field_buf, int mutated_buf_size){
+  /* Four walking bytes. */
+  stage_name  = "bitflip 32/8";
+  stage_short = "flip32";
+  stage_cur   = rand()%stage_max;
+  stage_max   = mutated_buf_size - 3;
 
+  orig_hit_cnt = new_hit_cnt;
+
+  // for (i = 0; i < len - 3; i++) {
+
+    /* Let's consult the effector map... */
+    // if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)] &&
+    //     !eff_map[EFF_APOS(i + 2)] && !eff_map[EFF_APOS(i + 3)]) {
+    //   stage_max--;
+    //   continue;
+    // }
+
+    stage_cur_byte = stage_cur;
+
+    *(u32*)(field_buf + stage_cur) ^= 0xFFFFFFFF;
+
+    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
+    // stage_cur++;
+
+    // *(u32*)(out_buf + i) ^= 0xFFFFFFFF;
+
+  // }
+
+  // new_hit_cnt = queued_paths + unique_crashes;
+
+  // stage_finds[STAGE_FLIP32]  += new_hit_cnt - orig_hit_cnt;
+  // stage_cycles[STAGE_FLIP32] += stage_max;
 
 }
+
+void arith8(u8 *field_buf, int mutated_buf_size){
+
+}
+
+void arith16(u8 *field_buf, int mutated_buf_size){
+
+}
+
+void arith32(u8 *field_buf, int mutated_buf_size){
+
+}
+
 
 
 
@@ -3222,27 +3369,33 @@ u8 *mutate_string(char *buf, int* size){
     /*use AFLNet's mutation strategy*/
     mutated_string_cnt = *size;
     mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
-    int mutater_dispatcher = 0;
+    int mutater_dispatcher = rand() % 6;
     memcpy(mutated_string, buf, mutated_string_cnt);
     switch (mutater_dispatcher)
     {
       case 0:
         bitflip1(mutated_string, mutated_string_cnt);
+        field_mutator = BITFLIP;
         break;
       case 1:
         bitflip2(mutated_string, mutated_string_cnt);
+        field_mutator = BITFLIP;
         break;
       case 2:
         bitflip4(mutated_string, mutated_string_cnt);
+        field_mutator = BITFLIP;
+        break;
+      case 3:
+        bitflip8(mutated_string, mutated_string_cnt);
+        field_mutator = BITFLIP;
         break;
       case 4:
-        bitflip8(mutated_string, mutated_string_cnt);
+        bitflip16(mutated_string, mutated_string_cnt);
+        field_mutator = BITFLIP;
         break;
       case 5:
-        bitflip16(mutated_string, mutated_string_cnt);
-        break;
-      case 6:
         bitflip32(mutated_string, mutated_string_cnt);
+        field_mutator = BITFLIP;
         break;
       default:
         break;
@@ -3257,10 +3410,20 @@ u8 *mutate_string(char *buf, int* size){
 u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u32* in_buf_size_ref){
   //mutate fields
   u32 in_buf_size = 0;
+  u32 selected_field = rand()%field_count;
   for(u32 i = 0; i < field_count; i++)
   {
-    
-    if (fields[i].field_type == SEPARATOR) {
+    if(i != selected_field) {
+   
+      in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+      if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+      //Retrieve data from kl_messages to populate the in_buf
+      memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+      in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+
+    }
+    else{
+      if (fields[i].field_type == SEPARATOR) {
         in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
         if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
         //Retrieve data from kl_messages to populate the in_buf
@@ -3268,7 +3431,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
 
         in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
 
-    } else if (fields[i].field_type == INT_FIELD) {
+      } else if (fields[i].field_type == INT_FIELD) {
       //  in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
       //   if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
       //   //Retrieve data from kl_messages to populate the in_buf
@@ -3290,7 +3453,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
 
         in_buf_size += mutated_size;
 
-    } else if (fields[i].field_type == ENUM_FIELD) {
+      } else if (fields[i].field_type == ENUM_FIELD) {
 
         // 大概率不变enum字段，10%概率根据字典变异
         if(rand()%10 > 0){
@@ -3299,8 +3462,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
           //Retrieve data from kl_messages to populate the in_buf
           memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
           in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
-        }
-        else{
+        } else{
           int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
           u8 mutated_enum_str[32];
           u8 *mutated_enum_str_ptr = mutate_enum(mutated_enum_str, &mutated_size);
@@ -3317,9 +3479,9 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         
 
 
-    } else if (fields[i].field_type == STRING_FIELD) {
+      } else if (fields[i].field_type == STRING_FIELD) {
         // 处理 STRING_FIELD 类型的逻辑
-        if(rand()%10 < 0){
+        if(rand()%10 > 0){
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
           if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
           //Retrieve data from kl_messages to populate the in_buf
@@ -3340,7 +3502,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         }
         
 
-    } else {
+      } else {
         // 处理其他情况
         in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
         if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
@@ -3348,7 +3510,9 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
         in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
 
+      }
     }
+    
 
     
   }
@@ -7421,8 +7585,8 @@ AFLNET_REGIONS_SELECTION:;
 
   u32 in_buf_size = 0;
   // int seq_level = 1;
-  int seq_level = rand()%3;
-  int add_mess = rand()%10;
+  int seq_level = rand()%2;
+  int add_mess = rand()%2;
   // int add_mess = 1;
 /* syntax_aware_mode */
   if(syntax_aware_mode){   
@@ -7576,7 +7740,7 @@ AFLNET_REGIONS_SELECTION:;
           itt = it;
           u32 count = 0;
           u32 m_ids[M2_region_count];
-          bool deleted = 0;
+          int deleted = 0;
 
           while (itt != M2_next) {
             m_ids[count++] = get_id_from_message_unit_pool(&message_unit_pool, kl_val(itt)->mdata);
@@ -7591,15 +7755,15 @@ AFLNET_REGIONS_SELECTION:;
           count = 0;
           while(it != M2_next){
 
-            if(m_ids[count++] == UINT32_MAX && M2_region_count != 1){
+            if(m_ids[count++] == UINT32_MAX && ((M2_region_count-deleted) > 1)){
               it = kl_next(it);//skip delete indice
-              deleted = 1;
+              deleted++;
             }
             else{
-              if(count == M2_region_count && !deleted && M2_region_count != 1)//Already the last message in M2_region and haven't delete any thing, delete the last one
+              if(count == M2_region_count && ((M2_region_count-deleted) > 1))//Already the last message in M2_region and haven't delete any thing, delete the last one
               {
                 it = kl_next(it);//skip delete indice
-                deleted = 1;
+                deleted++;
               }
               else{
                 in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
@@ -7642,19 +7806,34 @@ AFLNET_REGIONS_SELECTION:;
          * PERFORMANCE SCORE *
          *********************/
       orig_perf = perf_score = calculate_score(queue_cur);
+      int selected_pac = rand() % M2_region_count;
       // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
       /*parse fileds, like aflnet regions*/
         while (it != M2_next) {
-          u32 field_count = 0;
-          fields_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
+          if(selected_pac == 0){
+            u32 field_count = 0;
+            fields_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
+            
+            debug_fields(fields, field_count, kl_val(it)->mdata);
+            /*mutate fields, according to field types*/
+            in_buf = mutate_fields(fields, field_count, kl_val(it)->mdata, in_buf, &in_buf_size);
+            // ACTF("in_buf_size = %d; in_buf:\n%s\n",in_buf_size,in_buf);
+            /*free*/
+            free_fields(fields);
+            it = kl_next(it);
+            selected_pac--;
+          }
+          else{
+            in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+            if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+            //Retrieve data from kl_messages to populate the in_buf
+            memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+
+            in_buf_size += kl_val(it)->msize;
+            it = kl_next(it);
+            selected_pac--;
+          }
           
-          debug_fields(fields, field_count, kl_val(it)->mdata);
-          /*mutate fields, according to field types*/
-          in_buf = mutate_fields(fields, field_count, kl_val(it)->mdata, in_buf, &in_buf_size);
-          // ACTF("in_buf_size = %d; in_buf:\n%s\n",in_buf_size,in_buf);
-          /*free*/
-          free_fields(fields);
-          it = kl_next(it);
         }
         orig_in = in_buf;
 
@@ -7753,6 +7932,12 @@ AFLNET_REGIONS_SELECTION:;
       stage_name  = "syntax-aware mutation";
       stage_short = "sam";
       common_fuzz_stuff(argv, out_buf, len);
+      if(field_mutator==BITFLIP){
+        new_hit_cnt = queued_paths + unique_crashes;
+        stage_finds[STAGE_FLIP16]  += new_hit_cnt - orig_hit_cnt;
+        stage_cycles[STAGE_FLIP16] += stage_max;
+        field_mutator = NOT_AFL;
+      }
       goto abandon_entry;
     }
   }
