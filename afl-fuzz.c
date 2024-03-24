@@ -440,11 +440,23 @@ u32 a_len = 0;
 
 enum{
   /* 00 */ NOT_AFL,
-  /* 01 */ BITFLIP,
-  /* 02 */ ARTHIMETIC,
-  /* 03 */ INTERESTING,
-  /* 04 */ EXTRA,
-  /* 05 */ HAVOC
+  /* 01 */ BITFLIP1,
+  /* 02 */ BITFLIP2,
+  /* 03 */ BITFLIP4,
+  /* 04 */ BITFLIP8,
+  /* 05 */ BITFLIP16,
+  /* 06 */ BITFLIP32,
+  /* 07 */ ARITH8,
+  /* 08 */ ARITH16,
+  /* 09 */ ARITH32,
+  /* 10 */ INTEREST8,
+  /* 11 */ INTEREST16,
+  /* 12 */ INTEREST32,
+  /* 13 */ EXTRAS_UO,
+  /* 14 */ EXTRAS_UI,
+  /* 15 */ EXTRAS_AO,
+  /* 16 */ HAVOC,
+  /* 17 */ SPLICE
 };
 
 u8 field_mutator = NOT_AFL;
@@ -3009,12 +3021,12 @@ void bitflip1(u8 *field_buf, int mutated_buf_size){
   stage_cur = rand()%stage_max;
   
 
-    stage_cur_byte = stage_cur >> 3;
+  stage_cur_byte = stage_cur >> 3;
 
 
 
 
-    FLIP_BIT(field_buf, stage_cur);
+  FLIP_BIT(field_buf, stage_cur);
 
     /* While flipping the least significant bit in every byte, pull of an extra
        trick to detect possible syntax tokens. In essence, the idea is that if
@@ -3080,16 +3092,9 @@ void bitflip1(u8 *field_buf, int mutated_buf_size){
         a_len++;
 
       }
-
-    
+  
 
   }
-
-  // new_hit_cnt = queued_paths + unique_crashes;
-
-  // stage_finds[STAGE_FLIP1]  += new_hit_cnt - orig_hit_cnt;
-  // stage_cycles[STAGE_FLIP1] += stage_max;
-
 }
 
 void bitflip2(u8 *field_buf, int mutated_buf_size){
@@ -3101,21 +3106,11 @@ void bitflip2(u8 *field_buf, int mutated_buf_size){
 
   orig_hit_cnt = new_hit_cnt;
   stage_cur = rand()%stage_max;
-  // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
-    stage_cur_byte = stage_cur >> 3;
+  stage_cur_byte = stage_cur >> 3;
 
-    FLIP_BIT(field_buf, stage_cur);
-    FLIP_BIT(field_buf, stage_cur + 1);
-
-
-  // }
-
-  // new_hit_cnt = queued_paths + unique_crashes;
-
-  // stage_finds[STAGE_FLIP2]  += new_hit_cnt - orig_hit_cnt;
-  // stage_cycles[STAGE_FLIP2] += stage_max;
-
+  FLIP_BIT(field_buf, stage_cur);
+  FLIP_BIT(field_buf, stage_cur + 1);
 
 }
 
@@ -3129,20 +3124,14 @@ void bitflip4(u8 *field_buf, int mutated_buf_size){
 
   orig_hit_cnt = new_hit_cnt;
   stage_cur = rand()%stage_max;
-  // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
-    stage_cur_byte = stage_cur >> 3;
+  stage_cur_byte = stage_cur >> 3;
 
-    FLIP_BIT(field_buf, stage_cur);
-    FLIP_BIT(field_buf, stage_cur + 1);
-    FLIP_BIT(field_buf, stage_cur + 2);
-    FLIP_BIT(field_buf, stage_cur + 3);
+  FLIP_BIT(field_buf, stage_cur);
+  FLIP_BIT(field_buf, stage_cur + 1);
+  FLIP_BIT(field_buf, stage_cur + 2);
+  FLIP_BIT(field_buf, stage_cur + 3);
 
-
-  // new_hit_cnt = queued_paths + unique_crashes;
-
-  // stage_finds[STAGE_FLIP4]  += new_hit_cnt - orig_hit_cnt;
-  // stage_cycles[STAGE_FLIP4] += stage_max;
 
 }
 
@@ -3155,65 +3144,11 @@ void bitflip8(u8 *field_buf, int mutated_buf_size){
 
   orig_hit_cnt = new_hit_cnt;
   stage_cur = rand()%stage_max;
-  // for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
-    stage_cur_byte = stage_cur;
 
-    field_buf[stage_cur] ^= 0xFF;
+  stage_cur_byte = stage_cur;
 
-    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
-
-    /* We also use this stage to pull off a simple trick: we identify
-       bytes that seem to have no effect on the current execution path
-       even when fully flipped - and we skip them during more expensive
-       deterministic stages, such as arithmetics or known ints. */
-
-    // if (!eff_map[EFF_APOS(stage_cur)]) {
-
-    //   u32 cksum;
-
-    //   /* If in dumb mode or if the file is very short, just flag everything
-    //      without wasting time on checksums. */
-
-    //   if (!dumb_mode && len >= EFF_MIN_LEN)
-    //     cksum = hash32(trace_bits, MAP_SIZE, HASH_CONST);
-    //   else
-    //     cksum = ~queue_cur->exec_cksum;
-
-    //   if (cksum != queue_cur->exec_cksum) {
-    //     eff_map[EFF_APOS(stage_cur)] = 1;
-    //     eff_cnt++;
-    //   }
-
-    // }
-
-    // field_buf[stage_cur] ^= 0xFF;
-
-  // }
-
-  /* If the effector map is more than EFF_MAX_PERC dense, just flag the
-     whole thing as worth fuzzing, since we wouldn't be saving much time
-     anyway. */
-
-  // if (eff_cnt != EFF_ALEN(len) &&
-  //     eff_cnt * 100 / EFF_ALEN(len) > EFF_MAX_PERC) {
-
-  //   memset(eff_map, 1, EFF_ALEN(len));
-
-  //   blocks_eff_select += EFF_ALEN(len);
-
-  // } else {
-
-  //   blocks_eff_select += eff_cnt;
-
-  // }
-
-  // blocks_eff_total += EFF_ALEN(len);
-
-  // new_hit_cnt = queued_paths + unique_crashes;
-
-  // stage_finds[STAGE_FLIP8]  += new_hit_cnt - orig_hit_cnt;
-  // stage_cycles[STAGE_FLIP8] += stage_max;
+  field_buf[stage_cur] ^= 0xFF;
 
 }
 
@@ -3225,27 +3160,10 @@ void bitflip16(u8 *field_buf, int mutated_buf_size){
 
   orig_hit_cnt = new_hit_cnt;
 
-  // for (i = 0; i < mutated_buf_size - 1; i++) {
+  stage_cur_byte = stage_cur;
 
-    /* Let's consult the effector map... */
+  *(u16*)(field_buf + stage_cur) ^= 0xFFFF;
 
-    // if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)]) {
-    //   stage_max--;
-    //   continue;
-    // }
-
-    stage_cur_byte = stage_cur;
-
-    *(u16*)(field_buf + stage_cur) ^= 0xFFFF;
-
-    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
-    // stage_cur++;
-
-    // *(u16*)(out_buf + i) ^= 0xFFFF;
-  // new_hit_cnt = queued_paths + unique_crashes;
-
-  // stage_finds[STAGE_FLIP16]  += new_hit_cnt - orig_hit_cnt;
-  // stage_cycles[STAGE_FLIP16] += stage_max;
 }
 
 void bitflip32(u8 *field_buf, int mutated_buf_size){
@@ -3257,45 +3175,272 @@ void bitflip32(u8 *field_buf, int mutated_buf_size){
 
   orig_hit_cnt = new_hit_cnt;
 
-  // for (i = 0; i < len - 3; i++) {
+  stage_cur_byte = stage_cur;
 
-    /* Let's consult the effector map... */
-    // if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)] &&
-    //     !eff_map[EFF_APOS(i + 2)] && !eff_map[EFF_APOS(i + 3)]) {
-    //   stage_max--;
-    //   continue;
-    // }
+  *(u32*)(field_buf + stage_cur) ^= 0xFFFFFFFF;
 
-    stage_cur_byte = stage_cur;
-
-    *(u32*)(field_buf + stage_cur) ^= 0xFFFFFFFF;
-
-    // if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
-    // stage_cur++;
-
-    // *(u32*)(out_buf + i) ^= 0xFFFFFFFF;
-
-  // }
-
-  // new_hit_cnt = queued_paths + unique_crashes;
-
-  // stage_finds[STAGE_FLIP32]  += new_hit_cnt - orig_hit_cnt;
-  // stage_cycles[STAGE_FLIP32] += stage_max;
 
 }
 
 void arith8(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "arith 8/8";
+  stage_short = "arith8";
+  stage_cur   = 0;
+  stage_max   = 1;
+  i = rand() % mutated_buf_size;
+  stage_val_type = STAGE_VAL_LE;
+
+  orig_hit_cnt = new_hit_cnt;
+
+  u8 orig = field_buf[i];
+
+    /* Let's consult the effector map... */
+
+  stage_cur_byte = i;
+  j = rand()%ARITH_MAX+1;
+  if(rand()%2){
+    stage_cur_val = j;
+    field_buf[i] = orig + j;
+  }
+   else{
+    stage_cur_val = -j;
+    field_buf[i] = orig - j;
+  }
+
 
 }
 
 void arith16(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "arith 16/8";
+  stage_short = "arith16";
+  stage_cur   = 0;
+  stage_max   = 1;
+  i = rand() % (mutated_buf_size-1);
+  orig_hit_cnt = new_hit_cnt;
+
+  // for (i = 0; i < len - 1; i++) {
+
+  u16 orig = *(u16*)(field_buf + i);
+
+  /* Let's consult the effector map... */
+
+
+  stage_cur_byte = i;
+  j = rand()%ARITH_MAX+1;
+
+      /* Try little endian addition and subtraction first. Do it only
+         if the operation would affect more than one byte (hence the
+         & 0xff overflow checks) and if it couldn't be a product of
+         a bitflip. */
+  if(rand()%2){
+    stage_val_type = STAGE_VAL_LE;
+    if(rand()%2){
+      stage_cur_val = j;
+      *(u16*)(field_buf + i) = orig + j;
+    }else{
+      stage_cur_val = -j;
+      *(u16*)(field_buf + i) = orig - j;
+    }
+  }else{
+      /* Big endian comes next. Same deal. */
+      stage_val_type = STAGE_VAL_BE;
+    if(rand()%2){
+      stage_cur_val = j;
+      *(u16*)(field_buf + i) = SWAP16(SWAP16(orig) + j);
+    }else{
+      stage_cur_val = -j;
+      *(u16*)(field_buf + i) = SWAP16(SWAP16(orig) - j);
+    }
+  }
+
 
 }
 
 void arith32(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "arith 32/8";
+  stage_short = "arith32";
+  stage_cur   = 0;
+  stage_max   = 1;
+  i = rand() % (mutated_buf_size-3);
+  orig_hit_cnt = new_hit_cnt;
+
+  u32 orig = *(u32*)(field_buf + i);
+
+    /* Let's consult the effector map... */
+
+  stage_cur_byte = i;
+  j = rand()%ARITH_MAX+1;
+   if(rand()%2){
+    stage_val_type = STAGE_VAL_LE;
+    if(rand()%2){
+      stage_cur_val = j;
+      *(u32*)(field_buf + i) = orig + j;
+    }else{    
+      stage_cur_val = -j;
+      *(u32*)(field_buf + i) = orig - j;
+    }
+  }else{
+    stage_val_type = STAGE_VAL_BE;
+    if(rand()%2){
+      stage_cur_val = j;
+      *(u32*)(field_buf + i) = SWAP32(SWAP32(orig) + j);
+    }else{
+      stage_cur_val = -j;
+      *(u32*)(field_buf + i) = SWAP32(SWAP32(orig) - j);
+    }
+  }
 
 }
 
+void int8(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "interest 8/8";
+  stage_short = "int8";
+  stage_cur   = 0;
+  stage_max   = 1;
+
+  stage_val_type = STAGE_VAL_LE;
+
+  orig_hit_cnt = new_hit_cnt;
+  i = rand()% mutated_buf_size;
+  /* Setting 8-bit integers. */
+
+  u8 orig = field_buf[i];
+  stage_cur_byte = i;
+  j = rand() % (sizeof(interesting_8));
+  stage_cur_val = interesting_8[j];
+  field_buf[i] = interesting_8[j];
+
+}
+
+void int16(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "interest 16/8";
+  stage_short = "int16";
+  stage_cur   = 0;
+  stage_max   = 1;
+
+  orig_hit_cnt = new_hit_cnt;
+  i = rand()% (mutated_buf_size-1);
+
+
+  u16 orig = *(u16*)(field_buf + i);
+
+  stage_cur_byte = i;
+  j = rand() % (sizeof(interesting_16)/2);
+
+
+  stage_cur_val = interesting_16[j];
+  if(rand()%2){
+    stage_val_type = STAGE_VAL_LE;
+    *(u16*)(field_buf + i) = interesting_16[j];
+
+  }else{
+    stage_val_type = STAGE_VAL_BE;
+    *(u16*)(field_buf + i) = SWAP16(interesting_16[j]);
+ 
+  }
+
+}
+
+void int32(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "interest 32/8";
+  stage_short = "int32";
+  stage_cur   = 0;
+  stage_max   = 1;
+
+  orig_hit_cnt = new_hit_cnt;
+  i = rand()% (mutated_buf_size-3);
+
+  u32 orig = *(u32*)(field_buf + i);
+
+  stage_cur_byte = i;
+  i = rand()%(sizeof(interesting_32) / 4);
+
+  stage_cur_val = interesting_32[j];
+
+  if(rand()%2){
+    stage_val_type = STAGE_VAL_LE;
+    *(u32*)(field_buf + i) = interesting_32[j];
+  }else{
+    stage_val_type = STAGE_VAL_BE;
+    *(u32*)(field_buf + i) = SWAP32(interesting_32[j]);
+  }
+        
+}
+
+void ext_UO(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "user extras (over)";
+  stage_short = "ext_UO";
+  stage_cur   = 0;
+  stage_max   = 1;
+  i = rand() % mutated_buf_size;
+  stage_val_type = STAGE_VAL_NONE;
+
+  orig_hit_cnt = new_hit_cnt;
+
+  u32 last_len = 0;
+
+  stage_cur_byte = i;
+
+  j = rand() % extras_cnt;
+
+  last_len = extras[j].len;
+  memcpy(field_buf + i, extras[j].data, last_len);
+
+}
+
+void ext_UI(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "user extras (insert)";
+  stage_short = "ext_UI";
+  stage_cur   = 0;
+  stage_max   = 1;
+
+  orig_hit_cnt = new_hit_cnt;
+
+  ex_tmp = ck_alloc(mutated_buf_size + MAX_DICT_FILE);
+  i = rand() % (mutated_buf_size+1);
+
+
+  stage_cur_byte = i;
+  j = rand() % extras_cnt;
+
+  /* Copy head */
+  memcpy(ex_tmp, field_buf, i);
+  /* Insert token */
+  memcpy(ex_tmp + i, extras[j].data, extras[j].len);
+  /* Copy tail */
+  memcpy(ex_tmp + i + extras[j].len, field_buf + i, len - i);
+
+  /* Copy to field_buf */
+  field_buf = ck_realloc(field_buf,mutated_buf_size + extras[j].len);
+  memcpy(field_buf, ex_tmp, mutated_buf_size + extras[j].len);
+  ck_free(ex_tmp);
+
+}
+
+void ext_AO(u8 *field_buf, int mutated_buf_size){
+  stage_name  = "auto extras (over)";
+  stage_short = "ext_AO";
+  stage_cur   = 0;
+  stage_max   = 1;
+
+  stage_val_type = STAGE_VAL_NONE;
+
+  orig_hit_cnt = new_hit_cnt;
+  i = rand() % mutated_buf_size;
+  u32 last_len = 0;
+
+  stage_cur_byte = i;
+  j = rand() % (MIN(a_extras_cnt, USE_AUTO_EXTRAS));
+
+  last_len = a_extras[j].len;
+  memcpy(field_buf + i, a_extras[j].data, last_len);
+
+}
+
+
+void havoc(u8 *field_buf, int mutated_buf_size){
+
+}
 
 
 
@@ -3369,34 +3514,62 @@ u8 *mutate_string(char *buf, int* size){
     /*use AFLNet's mutation strategy*/
     mutated_string_cnt = *size;
     mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
-    int mutater_dispatcher = rand() % 6;
+    int mutater_dispatcher = rand() % 15;
     memcpy(mutated_string, buf, mutated_string_cnt);
     switch (mutater_dispatcher)
     {
       case 0:
         bitflip1(mutated_string, mutated_string_cnt);
-        field_mutator = BITFLIP;
+        field_mutator = BITFLIP1;
         break;
       case 1:
         bitflip2(mutated_string, mutated_string_cnt);
-        field_mutator = BITFLIP;
+        field_mutator = BITFLIP2;
         break;
       case 2:
         bitflip4(mutated_string, mutated_string_cnt);
-        field_mutator = BITFLIP;
+        field_mutator = BITFLIP4;
         break;
       case 3:
         bitflip8(mutated_string, mutated_string_cnt);
-        field_mutator = BITFLIP;
+        field_mutator = BITFLIP8;
         break;
       case 4:
         bitflip16(mutated_string, mutated_string_cnt);
-        field_mutator = BITFLIP;
+        field_mutator = BITFLIP16;
         break;
       case 5:
         bitflip32(mutated_string, mutated_string_cnt);
-        field_mutator = BITFLIP;
+        field_mutator = BITFLIP32;
         break;
+      case 6:
+        arith8(mutated_string, mutated_string_cnt);
+        field_mutator = ARITH8;
+      case 7:
+        arith16(mutated_string, mutated_string_cnt);
+        field_mutator = ARITH16;
+      case 8:
+        arith32(mutated_string, mutated_string_cnt);
+        field_mutator = ARITH32;
+      case 9:
+        int8(mutated_string, mutated_string_cnt);
+        field_mutator = INTEREST8;
+      case 10:
+        int16(mutated_string, mutated_string_cnt);
+        field_mutator = INTEREST16;
+      case 11:
+        int32(mutated_string, mutated_string_cnt);
+        field_mutator = INTEREST32;
+      case 12:
+        ext_UO(mutated_string, mutated_string_cnt);
+        field_mutator = EXTRAS_UO;
+      case 13:
+        ext_UI(mutated_string, mutated_string_cnt);
+        field_mutator = EXTRAS_UI;
+      case 14:
+        ext_AO(mutated_string, mutated_string_cnt);
+        field_mutator = EXTRAS_AO;
+
       default:
         break;
     }
@@ -3410,7 +3583,8 @@ u8 *mutate_string(char *buf, int* size){
 u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u32* in_buf_size_ref){
   //mutate fields
   u32 in_buf_size = 0;
-  u32 selected_field = rand()%field_count;
+  // u32 selected_field = rand() % field_count;
+  u32 selected_field = 11111;
   for(u32 i = 0; i < field_count; i++)
   {
     if(i != selected_field) {
@@ -3419,6 +3593,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
       if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
       //Retrieve data from kl_messages to populate the in_buf
       memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+
       in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
 
     }
@@ -7932,10 +8107,10 @@ AFLNET_REGIONS_SELECTION:;
       stage_name  = "syntax-aware mutation";
       stage_short = "sam";
       common_fuzz_stuff(argv, out_buf, len);
-      if(field_mutator==BITFLIP){
+      if(field_mutator!= NOT_AFL){
         new_hit_cnt = queued_paths + unique_crashes;
-        stage_finds[STAGE_FLIP16]  += new_hit_cnt - orig_hit_cnt;
-        stage_cycles[STAGE_FLIP16] += stage_max;
+        stage_finds[field_mutator]  += new_hit_cnt - orig_hit_cnt;
+        stage_cycles[field_mutator] += stage_max;
         field_mutator = NOT_AFL;
       }
       goto abandon_entry;
