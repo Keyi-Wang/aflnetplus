@@ -437,6 +437,9 @@ u8  ret_val = 1, doing_det = 0;
 
 u8  a_collect[MAX_AUTO_EXTRA];
 u32 a_len = 0;
+extern u32 total_response_cnt;
+extern u32 succ_response_cnt;
+extern u32 count_res;
 
 enum{
   /* 00 */ NOT_AFL,
@@ -493,7 +496,7 @@ void read_strings_from_file(const u8 *filename, StringList *str_list) {
         // line[strcspn(line, "\n")] = '\0'; // 移除行尾的换行符
         // strncpy(str_list->strs[str_list->count++], &line[1], sizeof(line)-2); // 保存字符串到 StringList 中
     }
-    debug_dic_strings(str_list);
+    // debug_dic_strings(str_list);
     fclose(file);
 
 }
@@ -564,7 +567,7 @@ void init_relation_table(){
 
       trace_bits_focus_i = (u8*)malloc(MAP_SIZE * sizeof(u8));
       trace_bits_focus_i_except_j = (u8*)malloc(MAP_SIZE * sizeof(u8));
-      debug_relation_table();
+      // debug_relation_table();
       ACTF("print init relation table..");
 }
 
@@ -773,7 +776,10 @@ u8* choose_source_region(u32 *out_len) {
 /* Update #fuzzs visiting a specific state */
 void update_fuzzs() {
   unsigned int state_count, i, discard;
+  count_res = 1;
   unsigned int *state_sequence = (*extract_response_codes)(response_buf, response_buf_size, &state_count);
+  count_res = 0;
+  /*aflnetplus: success response code and total response code*/
 
   //A hash set is used so that the #paths is not updated more than once for one specific state
   khash_t(hs32) *khs_state_ids;
@@ -6107,7 +6113,7 @@ static void perform_dry_run(char** argv) {
 
   free(trace_bits_focus_i);
   free(trace_bits_focus_i_except_j);
-  debug_relation_table();
+  // debug_relation_table();
 
   if (cal_failures) {
 
@@ -6614,6 +6620,29 @@ static void find_timeout(void) {
 
 }
 
+static void write_response_count(){
+
+  u8* fn = alloc_printf("%s/response_cnt", out_dir);
+  s32 fd;
+  FILE* f;
+
+  fd = open(fn, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+
+  if (fd < 0) PFATAL("Unable to create '%s'", fn);
+
+  ck_free(fn);
+
+  f = fdopen(fd, "w");
+
+  if (!f) PFATAL("fdopen() failed");
+  float ratio = (float)succ_response_cnt/total_response_cnt;
+
+  fprintf(f, "success response: %u\n"
+              "total response:  %u\n"
+              "suc/total:       %.2f\n", succ_response_cnt, total_response_cnt, ratio);
+  fclose(f);
+}
+  
 
 /* Update stats file for unattended monitoring. */
 
@@ -8535,7 +8564,7 @@ AFLNET_REGIONS_SELECTION:;
             u32 field_count = 0;
             fields_t *fields = (*extract_fields)(kl_val(it)->mdata, kl_val(it)->msize, &field_count);
             
-            debug_fields(fields, field_count, kl_val(it)->mdata);
+            // debug_fields(fields, field_count, kl_val(it)->mdata);
             /*mutate fields, according to field types*/
             in_buf = mutate_fields(fields, field_count, kl_val(it)->mdata, in_buf, &in_buf_size);
             // ACTF("in_buf_size = %d; in_buf:\n%s\n",in_buf_size,in_buf);
@@ -12115,6 +12144,7 @@ int main(int argc, char** argv) {
 
   write_bitmap();
   write_stats_file(0, 0, 0);
+  write_response_count();
   save_auto();
 
 stop_fuzzing:

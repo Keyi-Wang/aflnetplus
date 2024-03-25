@@ -20,7 +20,8 @@ typedef struct {
 } StringList;
 
 StringList str_list = { .count = 0 };
-
+u32 total_response_cnt,succ_response_cnt = 0;
+u32 count_res = 0;
 // Protocol-specific functions for extracting requests and responses
 
 region_t* extract_requests_tftp(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref)
@@ -1975,7 +1976,13 @@ unsigned int* extract_response_codes_rtsp(unsigned char* buf, unsigned int buf_s
         unsigned int message_code = (unsigned int) atoi(temp);
 
         if (message_code == 0) break;
-
+        
+        /*aflnetplus: calculate response count*/
+        if(count_res){
+          total_response_cnt++;
+          if(message_code >= 100 && message_code < 300) succ_response_cnt++;
+        }
+        
         state_count++;
         state_sequence = (unsigned int *)ck_realloc(state_sequence, state_count * sizeof(unsigned int));
         state_sequence[state_count - 1] = message_code;
