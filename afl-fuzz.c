@@ -5420,7 +5420,7 @@ static u8 run_target_to_parse(char** argv, u32 timeout, klist_t(lms) *kl_message
 
   setitimer(ITIMER_REAL, &it, NULL);
 
-  total_execs++;
+  // total_execs++;
 
   /* Any subsequent operations on trace_bits must not be moved by the
      compiler below this point. Past this location, trace_bits[] behave
