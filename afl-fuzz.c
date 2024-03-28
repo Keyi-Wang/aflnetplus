@@ -3392,8 +3392,8 @@ void ext_UO(u8 *field_buf, int* mutated_buf_size){
   j = rand() % extras_cnt;
 
   last_len = extras[j].len;
-  if((*mutated_buf_size - last_len) > 0){
-    i = rand() % (*mutated_buf_size - last_len);
+  if(((*mutated_buf_size) - last_len) > 0){
+    i = rand() % ((*mutated_buf_size) - last_len);
     stage_cur_byte = i;
 
     memcpy(field_buf + i, extras[j].data, last_len);
@@ -4088,6 +4088,7 @@ u8 *mutate_string(char *buf, int* size){
     mutated_string_cnt = *size;
     mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
     int mutater_dispatcher = rand() % 17;
+
     if(mutated_string_cnt < 2 && (mutater_dispatcher == 4 || mutater_dispatcher == 5 || mutater_dispatcher == 7 || mutater_dispatcher == 8 || mutater_dispatcher == 10 || mutater_dispatcher == 11)){
       mutater_dispatcher = 15;
     }else if(mutated_string_cnt < 4 && (mutater_dispatcher == 5 || mutater_dispatcher == 8 || mutater_dispatcher == 11)){
