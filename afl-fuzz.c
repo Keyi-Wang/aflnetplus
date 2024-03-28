@@ -3011,13 +3011,13 @@ message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
     _arf[(_bf) >> 3] ^= (128 >> ((_bf) & 7)); \
   } while (0)
 /* aflnetplus: overwrite AFLNet's mutation strategy */
-void bitflip1(u8 *field_buf, int mutated_buf_size){
+void bitflip1(u8 *field_buf, int* mutated_buf_size){
 
 
   /* Single walking bit. */
 
   stage_short = "flip1";
-  stage_max   = mutated_buf_size << 3;
+  stage_max   = *mutated_buf_size << 3;
   stage_name  = "bitflip 1/1";
 
   stage_val_type = STAGE_VAL_NONE;
@@ -3104,12 +3104,12 @@ void bitflip1(u8 *field_buf, int mutated_buf_size){
   }
 }
 
-void bitflip2(u8 *field_buf, int mutated_buf_size){
+void bitflip2(u8 *field_buf, int* mutated_buf_size){
 /* Two walking bits. */
 
   stage_name  = "bitflip 2/1";
   stage_short = "flip2";
-  stage_max   = (mutated_buf_size << 3) - 1;
+  stage_max   = (*mutated_buf_size << 3) - 1;
 
   orig_hit_cnt = new_hit_cnt;
   stage_cur = rand()%stage_max;
@@ -3122,12 +3122,12 @@ void bitflip2(u8 *field_buf, int mutated_buf_size){
 }
 
 
-void bitflip4(u8 *field_buf, int mutated_buf_size){
+void bitflip4(u8 *field_buf, int* mutated_buf_size){
 /* Four walking bits. */
 
   stage_name  = "bitflip 4/1";
   stage_short = "flip4";
-  stage_max   = (len << 3) - 3;
+  stage_max   = (*mutated_buf_size << 3) - 3;
 
   orig_hit_cnt = new_hit_cnt;
   stage_cur = rand()%stage_max;
@@ -3143,11 +3143,11 @@ void bitflip4(u8 *field_buf, int mutated_buf_size){
 }
 
 
-void bitflip8(u8 *field_buf, int mutated_buf_size){
+void bitflip8(u8 *field_buf, int* mutated_buf_size){
 
   stage_name  = "bitflip 8/8";
   stage_short = "flip8";
-  stage_max   = mutated_buf_size;
+  stage_max   = *mutated_buf_size;
 
   orig_hit_cnt = new_hit_cnt;
   stage_cur = rand()%stage_max;
@@ -3159,11 +3159,12 @@ void bitflip8(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void bitflip16(u8 *field_buf, int mutated_buf_size){
+void bitflip16(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "bitflip 16/8";
   stage_short = "flip16";
+  stage_max   = *mutated_buf_size - 1;
   stage_cur   = rand()%stage_max;
-  stage_max   = mutated_buf_size - 1;
+  
 
   orig_hit_cnt = new_hit_cnt;
 
@@ -3173,12 +3174,13 @@ void bitflip16(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void bitflip32(u8 *field_buf, int mutated_buf_size){
+void bitflip32(u8 *field_buf, int* mutated_buf_size){
   /* Four walking bytes. */
   stage_name  = "bitflip 32/8";
   stage_short = "flip32";
+  stage_max   = *mutated_buf_size - 3;
   stage_cur   = rand()%stage_max;
-  stage_max   = mutated_buf_size - 3;
+  
 
   orig_hit_cnt = new_hit_cnt;
 
@@ -3189,12 +3191,12 @@ void bitflip32(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void arith8(u8 *field_buf, int mutated_buf_size){
+void arith8(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "arith 8/8";
   stage_short = "arith8";
   stage_cur   = 0;
   stage_max   = 1;
-  i = rand() % mutated_buf_size;
+  i = rand() % *mutated_buf_size;
   stage_val_type = STAGE_VAL_LE;
 
   orig_hit_cnt = new_hit_cnt;
@@ -3217,12 +3219,12 @@ void arith8(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void arith16(u8 *field_buf, int mutated_buf_size){
+void arith16(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "arith 16/8";
   stage_short = "arith16";
   stage_cur   = 0;
   stage_max   = 1;
-  i = rand() % (mutated_buf_size-1);
+  i = rand() % (*mutated_buf_size-1);
   orig_hit_cnt = new_hit_cnt;
 
   // for (i = 0; i < len - 1; i++) {
@@ -3263,12 +3265,12 @@ void arith16(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void arith32(u8 *field_buf, int mutated_buf_size){
+void arith32(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "arith 32/8";
   stage_short = "arith32";
   stage_cur   = 0;
   stage_max   = 1;
-  i = rand() % (mutated_buf_size-3);
+  i = rand() % (*mutated_buf_size-3);
   orig_hit_cnt = new_hit_cnt;
 
   u32 orig = *(u32*)(field_buf + i);
@@ -3299,7 +3301,7 @@ void arith32(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void int8(u8 *field_buf, int mutated_buf_size){
+void int8(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "interest 8/8";
   stage_short = "int8";
   stage_cur   = 0;
@@ -3308,7 +3310,7 @@ void int8(u8 *field_buf, int mutated_buf_size){
   stage_val_type = STAGE_VAL_LE;
 
   orig_hit_cnt = new_hit_cnt;
-  i = rand()% mutated_buf_size;
+  i = rand()% *mutated_buf_size;
   /* Setting 8-bit integers. */
 
   u8 orig = field_buf[i];
@@ -3319,14 +3321,14 @@ void int8(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void int16(u8 *field_buf, int mutated_buf_size){
+void int16(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "interest 16/8";
   stage_short = "int16";
   stage_cur   = 0;
   stage_max   = 1;
 
   orig_hit_cnt = new_hit_cnt;
-  i = rand()% (mutated_buf_size-1);
+  i = rand()% (*mutated_buf_size-1);
 
 
   u16 orig = *(u16*)(field_buf + i);
@@ -3348,19 +3350,19 @@ void int16(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void int32(u8 *field_buf, int mutated_buf_size){
+void int32(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "interest 32/8";
   stage_short = "int32";
   stage_cur   = 0;
   stage_max   = 1;
 
   orig_hit_cnt = new_hit_cnt;
-  i = rand()% (mutated_buf_size-3);
+  i = rand()% (*mutated_buf_size - 3);
 
   u32 orig = *(u32*)(field_buf + i);
 
   stage_cur_byte = i;
-  i = rand()%(sizeof(interesting_32) / 4);
+  j = rand()%(sizeof(interesting_32) / 4);
 
   stage_cur_val = interesting_32[j];
 
@@ -3374,57 +3376,65 @@ void int32(u8 *field_buf, int mutated_buf_size){
         
 }
 
-void ext_UO(u8 *field_buf, int mutated_buf_size){
+void ext_UO(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "user extras (over)";
   stage_short = "ext_UO";
   stage_cur   = 0;
   stage_max   = 1;
-  i = rand() % mutated_buf_size;
+ 
   stage_val_type = STAGE_VAL_NONE;
 
   orig_hit_cnt = new_hit_cnt;
 
   u32 last_len = 0;
 
-  stage_cur_byte = i;
 
   j = rand() % extras_cnt;
 
   last_len = extras[j].len;
-  memcpy(field_buf + i, extras[j].data, last_len);
+  if((*mutated_buf_size - last_len) > 0){
+    i = rand() % (*mutated_buf_size - last_len);
+    stage_cur_byte = i;
+
+    memcpy(field_buf + i, extras[j].data, last_len);
+  }
+  
 
 }
 
-void ext_UI(u8 *field_buf, int mutated_buf_size){
+void ext_UI(u8 **field_buf, int *mutated_buf_size){
   stage_name  = "user extras (insert)";
   stage_short = "ext_UI";
   stage_cur   = 0;
   stage_max   = 1;
 
   orig_hit_cnt = new_hit_cnt;
-
-  ex_tmp = ck_alloc(mutated_buf_size + MAX_DICT_FILE);
-  i = rand() % (mutated_buf_size+1);
+  int origin_size = *mutated_buf_size;
+  
+  i = rand() % (origin_size+1);
 
 
   stage_cur_byte = i;
   j = rand() % extras_cnt;
-
+  ex_tmp = ck_alloc(origin_size + extras[j].len);
   /* Copy head */
-  memcpy(ex_tmp, field_buf, i);
+  memcpy(ex_tmp, *field_buf, i);
   /* Insert token */
   memcpy(ex_tmp + i, extras[j].data, extras[j].len);
   /* Copy tail */
-  memcpy(ex_tmp + i + extras[j].len, field_buf + i, len - i);
+  memcpy(ex_tmp + i + extras[j].len, *field_buf + i, origin_size - i);
 
   /* Copy to field_buf */
-  ck_free(field_buf);
+  ck_free(*field_buf);
 
-  field_buf = ex_tmp;
+  *field_buf = ex_tmp;
+  
+  *mutated_buf_size = origin_size + extras[j].len;
+
 
 }
 
-void ext_AO(u8 *field_buf, int mutated_buf_size){
+void ext_AO(u8 *field_buf, int* mutated_buf_size){
   stage_name  = "auto extras (over)";
   stage_short = "ext_AO";
   stage_cur   = 0;
@@ -3433,24 +3443,27 @@ void ext_AO(u8 *field_buf, int mutated_buf_size){
   stage_val_type = STAGE_VAL_NONE;
 
   orig_hit_cnt = new_hit_cnt;
-  i = rand() % mutated_buf_size;
+  i = rand() % *mutated_buf_size;
   u32 last_len = 0;
 
   stage_cur_byte = i;
-  j = rand() % (MIN(a_extras_cnt, USE_AUTO_EXTRAS));
+  if(a_extras_cnt>0){
+    j = rand() % (MIN(a_extras_cnt, USE_AUTO_EXTRAS));
 
-  last_len = a_extras[j].len;
-  memcpy(field_buf + i, a_extras[j].data, last_len);
+    last_len = a_extras[j].len;
+    memcpy(field_buf + i, a_extras[j].data, last_len);
+  }
+  
 
 }
 
 
-void havoc(u8 *field_buf, int mutated_buf_size){
+void havoc(u8 **field_buf, int* mutated_buf_size){
   stage_cur_byte = -1;
   stage_name  = "havoc";
   stage_short = "havoc";
   stage_max   = 1;
-  temp_len = mutated_buf_size;
+  temp_len = *mutated_buf_size;
 
   orig_hit_cnt = queued_paths + unique_crashes;
 
@@ -3468,14 +3481,14 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
           /* Flip a single bit somewhere. Spooky! */
 
-          FLIP_BIT(field_buf, UR(temp_len << 3));
+          FLIP_BIT(*field_buf, UR(temp_len << 3));
           break;
 
         case 1:
 
           /* Set byte to interesting value. */
 
-          field_buf[UR(temp_len)] = interesting_8[UR(sizeof(interesting_8))];
+          (*field_buf)[UR(temp_len)] = interesting_8[UR(sizeof(interesting_8))];
           break;
 
         case 2:
@@ -3486,12 +3499,12 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
           if (UR(2)) {
 
-            *(u16*)(field_buf + UR(temp_len - 1)) =
+            *(u16*)(*field_buf + UR(temp_len - 1)) =
               interesting_16[UR(sizeof(interesting_16) >> 1)];
 
           } else {
 
-            *(u16*)(field_buf + UR(temp_len - 1)) = SWAP16(
+            *(u16*)(*field_buf + UR(temp_len - 1)) = SWAP16(
               interesting_16[UR(sizeof(interesting_16) >> 1)]);
 
           }
@@ -3506,12 +3519,12 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
           if (UR(2)) {
 
-            *(u32*)(field_buf + UR(temp_len - 3)) =
+            *(u32*)(*field_buf + UR(temp_len - 3)) =
               interesting_32[UR(sizeof(interesting_32) >> 2)];
 
           } else {
 
-            *(u32*)(field_buf + UR(temp_len - 3)) = SWAP32(
+            *(u32*)(*field_buf + UR(temp_len - 3)) = SWAP32(
               interesting_32[UR(sizeof(interesting_32) >> 2)]);
 
           }
@@ -3522,14 +3535,14 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
           /* Randomly subtract from byte. */
 
-          field_buf[UR(temp_len)] -= 1 + UR(ARITH_MAX);
+          (*field_buf)[UR(temp_len)] -= 1 + UR(ARITH_MAX);
           break;
 
         case 5:
 
           /* Randomly add to byte. */
 
-          field_buf[UR(temp_len)] += 1 + UR(ARITH_MAX);
+          (*field_buf)[UR(temp_len)] += 1 + UR(ARITH_MAX);
           break;
 
         case 6:
@@ -3542,15 +3555,15 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             u32 pos = UR(temp_len - 1);
 
-            *(u16*)(field_buf + pos) -= 1 + UR(ARITH_MAX);
+            *(u16*)(*field_buf + pos) -= 1 + UR(ARITH_MAX);
 
           } else {
 
             u32 pos = UR(temp_len - 1);
             u16 num = 1 + UR(ARITH_MAX);
 
-            *(u16*)(field_buf + pos) =
-              SWAP16(SWAP16(*(u16*)(field_buf + pos)) - num);
+            *(u16*)(*field_buf + pos) =
+              SWAP16(SWAP16(*(u16*)(*field_buf + pos)) - num);
 
           }
 
@@ -3566,15 +3579,15 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             u32 pos = UR(temp_len - 1);
 
-            *(u16*)(field_buf + pos) += 1 + UR(ARITH_MAX);
+            *(u16*)(*field_buf + pos) += 1 + UR(ARITH_MAX);
 
           } else {
 
             u32 pos = UR(temp_len - 1);
             u16 num = 1 + UR(ARITH_MAX);
 
-            *(u16*)(field_buf + pos) =
-              SWAP16(SWAP16(*(u16*)(field_buf + pos)) + num);
+            *(u16*)(*field_buf + pos) =
+              SWAP16(SWAP16(*(u16*)(*field_buf + pos)) + num);
 
           }
 
@@ -3590,15 +3603,15 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             u32 pos = UR(temp_len - 3);
 
-            *(u32*)(field_buf + pos) -= 1 + UR(ARITH_MAX);
+            *(u32*)(*field_buf + pos) -= 1 + UR(ARITH_MAX);
 
           } else {
 
             u32 pos = UR(temp_len - 3);
             u32 num = 1 + UR(ARITH_MAX);
 
-            *(u32*)(field_buf + pos) =
-              SWAP32(SWAP32(*(u32*)(field_buf + pos)) - num);
+            *(u32*)(*field_buf + pos) =
+              SWAP32(SWAP32(*(u32*)(*field_buf + pos)) - num);
 
           }
 
@@ -3614,15 +3627,15 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             u32 pos = UR(temp_len - 3);
 
-            *(u32*)(field_buf + pos) += 1 + UR(ARITH_MAX);
+            *(u32*)(*field_buf + pos) += 1 + UR(ARITH_MAX);
 
           } else {
 
             u32 pos = UR(temp_len - 3);
             u32 num = 1 + UR(ARITH_MAX);
 
-            *(u32*)(field_buf + pos) =
-              SWAP32(SWAP32(*(u32*)(field_buf + pos)) + num);
+            *(u32*)(*field_buf + pos) =
+              SWAP32(SWAP32(*(u32*)(*field_buf + pos)) + num);
 
           }
 
@@ -3634,7 +3647,7 @@ void havoc(u8 *field_buf, int mutated_buf_size){
              why not. We use XOR with 1-255 to eliminate the
              possibility of a no-op. */
 
-          field_buf[UR(temp_len)] ^= 1 + UR(255);
+          (*field_buf)[UR(temp_len)] ^= 1 + UR(255);
           break;
 
         case 11 ... 12: {
@@ -3653,11 +3666,11 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             del_from = UR(temp_len - del_len + 1);
 
-            memmove(field_buf + del_from, field_buf + del_from + del_len,
+            memmove(*field_buf + del_from, *field_buf + del_from + del_len,
                     temp_len - del_from - del_len);
 
             temp_len -= del_len;
-
+            *mutated_buf_size = temp_len;
             break;
 
           }
@@ -3690,23 +3703,24 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             /* Head */
 
-            memcpy(new_buf, field_buf, clone_to);
+            memcpy(new_buf, *field_buf, clone_to);
 
             /* Inserted part */
 
             if (actually_clone)
-              memcpy(new_buf + clone_to, field_buf + clone_from, clone_len);
+              memcpy(new_buf + clone_to, *field_buf + clone_from, clone_len);
             else
               memset(new_buf + clone_to,
-                     UR(2) ? UR(256) : field_buf[UR(temp_len)], clone_len);
+                     UR(2) ? UR(256) : (*field_buf)[UR(temp_len)], clone_len);
 
             /* Tail */
-            memcpy(new_buf + clone_to + clone_len, field_buf + clone_to,
+            memcpy(new_buf + clone_to + clone_len, *field_buf + clone_to,
                    temp_len - clone_to);
 
-            ck_free(field_buf);
-            field_buf = new_buf;
+            ck_free(*field_buf);
+            *field_buf = new_buf;
             temp_len += clone_len;
+            *mutated_buf_size = temp_len;
 
           }
 
@@ -3729,10 +3743,10 @@ void havoc(u8 *field_buf, int mutated_buf_size){
             if (UR(4)) {
 
               if (copy_from != copy_to)
-                memmove(field_buf + copy_to, field_buf + copy_from, copy_len);
+                memmove(*field_buf + copy_to, *field_buf + copy_from, copy_len);
 
-            } else memset(field_buf + copy_to,
-                          UR(2) ? UR(256) : field_buf[UR(temp_len)], copy_len);
+            } else memset(*field_buf + copy_to,
+                          UR(2) ? UR(256) : (*field_buf)[UR(temp_len)], copy_len);
 
             break;
 
@@ -3758,7 +3772,7 @@ void havoc(u8 *field_buf, int mutated_buf_size){
               if (extra_len > temp_len) break;
 
               insert_at = UR(temp_len - extra_len + 1);
-              memcpy(field_buf + insert_at, a_extras[use_extra].data, extra_len);
+              memcpy(*field_buf + insert_at, a_extras[use_extra].data, extra_len);
 
             } else {
 
@@ -3771,7 +3785,7 @@ void havoc(u8 *field_buf, int mutated_buf_size){
               if (extra_len > temp_len) break;
 
               insert_at = UR(temp_len - extra_len + 1);
-              memcpy(field_buf + insert_at, extras[use_extra].data, extra_len);
+              memcpy(*field_buf + insert_at, extras[use_extra].data, extra_len);
 
             }
 
@@ -3798,7 +3812,7 @@ void havoc(u8 *field_buf, int mutated_buf_size){
               new_buf = ck_alloc_nozero(temp_len + extra_len);
 
               /* Head */
-              memcpy(new_buf, field_buf, insert_at);
+              memcpy(new_buf, *field_buf, insert_at);
 
               /* Inserted part */
               memcpy(new_buf + insert_at, a_extras[use_extra].data, extra_len);
@@ -3813,7 +3827,7 @@ void havoc(u8 *field_buf, int mutated_buf_size){
               new_buf = ck_alloc_nozero(temp_len + extra_len);
 
               /* Head */
-              memcpy(new_buf, field_buf, insert_at);
+              memcpy(new_buf, *field_buf, insert_at);
 
               /* Inserted part */
               memcpy(new_buf + insert_at, extras[use_extra].data, extra_len);
@@ -3821,13 +3835,13 @@ void havoc(u8 *field_buf, int mutated_buf_size){
             }
 
             /* Tail */
-            memcpy(new_buf + insert_at + extra_len, field_buf + insert_at,
+            memcpy(new_buf + insert_at + extra_len, *field_buf + insert_at,
                    temp_len - insert_at);
 
-            ck_free(field_buf);
-            field_buf   = new_buf;
+            ck_free(*field_buf);
+            *field_buf = new_buf;
             temp_len += extra_len;
-
+            *mutated_buf_size = temp_len;
             break;
 
           }
@@ -3840,9 +3854,10 @@ void havoc(u8 *field_buf, int mutated_buf_size){
             if (new_buf == NULL) break;
 
             //replace the current region
-            ck_free(field_buf);
-            field_buf = new_buf;
+            ck_free(*field_buf);
+            *field_buf = new_buf;
             temp_len = src_region_len;
+            *mutated_buf_size = temp_len;
             break;
           }
 
@@ -3861,12 +3876,13 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             memcpy(new_buf, src_region, src_region_len);
 
-            memcpy(&new_buf[src_region_len], field_buf, temp_len);
+            memcpy(&new_buf[src_region_len], *field_buf, temp_len);
 
-            ck_free(field_buf);
+            ck_free(*field_buf);
             ck_free(src_region);
-            field_buf = new_buf;
+            *field_buf = new_buf;
             temp_len += src_region_len;
+            *mutated_buf_size = temp_len;
             break;
           }
 
@@ -3883,14 +3899,15 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             u8* new_buf = ck_alloc_nozero(temp_len + src_region_len);
 
-            memcpy(new_buf, field_buf, temp_len);
+            memcpy(new_buf, *field_buf, temp_len);
 
             memcpy(&new_buf[temp_len], src_region, src_region_len);
 
-            ck_free(field_buf);
+            ck_free(*field_buf);
             ck_free(src_region);
-            field_buf = new_buf;
+            *field_buf = new_buf;
             temp_len += src_region_len;
+            *mutated_buf_size = temp_len;
             break;
           }
 
@@ -3900,13 +3917,14 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
             u8* new_buf = ck_alloc_nozero(temp_len * 2);
 
-            memcpy(new_buf, field_buf, temp_len);
+            memcpy(new_buf, *field_buf, temp_len);
 
-            memcpy(&new_buf[temp_len], field_buf, temp_len);
+            memcpy(&new_buf[temp_len], *field_buf, temp_len);
 
-            ck_free(field_buf);
-            field_buf = new_buf;
+            ck_free(*field_buf);
+            *field_buf = new_buf;
             temp_len += temp_len;
+            *mutated_buf_size = temp_len;
             break;
           }
 
@@ -3916,7 +3934,7 @@ void havoc(u8 *field_buf, int mutated_buf_size){
 
 }
 
-void splice_s(u8 *field_buf, int mutated_buf_size){
+void splice_s(u8 **field_buf, int* mutated_buf_size){
   stage_cur_byte = -1;
   static u8 tmp[32];
 
@@ -3926,6 +3944,7 @@ void splice_s(u8 *field_buf, int mutated_buf_size){
   stage_name  = tmp;
   stage_short = "splice";
   stage_max   = 1;
+
   struct queue_entry* target;
     u32 tid, split_at;
     u8* new_buf;
@@ -3969,23 +3988,29 @@ void splice_s(u8 *field_buf, int mutated_buf_size){
        the last differing byte. Bail out if the difference is just a single
        byte or so. */
 
-    locate_diffs(field_buf, new_buf, MIN(len, target->len), &f_diff, &l_diff);
+    locate_diffs(*field_buf, new_buf, MIN(len, target->len), &f_diff, &l_diff);
+    if (f_diff < 0 || l_diff < 2 || f_diff == l_diff) {
+      ck_free(new_buf);
+      
+    }
+    else{
+      /* Split somewhere between the first and last differing byte. */
 
+      split_at = f_diff + UR(l_diff - f_diff);
 
-    /* Split somewhere between the first and last differing byte. */
+      /* Do the thing. */
 
-    split_at = f_diff + UR(l_diff - f_diff);
+      len = target->len;
+      memcpy(new_buf, *field_buf, split_at);
+      // field_buf = new_buf;
 
-    /* Do the thing. */
+      ck_free(*field_buf);
+      *field_buf = ck_alloc_nozero(len);
+      memcpy(*field_buf, new_buf, len);
+      ck_free(new_buf);
+    }
 
-    len = target->len;
-    memcpy(new_buf, field_buf, split_at);
-    // field_buf = new_buf;
-
-    ck_free(field_buf);
-    field_buf = ck_alloc_nozero(len);
-    memcpy(field_buf, new_buf, len);
-    ck_free(new_buf);
+    
 
 }
 
@@ -4047,7 +4072,8 @@ u8 *mutate_enum(u8 *mutated_enum_str, int *mutated_size){
 u8 *mutate_string(char *buf, int* size){
   u8 *mutated_string = NULL;
   u32 mutated_string_cnt = 0;
-  if(rand()%2<0){
+  /*buggy*/
+  if(rand()%10 < 0){
   
     mutated_string_cnt = rand() % (1 << 16);
     mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
@@ -4061,70 +4087,88 @@ u8 *mutate_string(char *buf, int* size){
     /*use AFLNet's mutation strategy*/
     mutated_string_cnt = *size;
     mutated_string = (u8 *)ck_realloc(mutated_string, mutated_string_cnt * sizeof(u8));
-    int mutater_dispatcher = rand() % 15;
+    int mutater_dispatcher = rand() % 17;
+    if(mutated_string_cnt < 2 && (mutater_dispatcher == 4 || mutater_dispatcher == 5 || mutater_dispatcher == 7 || mutater_dispatcher == 8 || mutater_dispatcher == 10 || mutater_dispatcher == 11)){
+      mutater_dispatcher = 15;
+    }else if(mutated_string_cnt < 4 && (mutater_dispatcher == 5 || mutater_dispatcher == 8 || mutater_dispatcher == 11)){
+      mutater_dispatcher = 15;
+    }
+
     memcpy(mutated_string, buf, mutated_string_cnt);
     switch (mutater_dispatcher)
     {
       case 0:
-        bitflip1(mutated_string, mutated_string_cnt);
+        bitflip1(mutated_string, &mutated_string_cnt);
         field_mutator = BITFLIP1;
         break;
       case 1:
-        bitflip2(mutated_string, mutated_string_cnt);
+        bitflip2(mutated_string, &mutated_string_cnt);
         field_mutator = BITFLIP2;
         break;
       case 2:
-        bitflip4(mutated_string, mutated_string_cnt);
+        bitflip4(mutated_string, &mutated_string_cnt);
         field_mutator = BITFLIP4;
         break;
       case 3:
-        bitflip8(mutated_string, mutated_string_cnt);
+        bitflip8(mutated_string, &mutated_string_cnt);
         field_mutator = BITFLIP8;
         break;
       case 4:
-        bitflip16(mutated_string, mutated_string_cnt);
+        bitflip16(mutated_string, &mutated_string_cnt);
         field_mutator = BITFLIP16;
         break;
       case 5:
-        bitflip32(mutated_string, mutated_string_cnt);
+        bitflip32(mutated_string, &mutated_string_cnt);
         field_mutator = BITFLIP32;
         break;
       case 6:
-        arith8(mutated_string, mutated_string_cnt);
+        arith8(mutated_string, &mutated_string_cnt);
         field_mutator = ARITH8;
+        break;
       case 7:
-        arith16(mutated_string, mutated_string_cnt);
+        arith16(mutated_string, &mutated_string_cnt);
         field_mutator = ARITH16;
+        break;
       case 8:
-        arith32(mutated_string, mutated_string_cnt);
+        arith32(mutated_string, &mutated_string_cnt);
         field_mutator = ARITH32;
+        break;
       case 9:
-        int8(mutated_string, mutated_string_cnt);
+        int8(mutated_string, &mutated_string_cnt);
         field_mutator = INTEREST8;
+        break;
       case 10:
-        int16(mutated_string, mutated_string_cnt);
+        int16(mutated_string, &mutated_string_cnt);
         field_mutator = INTEREST16;
+        break;
       case 11:
-        int32(mutated_string, mutated_string_cnt);
+        int32(mutated_string, &mutated_string_cnt);
         field_mutator = INTEREST32;
+        break;
       case 12:
-        ext_UO(mutated_string, mutated_string_cnt);
+        ext_UO(mutated_string, &mutated_string_cnt);
         field_mutator = EXTRAS_UO;
+        break;
       case 13:
-        ext_UI(mutated_string, mutated_string_cnt);
+        ext_UI(&mutated_string, &mutated_string_cnt);
         field_mutator = EXTRAS_UI;
+        break;
       case 14:
-        ext_AO(mutated_string, mutated_string_cnt);
+        ext_AO(mutated_string, &mutated_string_cnt);
         field_mutator = EXTRAS_AO;
+        break;
       case 15:
-        havoc(mutated_string, mutated_string_cnt);
+        havoc(&mutated_string, &mutated_string_cnt);
         field_mutator = HAVOC;
+        break;
       case 16:
-        splice_s(mutated_string, mutated_string_cnt);
+        splice_s(&mutated_string, &mutated_string_cnt);
         field_mutator = SPLICE;
+        break;
       default:
         break;
     }
+    *size = mutated_string_cnt;
   }
   
 
@@ -4139,17 +4183,17 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
   u32 selected_field = 11111;
   for(u32 i = 0; i < field_count; i++)
   {
-    if(i != selected_field) {
+    // if(i == selected_field) {
    
-      in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
-      if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-      //Retrieve data from kl_messages to populate the in_buf
-      memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+    //   in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+    //   if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+    //   //Retrieve data from kl_messages to populate the in_buf
+    //   memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
 
-      in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+    //   in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
 
-    }
-    else{
+    // }
+    // else{
       if (fields[i].field_type == SEPARATOR) {
         in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
         if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
@@ -4183,7 +4227,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
       } else if (fields[i].field_type == ENUM_FIELD) {
 
         // 大概率不变enum字段，10%概率根据字典变异
-        if(rand()%10 > 0){
+        if(rand()%10 > 3){
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
           if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
           //Retrieve data from kl_messages to populate the in_buf
@@ -4208,7 +4252,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
 
       } else if (fields[i].field_type == STRING_FIELD) {
         // 处理 STRING_FIELD 类型的逻辑
-        if(rand()%10 > 0){
+        if(rand()%10 < 0){
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
           if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
           //Retrieve data from kl_messages to populate the in_buf
@@ -4242,7 +4286,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
     
 
     
-  }
+  // }
   *in_buf_size_ref = in_buf_size;
   //write to buf
   return in_buf;
@@ -8334,7 +8378,7 @@ AFLNET_REGIONS_SELECTION:;
   kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
 
   u32 in_buf_size = 0;
-  // int seq_level = 1;
+  // int seq_level = 0;
   int seq_level = rand()%2;
   int add_mess = rand()%2;
   // int add_mess = 1;
@@ -8369,14 +8413,14 @@ AFLNET_REGIONS_SELECTION:;
       it = kl_next(M2_prev);
     }  
     it2 = it;
-
+    /*debug*/
     if(seq_level){
       /*sequence level*/
       // if(M2_region_count==1) add_mess = 1;
       
       
-
-      if(add_mess>0){
+      /*debug*/
+      if(add_mess){
         /*add message unit from MUP*/
         stage_name  = "add sequence unit";
         stage_max   = M2_region_count << 3;
@@ -8679,8 +8723,8 @@ AFLNET_REGIONS_SELECTION:;
       goto abandon_entry;
     }
     else{
-      stage_name  = "syntax-aware mutation";
-      stage_short = "sam";
+      // stage_name  = "syntax-aware mutation";
+      // stage_short = "sam";
       common_fuzz_stuff(argv, out_buf, len);
       if(field_mutator!= NOT_AFL){
         new_hit_cnt = queued_paths + unique_crashes;
