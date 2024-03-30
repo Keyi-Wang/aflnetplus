@@ -440,6 +440,7 @@ u32 a_len = 0;
 extern u32 total_response_cnt;
 extern u32 succ_response_cnt;
 extern u32 count_res;
+int m_size = 0;
 
 enum{
   /* 00 */ NOT_AFL,
@@ -1533,7 +1534,7 @@ static u64 get_cur_time_us(void) {
    have slight bias. */
 
 static inline u32 UR(u32 limit) {
-
+  if(limit<=0) return 0;
   if (unlikely(!rand_cnt--)) {
 
     u32 seed[2];
@@ -3381,19 +3382,20 @@ void ext_UO(u8 *field_buf, int* mutated_buf_size){
   stage_short = "ext_UO";
   stage_cur   = 0;
   stage_max   = 1;
+  m_size = *mutated_buf_size;
  
   stage_val_type = STAGE_VAL_NONE;
 
   orig_hit_cnt = new_hit_cnt;
 
-  u32 last_len = 0;
+  int last_len = 0;
 
 
   j = rand() % extras_cnt;
 
   last_len = extras[j].len;
-  if(((*mutated_buf_size) - last_len) > 0){
-    i = rand() % ((*mutated_buf_size) - last_len);
+  if(m_size > last_len){
+    i = rand() % (m_size - last_len);
     stage_cur_byte = i;
 
     memcpy(field_buf + i, extras[j].data, last_len);
@@ -3402,7 +3404,7 @@ void ext_UO(u8 *field_buf, int* mutated_buf_size){
 
 }
 
-void ext_UI(u8 **field_buf, int *mutated_buf_size){
+void ext_UI(u8 **field_buf, int* mutated_buf_size){
   stage_name  = "user extras (insert)";
   stage_short = "ext_UI";
   stage_cur   = 0;
@@ -3929,6 +3931,7 @@ void havoc(u8 **field_buf, int* mutated_buf_size){
           }
 
       }
+      // *mutated_buf_size = temp_len;
 
     // }
 
@@ -4016,8 +4019,8 @@ void splice_s(u8 **field_buf, int* mutated_buf_size){
 
 
 
-u8 *mutate_integer(u8 *mutated_int_str, u8 *int_str, int* size){
-
+u8 *mutate_integer(u8 *int_str, int* size){
+  u8 *mutated_int_str = NULL;
   int num = atoi(int_str);
   if (num == 0 && int_str[0] != '0') {
     printf("Error: Failed to convert string to integer.\n");
@@ -4052,12 +4055,23 @@ u8 *mutate_integer(u8 *mutated_int_str, u8 *int_str, int* size){
       num--;
     }
   }
-  int length = strlen(mutated_int_str);
-  if (num < 0) {
+
+  int length = 0;
+  int num_cpy = num;
+  if(num_cpy<0){
     length++;
+    num_cpy = -num_cpy;
   }
-  *size = length;
+  while(num_cpy/10>0){
+    length++;
+    num_cpy = num_cpy / 10;
+  }
+  length++;
+  mutated_int_str = (u8 *) ck_realloc(mutated_int_str,(length+1) * sizeof(u8));
   sprintf(mutated_int_str, "%d", num);
+
+  *size = length;
+  
   return mutated_int_str;
 
 }
@@ -4071,7 +4085,7 @@ u8 *mutate_enum(u8 *mutated_enum_str, int *mutated_size){
 
 u8 *mutate_string(char *buf, int* size){
   u8 *mutated_string = NULL;
-  u32 mutated_string_cnt = 0;
+  int mutated_string_cnt = 0;
   /*buggy*/
   if(rand()%10 < 0){
   
@@ -4180,21 +4194,25 @@ u8 *mutate_string(char *buf, int* size){
 u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u32* in_buf_size_ref){
   //mutate fields
   u32 in_buf_size = 0;
-  // u32 selected_field = rand() % field_count;
-  u32 selected_field = 11111;
+  u32 selected_field = 0;
+  if(field_count>1){
+    selected_field = (rand() % (field_count/2)) * 2;
+  }
+
   for(u32 i = 0; i < field_count; i++)
   {
-    // if(i == selected_field) {
+    if((fields[i].end_byte - fields[i].start_byte + 1)<=0) continue;
+    if(i != selected_field) {
    
-    //   in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
-    //   if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-    //   //Retrieve data from kl_messages to populate the in_buf
-    //   memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+      in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+      if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+      //Retrieve data from kl_messages to populate the in_buf
+      memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
 
-    //   in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+      in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
 
-    // }
-    // else{
+    }
+    else{
       if (fields[i].field_type == SEPARATOR) {
         in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
         if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
@@ -4202,30 +4220,33 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
 
         in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+      }
+      // } else if (fields[i].field_type == INT_FIELD) {
+      //   stage_name = "INT";
+      // //  in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+      // //   if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+      // //   //Retrieve data from kl_messages to populate the in_buf
+      // //   memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
 
-      } else if (fields[i].field_type == INT_FIELD) {
-      //  in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
+      // //   in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
+
+      //   u8 *temp_buf = NULL;
+      //   temp_buf = (u8 *) ck_realloc (temp_buf, fields[i].end_byte - fields[i].start_byte + 2);
+      //   memcpy(temp_buf, &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+      //   temp_buf[fields[i].end_byte - fields[i].start_byte + 1] = '\0';
+      //   int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
+      //   u8 *mutated_int_str_ptr = mutate_integer(temp_buf, &mutated_size);
+
+      //   in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + mutated_size);
       //   if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
       //   //Retrieve data from kl_messages to populate the in_buf
-      //   memcpy(&in_buf[in_buf_size], &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
+      //   memcpy(&in_buf[in_buf_size], mutated_int_str_ptr, mutated_size);
+      //   ck_free(temp_buf);
+      //   ck_free(mutated_int_str_ptr);
+      //   in_buf_size += mutated_size;
 
-      //   in_buf_size += fields[i].end_byte - fields[i].start_byte + 1;
-
-        u8 temp_buf[fields[i].end_byte - fields[i].start_byte + 2];
-        memcpy(temp_buf, &mdata[fields[i].start_byte], fields[i].end_byte - fields[i].start_byte + 1);
-        temp_buf[fields[i].end_byte - fields[i].start_byte + 1] = '\0';
-        int mutated_size = fields[i].end_byte - fields[i].start_byte + 1;
-        u8 mutated_int_str[16];
-        u8 *mutated_int_str_ptr = mutate_integer(mutated_int_str, temp_buf, &mutated_size);
-
-        in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + mutated_size);
-        if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
-        //Retrieve data from kl_messages to populate the in_buf
-        memcpy(&in_buf[in_buf_size], mutated_int_str, mutated_size);
-
-        in_buf_size += mutated_size;
-
-      } else if (fields[i].field_type == ENUM_FIELD) {
+      // } 
+      else if (fields[i].field_type == ENUM_FIELD) {
 
         // 大概率不变enum字段，10%概率根据字典变异
         if(rand()%10 > 3){
@@ -4251,7 +4272,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
         
 
 
-      } else if (fields[i].field_type == STRING_FIELD) {
+      } else if (fields[i].field_type == STRING_FIELD||fields[i].field_type == INT_FIELD) {
         // 处理 STRING_FIELD 类型的逻辑
         if(rand()%10 < 0){
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
@@ -4287,7 +4308,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
     
 
     
-  // }
+  }
   *in_buf_size_ref = in_buf_size;
   //write to buf
   return in_buf;
