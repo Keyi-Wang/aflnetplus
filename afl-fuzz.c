@@ -11826,6 +11826,7 @@ int main(int argc, char** argv) {
         } else if (!strcmp(optarg, "SMTP")) {
           extract_requests = &extract_requests_smtp;
           extract_response_codes = &extract_response_codes_smtp;
+          extract_fields = &extract_fields_smtp;
           terminator = malloc(2 * sizeof(char));
           terminator[0] = 0x0D;
           terminator[1] = 0x0A;

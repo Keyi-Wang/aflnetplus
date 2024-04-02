@@ -115,6 +115,7 @@ region_t* extract_requests_NTP(unsigned char* buf, unsigned int buf_size, unsign
 region_t* extract_requests_SNMP(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref);
 extern region_t* (*extract_requests)(unsigned char* buf, unsigned int buf_size, unsigned int* region_count_ref);
 
+fields_t* extract_fields_smtp(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
 fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
 fields_t* extract_fields_ftp(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
 extern fields_t* (*extract_fields)(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref) ;
