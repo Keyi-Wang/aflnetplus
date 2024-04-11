@@ -1218,6 +1218,12 @@ unsigned int* extract_response_codes_tftp(unsigned char* buf, unsigned int buf_s
 
       if (message_code == 0) break;
 
+      /*aflnetplus: calculate response count*/
+      if(count_res){
+        total_response_cnt++;
+        if(message_code >= 100 && message_code < 300) succ_response_cnt++;
+      }
+
       state_count++;
       state_sequence = (unsigned int *)ck_realloc(state_sequence, state_count * sizeof(unsigned int));
       state_sequence[state_count - 1] = message_code;
@@ -1540,6 +1546,12 @@ unsigned int* extract_response_codes_smtp(unsigned char* buf, unsigned int buf_s
 
       if (message_code == 0) break;
 
+      /*aflnetplus: calculate response count*/
+      if(count_res){
+        total_response_cnt++;
+        if(message_code >= 100 && message_code < 300) succ_response_cnt++;
+      }
+      
       state_count++;
       state_sequence = (unsigned int *)ck_realloc(state_sequence, state_count * sizeof(unsigned int));
       state_sequence[state_count - 1] = message_code;
