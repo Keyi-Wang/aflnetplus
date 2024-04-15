@@ -462,7 +462,7 @@ enum{
   /* 16 */ HAVOC,
   /* 17 */ SPLICE
 };
-
+int seq_level = 1;
 u8 field_mutator = NOT_AFL;
 static void maybe_add_auto(u8* mem, u32 len);
 static u32 choose_block_len(u32 limit);
@@ -8401,7 +8401,11 @@ AFLNET_REGIONS_SELECTION:;
 
   u32 in_buf_size = 0;
   // int seq_level = 0;
-  int seq_level = rand()%2;
+  // int seq_level = rand()%2;
+  if((seq_level==1) && ((get_cur_time()-start_time) > 3600000 )){
+    seq_level = 0;
+  }
+
   int add_mess = rand()%2;
   // int add_mess = 1;
 /* syntax_aware_mode */
