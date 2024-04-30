@@ -462,7 +462,7 @@ enum{
   /* 16 */ HAVOC,
   /* 17 */ SPLICE
 };
-int seq_level = 1;
+int seq_level = 0;
 u8 field_mutator = NOT_AFL;
 static void maybe_add_auto(u8* mem, u32 len);
 static u32 choose_block_len(u32 limit);
