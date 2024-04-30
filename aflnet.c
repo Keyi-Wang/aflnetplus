@@ -1599,7 +1599,7 @@ unsigned int* extract_response_codes_ssh(unsigned char* buf, unsigned int buf_si
         /*aflnetplus: calculate response count*/
         if(count_res){
           total_response_cnt++;
-          if(message_code >= 100 && message_code < 300) succ_response_cnt++;
+          succ_response_cnt++;
         }
 
         state_count++;

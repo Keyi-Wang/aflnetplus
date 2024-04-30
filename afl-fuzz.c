@@ -8401,10 +8401,10 @@ AFLNET_REGIONS_SELECTION:;
 
   u32 in_buf_size = 0;
   // int seq_level = 0;
-  // int seq_level = rand()%2;
-  if((seq_level==1) && ((get_cur_time()-start_time) > 3600000 )){
-    seq_level = 0;
-  }
+  seq_level = rand()%2;
+  // if((seq_level==1) && ((get_cur_time()-start_time) > 3600000 )){
+  //   seq_level = 0;
+  // }
 
   int add_mess = rand()%2;
   // int add_mess = 1;
