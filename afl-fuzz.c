@@ -8401,7 +8401,7 @@ AFLNET_REGIONS_SELECTION:;
 
   u32 in_buf_size = 0;
   // int seq_level = 0;
-  seq_level = rand()%2;
+  seq_level = rand()%3;
   // if((seq_level==1) && ((get_cur_time()-start_time) > 3600000 )){
   //   seq_level = 0;
   // }
@@ -8440,7 +8440,7 @@ AFLNET_REGIONS_SELECTION:;
     }  
     it2 = it;
     /*debug*/
-    if(seq_level){
+    if(seq_level==2){
       /*sequence level*/
       // if(M2_region_count==1) add_mess = 1;
       
@@ -8616,7 +8616,7 @@ AFLNET_REGIONS_SELECTION:;
       
 
     }
-    else{
+    else if(seq_level==1){
       /*unit level*/
       stage_name  = "syntax-aware mutation";
       stage_max   = M2_region_count;
@@ -8675,6 +8675,109 @@ AFLNET_REGIONS_SELECTION:;
     
     
 
+    else{
+      //havoc_mutation strategy
+      while (it != M2_next) {
+      in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
+      if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
+      //Retrieve data from kl_messages to populate the in_buf
+      memcpy(&in_buf[in_buf_size], kl_val(it)->mdata, kl_val(it)->msize);
+
+      in_buf_size += kl_val(it)->msize;
+      it = kl_next(it);
+      }
+      orig_in = in_buf;
+
+      out_buf = ck_alloc_nozero(in_buf_size);
+      memcpy(out_buf, in_buf, in_buf_size);
+
+      //Update len to keep the correct size of the buffer being mutated
+      len = in_buf_size;
+
+      //Save the len for later use
+      M2_len = len;
+
+      /*********************
+       * PERFORMANCE SCORE *
+       *********************/
+
+      orig_perf = perf_score = calculate_score(queue_cur);
+      int havoc_dispatcher = rand()%17;
+      // int mutated_string_cnt = len;
+      switch (havoc_dispatcher)
+      {
+        case 0:
+          bitflip1(out_buf, &len);
+          field_mutator = BITFLIP1;
+          break;
+        case 1:
+          bitflip2(out_buf, &len);
+          field_mutator = BITFLIP2;
+          break;
+        case 2:
+          bitflip4(out_buf, &len);
+          field_mutator = BITFLIP4;
+          break;
+        case 3:
+          bitflip8(out_buf, &len);
+          field_mutator = BITFLIP8;
+          break;
+        case 4:
+          bitflip16(out_buf, &len);
+          field_mutator = BITFLIP16;
+          break;
+        case 5:
+          bitflip32(out_buf, &len);
+          field_mutator = BITFLIP32;
+          break;
+        case 6:
+          arith8(out_buf, &len);
+          field_mutator = ARITH8;
+          break;
+        case 7:
+          arith16(out_buf, &len);
+          field_mutator = ARITH16;
+          break;
+        case 8:
+          arith32(out_buf, &len);
+          field_mutator = ARITH32;
+          break;
+        case 9:
+          int8(out_buf, &len);
+          field_mutator = INTEREST8;
+          break;
+        case 10:
+          int16(out_buf, &len);
+          field_mutator = INTEREST16;
+          break;
+        case 11:
+          int32(out_buf, &len);
+          field_mutator = INTEREST32;
+          break;
+        case 12:
+          ext_UO(out_buf, &len);
+          field_mutator = EXTRAS_UO;
+          break;
+        case 13:
+          ext_UI(&out_buf, &len);
+          field_mutator = EXTRAS_UI;
+          break;
+        case 14:
+          ext_AO(out_buf, &len);
+          field_mutator = EXTRAS_AO;
+          break;
+        case 15:
+          havoc(&out_buf, &len);
+          field_mutator = HAVOC;
+          break;
+        case 16:
+          splice_s(&out_buf, &len);
+          field_mutator = SPLICE;
+          break;
+        default:
+          break;
+      }
+    }
 
   }
   else{
@@ -8736,7 +8839,7 @@ AFLNET_REGIONS_SELECTION:;
  
   // First try 
   if(syntax_aware_mode){
-    if(seq_level){
+    if(seq_level==2){
       if(add_mess){
         stage_name  = "add sequence unit";
         stage_short = "add";
@@ -8748,7 +8851,7 @@ AFLNET_REGIONS_SELECTION:;
       common_fuzz_stuff(argv, out_buf, len);
       goto abandon_entry;
     }
-    else{
+    else if(seq_level==1){
       // stage_name  = "syntax-aware mutation";
       // stage_short = "sam";
       common_fuzz_stuff(argv, out_buf, len);
@@ -8758,6 +8861,12 @@ AFLNET_REGIONS_SELECTION:;
         stage_cycles[field_mutator] += stage_max;
         field_mutator = NOT_AFL;
       }
+      goto abandon_entry;
+    }
+    else{
+      stage_name  = "havoc stage";
+      stage_short = "havoc_s";
+      common_fuzz_stuff(argv, out_buf, len);
       goto abandon_entry;
     }
   }
