@@ -8703,80 +8703,87 @@ AFLNET_REGIONS_SELECTION:;
 
       orig_perf = perf_score = calculate_score(queue_cur);
       int havoc_dispatcher = rand()%17;
-      // int mutated_string_cnt = len;
+      int mutated_string_cnt;
+      mutated_string_cnt = in_buf_size;
+      if(mutated_string_cnt < 2 && (havoc_dispatcher == 4 || havoc_dispatcher == 5 || havoc_dispatcher == 7 || havoc_dispatcher == 8 || havoc_dispatcher == 10 || havoc_dispatcher == 11)){
+        havoc_dispatcher = 15;
+      }else if(mutated_string_cnt < 4 && (havoc_dispatcher == 5 || havoc_dispatcher == 8 || havoc_dispatcher == 11)){
+        havoc_dispatcher = 15;
+      }
       switch (havoc_dispatcher)
       {
         case 0:
-          bitflip1(out_buf, &len);
+          bitflip1(out_buf, &mutated_string_cnt);
           field_mutator = BITFLIP1;
           break;
         case 1:
-          bitflip2(out_buf, &len);
+          bitflip2(out_buf, &mutated_string_cnt);
           field_mutator = BITFLIP2;
           break;
         case 2:
-          bitflip4(out_buf, &len);
+          bitflip4(out_buf, &mutated_string_cnt);
           field_mutator = BITFLIP4;
           break;
         case 3:
-          bitflip8(out_buf, &len);
+          bitflip8(out_buf, &mutated_string_cnt);
           field_mutator = BITFLIP8;
           break;
         case 4:
-          bitflip16(out_buf, &len);
+          bitflip16(out_buf, &mutated_string_cnt);
           field_mutator = BITFLIP16;
           break;
         case 5:
-          bitflip32(out_buf, &len);
+          bitflip32(out_buf, &mutated_string_cnt);
           field_mutator = BITFLIP32;
           break;
         case 6:
-          arith8(out_buf, &len);
+          arith8(out_buf, &mutated_string_cnt);
           field_mutator = ARITH8;
           break;
         case 7:
-          arith16(out_buf, &len);
+          arith16(out_buf, &mutated_string_cnt);
           field_mutator = ARITH16;
           break;
         case 8:
-          arith32(out_buf, &len);
+          arith32(out_buf, &mutated_string_cnt);
           field_mutator = ARITH32;
           break;
         case 9:
-          int8(out_buf, &len);
+          int8(out_buf, &mutated_string_cnt);
           field_mutator = INTEREST8;
           break;
         case 10:
-          int16(out_buf, &len);
+          int16(out_buf, &mutated_string_cnt);
           field_mutator = INTEREST16;
           break;
         case 11:
-          int32(out_buf, &len);
+          int32(out_buf, &mutated_string_cnt);
           field_mutator = INTEREST32;
           break;
         case 12:
-          ext_UO(out_buf, &len);
+          ext_UO(out_buf, &mutated_string_cnt);
           field_mutator = EXTRAS_UO;
           break;
         case 13:
-          ext_UI(&out_buf, &len);
+          ext_UI(&out_buf, &mutated_string_cnt);
           field_mutator = EXTRAS_UI;
           break;
         case 14:
-          ext_AO(out_buf, &len);
+          ext_AO(out_buf, &mutated_string_cnt);
           field_mutator = EXTRAS_AO;
           break;
         case 15:
-          havoc(&out_buf, &len);
+          havoc(&out_buf, &mutated_string_cnt);
           field_mutator = HAVOC;
           break;
         case 16:
-          splice_s(&out_buf, &len);
+          splice_s(&out_buf, &mutated_string_cnt);
           field_mutator = SPLICE;
           break;
         default:
           break;
       }
+      len = mutated_string_cnt;
     }
 
   }
