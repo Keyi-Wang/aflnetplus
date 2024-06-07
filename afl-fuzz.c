@@ -38,6 +38,7 @@
 #define _FILE_OFFSET_BITS 64
 #define MAX_STR_LEN 256
 #define MAX_STR_NUM 1000
+#define PACK_HAVOC_FUZZ_NUM 1000
 
 #include "config.h"
 #include "types.h"
@@ -431,8 +432,8 @@ char *terminator;
 s32 len, fd, temp_len, i, j;
 u8  *out_buf, *orig_in, *ex_tmp, *eff_map = 0;
 u64 havoc_queued,  orig_hit_cnt, new_hit_cnt;
-u32 splice_cycle = 0, perf_score = 100, orig_perf, prev_cksum, eff_cnt = 1, M2_len;
-
+u32 splice_cycle = 0, perf_score = 100, orig_perf, prev_cksum, eff_cnt = 1, M2_len, mutation_method = 0, loop_cnt = 1;
+u8 hnb_g = 0;
 u8  ret_val = 1, doing_det = 0;
 
 u8  a_collect[MAX_AUTO_EXTRA];
@@ -568,7 +569,7 @@ void init_relation_table(){
 
       trace_bits_focus_i = (u8*)malloc(MAP_SIZE * sizeof(u8));
       trace_bits_focus_i_except_j = (u8*)malloc(MAP_SIZE * sizeof(u8));
-      // debug_relation_table();
+      debug_relation_table();
       ACTF("print init relation table..");
 }
 
@@ -4248,7 +4249,7 @@ u8 *mutate_fields(fields_t *fields, u32 field_count, char *mdata, u8 *in_buf ,u3
       // } 
       else if (fields[i].field_type == ENUM_FIELD) {
 
-        // 大概率不变enum字段，10%概率根据字典变异
+        // 大概率不变enum字段，40%概率根据字典变异
         if(rand()%10 > 3){
           in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + fields[i].end_byte - fields[i].start_byte + 1);
           if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
@@ -5618,6 +5619,7 @@ static u8 calibrate_case(char** argv, struct queue_entry* q, u8* use_mem,
     if (q->exec_cksum != cksum) {
 
       u8 hnb = has_new_bits(virgin_bits);
+      hnb_g = hnb;
       if (hnb > new_bits) new_bits = hnb;
 
       if (q->exec_cksum) {
@@ -5988,7 +5990,7 @@ static void perform_dry_run(char** argv) {
         relation_parse(argv,kl_messages,i,(u32)1);
         // debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log",i);
         // delete_kl_messages(kl_messages);
-        // ACTF("send_over_network_focus_i success");
+        ACTF("send_over_network_focus_i success");
         for(u32 j=0;j<i;j++){
 
           kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j,i);
@@ -6001,7 +6003,7 @@ static void perform_dry_run(char** argv) {
 
           relation_parse(argv,kl_messages_except_j,i,(u32)0);
 
-          // ACTF("send_over_network_focus_i_except_j success");
+          ACTF("send_over_network_focus_i_except_j success");
           delete_kl_messages(kl_messages_except_j);
           // ACTF("delete_kl_messages success");
           
@@ -6016,9 +6018,9 @@ static void perform_dry_run(char** argv) {
       }
 
 
-      // ACTF("parse relation success.");
+      ACTF("parse relation success.");
     }
-    
+    debug_relation_table();
 
     /* AFLNet delete the kl_messages */
     delete_kl_messages(kl_messages);
@@ -6179,7 +6181,7 @@ static void perform_dry_run(char** argv) {
 
   free(trace_bits_focus_i);
   free(trace_bits_focus_i_except_j);
-  // debug_relation_table();
+  debug_relation_table();
 
   if (cal_failures) {
 
@@ -6432,10 +6434,11 @@ static u8 save_if_interesting(char** argv, void* mem, u32 len, u8 fault) {
        future fuzzing, etc. */
 
     if (!(hnb = has_new_bits(virgin_bits))) {
+      hnb_g = hnb;
       if (crash_mode) total_crashes++;
       return 0;
     }
-
+    hnb_g = hnb;
 #ifndef SIMPLE_FILES
 
     fn = alloc_printf("%s/queue/id:%06u,%s", out_dir, queued_paths,
@@ -8401,15 +8404,48 @@ AFLNET_REGIONS_SELECTION:;
 
   u32 in_buf_size = 0;
   // int seq_level = 0;
-  seq_level = rand()%3;
+  
   // if((seq_level==1) && ((get_cur_time()-start_time) > 3600000 )){
   //   seq_level = 0;
   // }
 
-  int add_mess = rand()%2;
+  
   // int add_mess = 1;
 /* syntax_aware_mode */
   if(syntax_aware_mode){   
+    mutation:
+    int add_mess = rand()%2;
+
+    
+
+    for(;loop_cnt > 0;loop_cnt--){
+
+      if(mutation_method == 1 && loop_cnt < PACK_HAVOC_FUZZ_NUM){
+        splicing_with = -1;
+        ck_free(in_buf);
+        in_buf = NULL;
+        ck_free(out_buf);
+        ck_free(eff_map);
+        in_buf_size = 0;
+      }else if(mutation_method == 1 && loop_cnt == PACK_HAVOC_FUZZ_NUM){
+        // splicing_with = -1;
+        // ck_free(in_buf);
+        // in_buf = NULL;
+        // ck_free(out_buf);
+        // ck_free(eff_map);
+        // in_buf_size = 0;
+        delete_kl_messages(kl_messages);
+        queue_cur = queue;
+        current_entry = 0;
+        while(queue_cur!=queue_top){
+          current_entry++;
+          queue_cur = queue_cur->next;
+        }
+        // ACTF("current queue_cur:%s",queue_cur->fname);
+        kl_messages = construct_kl_messages(queue_cur->fname, queue_cur->regions, queue_cur->region_count);
+      }
+
+    
     //TODO: implement syntax_aware_mode.
     /*****************************************************************************************
      * we have 2 mutation levels, one is sequence level and the other is unit level.
@@ -8422,28 +8458,35 @@ AFLNET_REGIONS_SELECTION:;
     kliter_t(lms) *it2;
     M2_prev = NULL;
     M2_next = kl_end(kl_messages);
-      
-    for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
-      if (cnt == M2_start_region_ID - 1) {
-        M2_prev = it;
+
+    if(mutation_method==0){   // set M2 region
+      seq_level = rand()%3;
+      for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+        if (cnt == M2_start_region_ID - 1) {
+          M2_prev = it;
+        }
+        if (cnt == M2_start_region_ID + M2_region_count) {
+          M2_next = it;
+        }
+        cnt++;
       }
-      if (cnt == M2_start_region_ID + M2_region_count) {
-        M2_next = it;
-      }
-      cnt++;
+    }else{
+      seq_level = rand()%2; // pack/havoc
     }
 
+    // set iterator for mutated region
     if (M2_prev == NULL) {
       it = kl_begin(kl_messages);
     } else {
       it = kl_next(M2_prev);
     }  
     it2 = it;
+    
     /*debug*/
     if(seq_level==2){
       /*sequence level*/
       // if(M2_region_count==1) add_mess = 1;
-      
+      // ACTF("sequence111");
       
       /*debug*/
       if(add_mess){
@@ -8617,6 +8660,7 @@ AFLNET_REGIONS_SELECTION:;
 
     }
     else if(seq_level==1){
+      // ACTF("packet111");
       /*unit level*/
       stage_name  = "syntax-aware mutation";
       stage_max   = M2_region_count;
@@ -8677,6 +8721,7 @@ AFLNET_REGIONS_SELECTION:;
 
     else{
       //havoc_mutation strategy
+      // ACTF("hacov stage 111");
       while (it != M2_next) {
       in_buf = (u8 *) ck_realloc (in_buf, in_buf_size + kl_val(it)->msize);
       if (!in_buf) PFATAL("AFLNet cannot allocate memory for in_buf");
@@ -8786,6 +8831,71 @@ AFLNET_REGIONS_SELECTION:;
       len = mutated_string_cnt;
     }
 
+    if(seq_level==2){
+      if(add_mess){
+        stage_name  = "add sequence unit";
+        stage_short = "add";
+      }
+      else{
+        stage_name  = "delete sequence unit";
+        stage_short = "del";
+      }
+      common_fuzz_stuff(argv, out_buf, len);
+      if(hnb_g == 2){
+        
+        //goto packet/havoc for N times;
+        mutation_method = 1;
+        loop_cnt = PACK_HAVOC_FUZZ_NUM;
+        ACTF("sequence_cov++");
+        // goto mutation;
+        goto abandon_entry;
+
+      }
+      else{
+        if(loop_cnt<=0){
+          loop_cnt = 1;
+          mutation_method = 0;
+        }
+        if(mutation_method==0){
+          goto abandon_entry;
+        }
+      }
+      
+      
+    }
+    else if(seq_level==1){
+      // stage_name  = "syntax-aware mutation";
+      // stage_short = "sam";
+      common_fuzz_stuff(argv, out_buf, len);
+      if(field_mutator!= NOT_AFL){
+        new_hit_cnt = queued_paths + unique_crashes;
+        stage_finds[field_mutator]  += new_hit_cnt - orig_hit_cnt;
+        stage_cycles[field_mutator] += stage_max;
+        field_mutator = NOT_AFL;
+      }
+      if(loop_cnt <= 1){
+        loop_cnt = 1;
+        mutation_method = 0;
+      }
+      
+      if(mutation_method==0){
+        goto abandon_entry;
+      }
+    }
+    else{
+      stage_name  = "havoc stage";
+      stage_short = "havoc_s";
+      common_fuzz_stuff(argv, out_buf, len);
+      if(loop_cnt <= 1){
+        loop_cnt = 1;
+        mutation_method = 0;
+      }
+      if(mutation_method==0){
+        goto abandon_entry;
+      }
+    }
+
+    }//end for-loop
   }
   else{
     //remain previous code.
@@ -8845,38 +8955,9 @@ AFLNET_REGIONS_SELECTION:;
   
  
   // First try 
-  if(syntax_aware_mode){
-    if(seq_level==2){
-      if(add_mess){
-        stage_name  = "add sequence unit";
-        stage_short = "add";
-      }
-      else{
-        stage_name  = "delete sequence unit";
-        stage_short = "del";
-      }
-      common_fuzz_stuff(argv, out_buf, len);
-      goto abandon_entry;
-    }
-    else if(seq_level==1){
-      // stage_name  = "syntax-aware mutation";
-      // stage_short = "sam";
-      common_fuzz_stuff(argv, out_buf, len);
-      if(field_mutator!= NOT_AFL){
-        new_hit_cnt = queued_paths + unique_crashes;
-        stage_finds[field_mutator]  += new_hit_cnt - orig_hit_cnt;
-        stage_cycles[field_mutator] += stage_max;
-        field_mutator = NOT_AFL;
-      }
-      goto abandon_entry;
-    }
-    else{
-      stage_name  = "havoc stage";
-      stage_short = "havoc_s";
-      common_fuzz_stuff(argv, out_buf, len);
-      goto abandon_entry;
-    }
-  }
+  // if(syntax_aware_mode){
+    
+  // }
   //   // ACTF("here1");
     
   
@@ -11965,6 +12046,7 @@ int main(int argc, char** argv) {
         } else if (!strcmp(optarg, "SIP")) {
           extract_requests = &extract_requests_sip;
           extract_response_codes = &extract_response_codes_sip;
+          extract_fields = &extract_fields_sip;
           terminator = malloc(2 * sizeof(char));
           terminator[0] = 0x0D;
           terminator[1] = 0x0A;
@@ -12148,7 +12230,7 @@ int main(int argc, char** argv) {
   setup_dirs_fds();
   init_message_pool(&message_unit_pool, 50);
   read_testcases();
-  // debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
+  debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
   load_auto();
 
   pivot_inputs();
@@ -12239,7 +12321,7 @@ int main(int argc, char** argv) {
           }
         }
       }
-
+      // if(hnb_g==2) queue_cur = queue_top;
       skipped_fuzz = fuzz_one(use_argv);
 
       if (!stop_soon && sync_id && !skipped_fuzz) {

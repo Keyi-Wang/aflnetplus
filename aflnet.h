@@ -119,6 +119,8 @@ fields_t* extract_fields_smtp(unsigned char* buf, unsigned int buf_size, unsigne
 fields_t* extract_fields_rtsp(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
 fields_t* extract_fields_ftp(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
 fields_t* extract_fields_ssh(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
+fields_t* extract_fields_sip(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
+fields_t* extract_fields_daap(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref);
 extern fields_t* (*extract_fields)(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref) ;
 
 // Network communication functions
