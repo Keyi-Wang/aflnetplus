@@ -8413,7 +8413,7 @@ AFLNET_REGIONS_SELECTION:;
   // int add_mess = 1;
 /* syntax_aware_mode */
   if(syntax_aware_mode){   
-    mutation:
+    // mutation:
     int add_mess = rand()%2;
 
     
