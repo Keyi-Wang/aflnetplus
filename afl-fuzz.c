@@ -504,7 +504,7 @@ void read_strings_from_file(const u8 *filename, StringList *str_list) {
 }
 
 void debug_dic_strings(StringList *str_list){
-  FILE *file = fopen("/home/keyi/aflnetplus/dic_strings.log","w");
+  FILE *file = fopen("/home/ubuntu/dic_strings.log","w");
   if (!file) {
     fprintf(stderr, "Cannot open file %s\n", file);
     exit(1);
@@ -4489,7 +4489,7 @@ static void load_extras(u8* dir) {
   }
 
   ACTF("Loading extra dictionary from '%s' (level %u)...", dir, dict_level);
-  read_strings_from_file(dir, &str_list);
+
   d = opendir(dir);
 
   if (!d) {
@@ -5619,7 +5619,7 @@ static u8 calibrate_case(char** argv, struct queue_entry* q, u8* use_mem,
     if (q->exec_cksum != cksum) {
 
       u8 hnb = has_new_bits(virgin_bits);
-      hnb_g = hnb;
+      // hnb_g = hnb;
       if (hnb > new_bits) new_bits = hnb;
 
       if (q->exec_cksum) {
@@ -8841,6 +8841,7 @@ AFLNET_REGIONS_SELECTION:;
         stage_short = "del";
       }
       common_fuzz_stuff(argv, out_buf, len);
+      ACTF("%d",hnb_g);
       if(hnb_g == 2){
         
         //goto packet/havoc for N times;
@@ -8852,7 +8853,7 @@ AFLNET_REGIONS_SELECTION:;
 
       }
       else{
-        if(loop_cnt<=0){
+        if(loop_cnt <= 1){
           loop_cnt = 1;
           mutation_method = 0;
         }
@@ -8867,19 +8868,33 @@ AFLNET_REGIONS_SELECTION:;
       // stage_name  = "syntax-aware mutation";
       // stage_short = "sam";
       common_fuzz_stuff(argv, out_buf, len);
-      if(field_mutator!= NOT_AFL){
-        new_hit_cnt = queued_paths + unique_crashes;
-        stage_finds[field_mutator]  += new_hit_cnt - orig_hit_cnt;
-        stage_cycles[field_mutator] += stage_max;
-        field_mutator = NOT_AFL;
-      }
-      if(loop_cnt <= 1){
-        loop_cnt = 1;
-        mutation_method = 0;
-      }
       
-      if(mutation_method==0){
+
+      if(field_mutator == NOT_AFL && hnb_g == 2){
+        
+        //goto packet/havoc for N times;
+        mutation_method = 1;
+        loop_cnt = PACK_HAVOC_FUZZ_NUM;
+        // ACTF("sequence_cov++");
+        // goto mutation;
         goto abandon_entry;
+
+      }
+      else{
+        if(field_mutator!= NOT_AFL){
+          new_hit_cnt = queued_paths + unique_crashes;
+          stage_finds[field_mutator]  += new_hit_cnt - orig_hit_cnt;
+          stage_cycles[field_mutator] += stage_max;
+          field_mutator = NOT_AFL;
+        }
+        if(loop_cnt <= 1){
+          loop_cnt = 1;
+          mutation_method = 0;
+        }
+        
+        if(mutation_method==0){
+          goto abandon_entry;
+        }
       }
     }
     else{
@@ -11779,6 +11794,7 @@ int main(int argc, char** argv) {
   u64 prev_queued = 0;
   u32 sync_interval_cnt = 0, seek_to;
   u8  *extras_dir = 0;
+  u8  *cmd_dir = 0;
   u8  mem_limit_given = 0;
   u8  exit_1 = !!getenv("AFL_BENCH_JUST_ONE");
   //char** use_argv;
@@ -11793,7 +11809,7 @@ int main(int argc, char** argv) {
   gettimeofday(&tv, &tz);
   srandom(tv.tv_sec ^ tv.tv_usec ^ getpid());
 
-  while ((opt = getopt(argc, argv, "+i:o:f:m:t:T:dnCB:S:M:x:QN:D:W:w:e:P:KEq:s:RFc:l:Y")) > 0)
+  while ((opt = getopt(argc, argv, "+i:o:f:m:t:T:dnCB:S:M:x:G:QN:D:W:w:e:P:KEq:s:RFc:l:Y")) > 0)
 
     switch (opt) {
 
@@ -11852,6 +11868,12 @@ int main(int argc, char** argv) {
         if (extras_dir) FATAL("Multiple -x options not supported");
         extras_dir = optarg;
         break;
+
+      case 'G': /* aflnetplus dictionary */
+
+        if (cmd_dir) FATAL("Multiple -X options not supported");
+        cmd_dir = optarg;
+        break;      
 
       case 't': { /* timeout */
 
@@ -12236,6 +12258,7 @@ int main(int argc, char** argv) {
   pivot_inputs();
 
   if (extras_dir) load_extras(extras_dir);
+  if (cmd_dir) read_strings_from_file(cmd_dir, &str_list);
 
   if (!timeout_given) find_timeout();
 
