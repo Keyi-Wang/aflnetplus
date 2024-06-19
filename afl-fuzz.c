@@ -4109,6 +4109,7 @@ u8 *mutate_string(char *buf, int* size){
     }else if(mutated_string_cnt < 4 && (mutater_dispatcher == 5 || mutater_dispatcher == 8 || mutater_dispatcher == 11)){
       mutater_dispatcher = 15;
     }
+    if (extras_cnt + a_extras_cnt == 0) mutater_dispatcher = 15;
 
     memcpy(mutated_string, buf, mutated_string_cnt);
     switch (mutater_dispatcher)
