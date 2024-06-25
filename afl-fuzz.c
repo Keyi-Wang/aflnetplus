@@ -4109,7 +4109,7 @@ u8 *mutate_string(char *buf, int* size){
     }else if(mutated_string_cnt < 4 && (mutater_dispatcher == 5 || mutater_dispatcher == 8 || mutater_dispatcher == 11)){
       mutater_dispatcher = 15;
     }
-    if (extras_cnt == 0 && (mutater_dispatcher >=12 && mutater_dispatcher =< 14)) mutater_dispatcher = 15; //extra_UI/UO/AI
+    if (extras_cnt == 0 && (mutater_dispatcher >=12 && mutater_dispatcher <= 14)) mutater_dispatcher = 15; //extra_UI/UO/AI
 
     memcpy(mutated_string, buf, mutated_string_cnt);
     switch (mutater_dispatcher)
@@ -8756,7 +8756,7 @@ AFLNET_REGIONS_SELECTION:;
       }else if(mutated_string_cnt < 4 && (havoc_dispatcher == 5 || havoc_dispatcher == 8 || havoc_dispatcher == 11)){
         havoc_dispatcher = 15;
       }
-      if (extras_cnt == 0 && (mutater_dispatcher >=12 && mutater_dispatcher =< 14)) mutater_dispatcher = 15; //extra_UI/UO/AI
+      if (extras_cnt == 0 && (havoc_dispatcher >=12 && havoc_dispatcher <= 14)) havoc_dispatcher = 15; //extra_UI/UO/AI
       switch (havoc_dispatcher)
       {
         case 0:
