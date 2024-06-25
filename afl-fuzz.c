@@ -2962,6 +2962,15 @@ bool msg_is_isolated(u32 *m_ids,int i){
   return 1;
 }
 
+message_t *get_message_unit_rand(message_unit_pool_t *pool, char *m_data){
+  message_t *new_msg;
+  int i = rand()%(pool->count);
+  new_msg = pool->messages[i];
+  // debug_id_from_MUP("/home/keyi/aflnetplus/id_from_MUP.log",id_for_m_data, m_data, new_msg->id, new_msg->mdata);
+  return new_msg; // 如果随机数超出了权重之和，则返回最后一个元素的索引
+}
+
+
 message_t *get_message_unit(message_unit_pool_t *pool, char *m_data){
   message_t *new_msg;
   u32 id_for_m_data = get_id_from_message_unit_pool(pool, m_data);
