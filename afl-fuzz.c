@@ -426,6 +426,7 @@ region_t* (*extract_requests)(unsigned char* buf, unsigned int buf_size, unsigne
 
 //aflnetplus: extract fields
 fields_t* (*extract_fields)(unsigned char* buf, unsigned int buf_size, unsigned int* field_count_ref) = NULL;
+u32 get_id_from_message_unit_pool(message_unit_pool_t *pool, char *m_data);
 
 //aflnetplus: for message unit pool
 char *terminator;
@@ -544,7 +545,6 @@ void destroy_ipsm()
 
 /*aflnetplus: init ralation table*/
 void init_relation_table(){
-  /*把这快部分提前初始化，在再加个free的部分*/
     // ACTF("init relation table..");
     relation_table = (u8**)malloc(message_t_id * sizeof(u8*));
     if (relation_table == NULL) {
@@ -571,6 +571,46 @@ void init_relation_table(){
       trace_bits_focus_i_except_j = (u8*)malloc(MAP_SIZE * sizeof(u8));
       debug_relation_table();
       ACTF("print init relation table..");
+}
+
+void expand_RT(u32 old_message_t_id){
+  relation_table = (u8**)realloc(relation_table, message_t_id * sizeof(u8*));
+    if (relation_table == NULL) {
+      fprintf(stderr, "Relation table memory allocation failed\n");
+      return 1;
+    }
+
+    // 分配内存给每行
+    for (u32 i = 0; i < old_message_t_id; i++) {
+        relation_table[i] = (u8*)realloc(relation_table[i], message_t_id * sizeof(u8));
+        if (relation_table[i] == NULL) {
+            fprintf(stderr, "Relation table memory allocation failed\n");
+            // 释放之前分配的内存
+            for (int j = 0; j < i; j++) {
+                free(relation_table[j]);
+            }
+            free(relation_table);
+            return 1;
+        }
+    }
+
+    for (u32 i = old_message_t_id; i < message_t_id; i++) {
+        relation_table[i] = (u8*)malloc(message_t_id * sizeof(u8));
+        if (relation_table[i] == NULL) {
+            fprintf(stderr, "Relation table memory allocation failed\n");
+            // 释放之前分配的内存
+            for (int j = 0; j < i; j++) {
+                free(relation_table[j]);
+            }
+            free(relation_table);
+            return 1;
+        }
+        memset(relation_table[i], 0, message_t_id * sizeof(u8));
+    }
+
+
+    debug_relation_table();
+    ACTF("print init relation table..");
 }
 
 void debug_relation_table(){
@@ -605,12 +645,19 @@ void init_message_pool(message_unit_pool_t *pool, int capacity) {
 void add_message_to_pool(message_unit_pool_t *pool, message_t *message) {
   if(pool->messages==NULL) FATAL("pool->message==NULL!");
   if(message==NULL) FATAL("message==NULL!");
+
+  // If the message unit is already in MUP, do nothing
+  if(get_id_from_message_unit_pool(pool, message->mdata) != UINT32_MAX){
+    return;
+  }
+
   if (pool->count >= pool->capacity) {
     // 扩展池容量
     pool->capacity *= 2;
     pool->messages = realloc(pool->messages, pool->capacity * sizeof(message_t*));
   }
   pool->messages[pool->count++] = message;
+  message_t_id++;
 }
 
 message_t *get_message_from_pool(message_unit_pool_t *pool, int index) {
@@ -1449,7 +1496,7 @@ int send_over_network_focus_i(klist_t(lms) *kl_message, u32 i, u32 flag)
     // ACTF("send 1");
     //retrieve server response
     u32 prev_buf_size = response_buf_size;
-    // ACTF("send 2");
+    // ACTF("send 2,response_buf:%s,response_buf_size:%d",response_buf,response_buf_size);
     if (net_recv(sockfd, timeout, poll_wait_msecs, &response_buf, &response_buf_size)) {
       // ACTF("send 3");
       goto HANDLE_RESPONSES;
@@ -2751,7 +2798,7 @@ void load_message_unit_pool(message_unit_pool_t *pool, u8* fname, u32 len, char*
     message->id = message_t_id;
     // ACTF("memcpy success..., mdata:'%s",message->mdata);
     add_message_to_pool(&message_unit_pool, message);
-    message_t_id++;
+    
     total_read -= (terminator_pos - buffer) + term_len;
     memmove(buffer, terminator_pos + term_len, total_read);
     msg_start = buffer;
@@ -6000,7 +6047,7 @@ static void perform_dry_run(char** argv) {
         relation_parse(argv,kl_messages,i,(u32)1);
         // debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log",i);
         // delete_kl_messages(kl_messages);
-        ACTF("send_over_network_focus_i success");
+        // ACTF("send_over_network_focus_i success");
         for(u32 j=0;j<i;j++){
 
           kl_messages_except_j = construct_kl_messages_except_j(q->fname, q->regions, q->region_count,j,i);
@@ -6013,7 +6060,7 @@ static void perform_dry_run(char** argv) {
 
           relation_parse(argv,kl_messages_except_j,i,(u32)0);
 
-          ACTF("send_over_network_focus_i_except_j success");
+          // ACTF("send_over_network_focus_i_except_j success");
           delete_kl_messages(kl_messages_except_j);
           // ACTF("delete_kl_messages success");
           
@@ -6189,8 +6236,7 @@ static void perform_dry_run(char** argv) {
 
   }
 
-  free(trace_bits_focus_i);
-  free(trace_bits_focus_i_except_j);
+
   debug_relation_table();
 
   if (cal_failures) {
@@ -6470,6 +6516,87 @@ static u8 save_if_interesting(char** argv, void* mem, u32 len, u8 fault) {
     /* save the seed to file for replaying */
     u8 *fn_replay = alloc_printf("%s/replayable-queue/%s", out_dir, basename(queue_top->fname));
     save_kl_messages_to_file(kl_messages, fn_replay, 1, messages_sent);
+    
+    if(syntax_aware_mode){
+      u32 old_message_t_id = message_t_id;
+      // Save the interesting seeds to MUP (breaking message sequence into packets)
+      kliter_t(lms) *it;
+      for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+        message_t *message = malloc(sizeof(message_t));
+        message->mdata = malloc(kl_val(it)->msize);
+        // message->mdata[kl_val(it)->msize]='\0';
+        memcpy(message->mdata, kl_val(it)->mdata, kl_val(it)->msize);
+        message->msize = kl_val(it)->msize;
+        message->id = message_t_id;
+        // ACTF("memcpy success..., mdata:'%s",message->mdata);
+        add_message_to_pool(&message_unit_pool, message);
+
+      }
+
+      // Parse the relation table
+      /* First expand RT if MUP expanded*/
+      if(old_message_t_id != message_t_id){
+        expand_RT(old_message_t_id);
+      }
+
+      /*aflnetplus parse relation*/
+      int i = 1;
+      for(it = kl_begin(kl_messages); it != kl_end(kl_messages) && i < messages_sent ; it = kl_next(it)){
+        if(it == kl_begin(kl_messages)){
+          continue;
+        }
+        // ACTF("before relation_parse");
+        // for (it = kl_begin(kl_messages); it != kl_end(kl_messages); it = kl_next(it)) {
+            // printf("kl_messages content: %s\nmsize:%d\n", kl_val(it)->mdata, kl_val(it)->msize);
+        // }
+        relation_parse(argv,kl_messages,i,(u32)1);
+        
+        // debug_trace_bits_focus_i("/home/keyi/aflnetplus/trace_bits_focus_i_logfile.log",i);
+        // delete_kl_messages(kl_messages);
+        // ACTF("send_over_network_focus_i success");
+
+        // printf("kl_val(it)->mdata: %s\n", kl_val(it)->mdata);
+        u32 i_id = get_id_from_message_unit_pool(&message_unit_pool,kl_val(it)->mdata);
+        // printf("i_id:%d\n",i_id);
+        for(u32 j=0;j<i;j++){
+          
+          kl_messages_except_j = delete_j_form_kl_messages(kl_messages,j);
+          kliter_t(lms) *it_j;
+          int count = 0;
+          for(it_j = kl_begin(kl_messages); count < j; it_j = kl_next(it_j)){
+            count++;
+          }
+          u32 j_id = get_id_from_message_unit_pool(&message_unit_pool,kl_val(it_j)->mdata);
+          // printf("j_id:%d\n",j_id);
+          /*debug kl_messages_except_j*/
+          // it = kl_begin(kl_messages_except_j);
+          // for (it = kl_begin(kl_messages_except_j); it != kl_end(kl_messages_except_j); it = kl_next(it)) {
+          //   printf("kl_messages_except_j content: %s\n", kl_val(it)->mdata);
+          // }
+
+          relation_parse(argv,kl_messages_except_j,i,(u32)0);
+
+          // ACTF("send_over_network_focus_i_except_j success");
+          delete_kl_messages(kl_messages_except_j);
+          // ACTF("delete_kl_messages success");
+          
+          // debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log",i,j);
+          if(i_has_new_bits()){
+            
+            update_relation(relation_table, j_id, i_id); /* i relies on j*/
+          }
+
+        }
+        i++;
+    
+      }
+
+
+      // ACTF("parse relation success.");
+    }
+
+    
+
     ck_free(fn_replay);
 
     if (hnb == 2) {
@@ -12467,6 +12594,8 @@ stop_fuzzing:
 
   fclose(plot_file);
   free_message_pool(&message_unit_pool);
+  free(trace_bits_focus_i);
+  free(trace_bits_focus_i_except_j);
   destroy_queue();
   destroy_extras();
   ck_free(target_path);

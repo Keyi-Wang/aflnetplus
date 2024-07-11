@@ -2321,6 +2321,33 @@ klist_t(lms) *construct_kl_messages_except_j(u8* fname, region_t *regions, u32 r
   return kl_messages;
 }
 
+klist_t(lms) *delete_j_form_kl_messages(klist_t(lms) *kl_messages, u32 j)
+{
+  kliter_t(lms) *it;
+  klist_t(lms) *kl_messages_j = kl_init(lms);
+  u32 i = 0;
+
+  for (it = kl_next(kl_begin(kl_messages)); it != kl_end(kl_messages); it = kl_next(it)) {
+    if(i==j) {
+      i++;
+      continue;
+    }
+    //Create a new message
+    message_t *m = kl_val(it);
+    message_t *new_m = (message_t *) ck_alloc(sizeof(message_t));
+    new_m->mdata = (char *) ck_alloc(m->msize);
+    new_m->msize = m->msize;
+    memcpy(new_m->mdata,m->mdata,new_m->msize);
+
+    
+    //Insert the message to the linked list
+    *kl_pushp(lms, kl_messages_j) = new_m;
+    i++;
+  }
+
+  return kl_messages_j;
+}
+
 
 void delete_kl_messages(klist_t(lms) *kl_messages)
 {
