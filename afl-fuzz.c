@@ -248,6 +248,7 @@ static s32 cpu_aff = -1;       	      /* Selected CPU core                */
 static FILE* plot_file;               /* Gnuplot output file              */
 
 message_unit_pool_t message_unit_pool; /* Message Unit Pool */
+cmd_message_unit_pool_t cmd_message_unit_pool; /* Message Unit Pool --cmd version */
 
 struct queue_entry {
 
@@ -389,6 +390,7 @@ u32 fuzzed_map_qentries = 0;
 u32 max_seed_region_count = 0;
 u32 local_port;		/* TCP/UDP port number to use as source */
 u32 message_t_id = 0;
+u32 cmd_id = 0;
 
 /* flags */
 u8 use_net = 0;
@@ -640,6 +642,95 @@ void init_message_pool(message_unit_pool_t *pool, int capacity) {
   if(pool->messages==NULL) FATAL("malloc for message_pool failed!");
   pool->count = 0;
   pool->capacity = capacity;
+}
+
+char* get_cmd_from_message(message_t *message){
+  /* Simple version, the first field is regarded as cmd */
+  char *m_data = message->mdata;
+  char *mem;
+  unsigned int mem_size = 1024;
+  unsigned int mem_count = 0;
+  mem = (char *)ck_alloc(mem_size);
+  while(mem_count < message->msize){
+    memcpy(&mem[mem_count], m_data + mem_count, 1);
+    mem_count++;
+    if(mem_count>=1 && mem[mem_count]== 0x20){
+      mem[mem_count] = '\0';
+      return mem;
+    }
+  }
+}
+
+int cmd_in_message_unit_pool(cmd_message_unit_pool_t *pool, char *cmd){
+  int cnt = 0;
+  while(cnt < pool->count){
+    if(strcmp(cmd, pool->cmds[cnt])==0){
+      return cnt;
+    }
+    cnt++;
+  }
+  return -1;
+}
+
+int msg_in_message_unit_pool(cmd_message_unit_pool_t *pool, int cmd_index, message_t *message){
+  int cnt = 0;
+  while(cnt < pool->cmds[cmd_index]->count){
+    if(strcmp(message->mdata, pool->cmds[cmd_index]->messages[cnt]->mdata)==0){
+      return cnt;
+    }
+    cnt++;
+  }
+  return -1;
+}
+
+void add_message_to_pool_by_cmd(cmd_message_unit_pool_t *pool, message_t *message){
+  if(pool->cmds==NULL) FATAL("pool->cmds==NULL!");
+  if(message==NULL) FATAL("message==NULL!");
+
+  /*extract cmd from message*/
+  char *cmd;
+  cmd = get_cmd_from_message(message);
+  int cmd_in_pool, msg_in_cmd;
+  cmd_in_pool = cmd_in_message_unit_pool(pool, cmd);
+  if(cmd_in_pool < 0){
+    // add_cmd_into_message_unit_pool();
+    if (pool->count >= pool->capacity) {
+    // 扩展pool容量
+    pool->capacity *= 2;
+    pool->cmds = realloc(pool->cmds, pool->capacity * sizeof(cmd_t*));
+    }
+    cmd_t *new_cmd;
+    new_cmd = ck_realloc(new_cmd,sizeof(cmd_t*));
+    new_cmd->cmd_name = cmd;
+    new_cmd->count = 1;
+    new_cmd->messages[new_cmd->count-1] = message;
+    new_cmd->capacity = 1;
+    pool->cmds[pool->count++] = new_cmd;
+    cmd_id++;
+  }
+  
+  if(msg_in_cmd < 0){
+    cmd_t *selected_cmd;
+
+    if(cmd_in_pool<0){
+      cmd_in_pool = pool->count-1;
+    }
+    
+    selected_cmd = pool->cmds[cmd_in_pool];
+
+    msg_in_cmd = msg_in_message_unit_pool(pool, cmd_in_pool, message);
+    if(msg_in_cmd < 0){
+      if (selected_cmd->count >= selected_cmd->capacity) {
+      // 扩展selected_cmd容量
+      selected_cmd->capacity *= 2;
+      selected_cmd->messages = realloc(selected_cmd->messages, selected_cmd->capacity * sizeof(message_t*));
+      }
+      selected_cmd->messages[selected_cmd->count++] = message;
+      message_t_id++;
+    }
+  }
+
+  
 }
 
 void add_message_to_pool(message_unit_pool_t *pool, message_t *message) {

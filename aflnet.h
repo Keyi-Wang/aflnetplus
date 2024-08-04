@@ -53,6 +53,20 @@ typedef struct {
   int capacity;         // 池的容量
 } message_unit_pool_t;
 
+/*cmd version: message unit pool*/
+typedef struct {
+  message_t **messages; // 指向 message_t 指针的指针
+  char *cmd_name ;
+  int count;            // 当前存储的消息数量
+  int capacity;         // 容量
+}cmd_t;
+
+typedef struct {
+  cmd_t **cmds; // 指向 cmd_t 指针的指针
+  int count;            // 当前存储的cmd数量
+  int capacity;         // 池的容量
+} cmd_message_unit_pool_t;
+
 enum {
   /* 00 */ PRO_TCP,
   /* 01 */ PRO_UDP
