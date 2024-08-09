@@ -55,6 +55,7 @@ typedef struct {
 
 /*cmd version: message unit pool*/
 typedef struct {
+  u32 id; /*cmd id*/
   message_t **messages; // 指向 message_t 指针的指针
   char *cmd_name ;
   int count;            // 当前存储的消息数量
