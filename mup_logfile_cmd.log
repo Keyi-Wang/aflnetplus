@@ -1,0 +1,160 @@
+Message Unit Pool contains 4 cmds:
+cmd 0: cmd_name = DESCRIBE, include 7 messages: Message 0: Size = 158, Data = DESCRIBE rtsp://127.0.0.1:8554/aacAudioTest RTSP/1.0
+CSeq: 2
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Accept: application/sdp
+
+Message 0: Size = 158, Data = DESCRIBE rtsp://127.0.0.1:8554/ac3AudioTest RTSP/1.0
+CSeq: 2
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Accept: application/sdp
+
+Message 3: Size = 162, Data = DESCRIBE rtsp://127.0.0.1:8554/matroskaFileTest RTSP/1.0
+CSeq: 2
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Accept: application/sdp
+
+Message 7: Size = 158, Data = DESCRIBE rtsp://127.0.0.1:8554/mp3AudioTest RTSP/1.0
+CSeq: 2
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Accept: application/sdp
+
+Message 11: Size = 168, Data = DESCRIBE rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest RTSP/1.0
+CSeq: 2
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Accept: application/sdp
+
+Message 16: Size = 158, Data = DESCRIBE rtsp://127.0.0.1:8554/wavAudioTest RTSP/1.0
+CSeq: 2
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Accept: application/sdp
+
+Message 20: Size = 158, Data = DESCRIBE rtsp://127.0.0.1:8554/webmFileTest RTSP/1.0
+CSeq: 2
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Accept: application/sdp
+
+
+cmd 1: cmd_name = SETUP, include 10 messages: Message 0: Size = 189, Data = SETUP rtsp://127.0.0.1:8554/aacAudioTest/track1 RTSP/1.0
+CSeq: 3
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=38784-38785
+
+Message 1: Size = 189, Data = SETUP rtsp://127.0.0.1:8554/ac3AudioTest/track1 RTSP/1.0
+CSeq: 3
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=33900-33901
+
+Message 4: Size = 193, Data = SETUP rtsp://127.0.0.1:8554/matroskaFileTest/track1 RTSP/1.0
+CSeq: 3
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=37216-37217
+
+Message 5: Size = 212, Data = SETUP rtsp://127.0.0.1:8554/matroskaFileTest/track2 RTSP/1.0
+CSeq: 4
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=49022-49023
+Session: 000022B8
+
+Message 8: Size = 189, Data = SETUP rtsp://127.0.0.1:8554/mp3AudioTest/track1 RTSP/1.0
+CSeq: 3
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=43712-43713
+
+Message 12: Size = 199, Data = SETUP rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/track1 RTSP/1.0
+CSeq: 3
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=50778-50779
+
+Message 13: Size = 218, Data = SETUP rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/track2 RTSP/1.0
+CSeq: 4
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=45546-45547
+Session: 000022B8
+
+Message 17: Size = 189, Data = SETUP rtsp://127.0.0.1:8554/wavAudioTest/track1 RTSP/1.0
+CSeq: 3
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=37952-37953
+
+Message 21: Size = 189, Data = SETUP rtsp://127.0.0.1:8554/webmFileTest/track1 RTSP/1.0
+CSeq: 3
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=50494-50495
+
+Message 22: Size = 208, Data = SETUP rtsp://127.0.0.1:8554/webmFileTest/track2 RTSP/1.0
+CSeq: 4
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Transport: RTP/AVP;unicast;client_port=60854-60855
+Session: 000022B8
+
+
+cmd 2: cmd_name = PLAY, include 7 messages: Message 0: Size = 168, Data = PLAY rtsp://127.0.0.1:8554/aacAudioTest/ RTSP/1.0
+CSeq: 4
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+Range: npt=0.000-
+
+Message 2: Size = 168, Data = PLAY rtsp://127.0.0.1:8554/ac3AudioTest/ RTSP/1.0
+CSeq: 4
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+Range: npt=0.000-
+
+Message 6: Size = 172, Data = PLAY rtsp://127.0.0.1:8554/matroskaFileTest/ RTSP/1.0
+CSeq: 5
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+Range: npt=0.000-
+
+Message 9: Size = 168, Data = PLAY rtsp://127.0.0.1:8554/mp3AudioTest/ RTSP/1.0
+CSeq: 4
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+Range: npt=0.000-
+
+Message 14: Size = 178, Data = PLAY rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/ RTSP/1.0
+CSeq: 5
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+Range: npt=0.000-
+
+Message 18: Size = 168, Data = PLAY rtsp://127.0.0.1:8554/wavAudioTest/ RTSP/1.0
+CSeq: 4
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+Range: npt=0.000-
+
+Message 23: Size = 168, Data = PLAY rtsp://127.0.0.1:8554/webmFileTest/ RTSP/1.0
+CSeq: 5
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+Range: npt=0.000-
+
+
+cmd 3: cmd_name = TEARDOWN, include 5 messages: Message 7: Size = 157, Data = TEARDOWN rtsp://127.0.0.1:8554/matroskaFileTest/ RTSP/1.0
+CSeq: 6
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+
+Message 10: Size = 153, Data = TEARDOWN rtsp://127.0.0.1:8554/mp3AudioTest/ RTSP/1.0
+CSeq: 5
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+
+Message 15: Size = 163, Data = TEARDOWN rtsp://127.0.0.1:8554/mpeg1or2AudioVideoTest/ RTSP/1.0
+CSeq: 6
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+
+Message 19: Size = 153, Data = TEARDOWN rtsp://127.0.0.1:8554/wavAudioTest/ RTSP/1.0
+CSeq: 5
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+
+Message 24: Size = 153, Data = TEARDOWN rtsp://127.0.0.1:8554/webmFileTest/ RTSP/1.0
+CSeq: 6
+User-Agent: ./testRTSPClient (LIVE555 Streaming Media v2018.08.28)
+Session: 000022B8
+
+

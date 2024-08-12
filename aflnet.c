@@ -2335,9 +2335,12 @@ klist_t(lms) *delete_j_form_kl_messages(klist_t(lms) *kl_messages, u32 j)
     //Create a new message
     message_t *m = kl_val(it);
     message_t *new_m = (message_t *) ck_alloc(sizeof(message_t));
-    new_m->mdata = (char *) ck_alloc(m->msize);
+    if(new_m == NULL)PFATAL("Unable to allocate memory region to store new message");
+    new_m->mdata = (char *) ck_alloc(m->msize+1);
+    if(new_m->mdata == NULL) PFATAL("Unable to allocate memory region to store new message");
     new_m->msize = m->msize;
     memcpy(new_m->mdata,m->mdata,new_m->msize);
+    new_m->mdata[m->msize] = '\n';
 
     
     //Insert the message to the linked list
