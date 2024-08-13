@@ -766,7 +766,7 @@ char* get_cmd_from_message(message_t *message){
     }
     memcpy(&mem[mem_count], m_data + mem_count, 1);
     
-    if(mem_count>=1 && mem[mem_count] == ' '){
+    if(mem_count>=1 && (mem[mem_count] == ' ' || mem[mem_count] == '\r')){
       mem[mem_count] = '\0';
       return mem;
     }
@@ -791,7 +791,7 @@ char* get_cmd_from_m_data(char *m_data, int m_size){
     }
     memcpy(&mem[mem_count], m_data + mem_count, 1);
     
-    if(mem_count>=1 && mem[mem_count] == ' '){
+    if(mem_count>=1 && (mem[mem_count] == ' ' || mem[mem_count] == '\r')){
       mem[mem_count] = '\0';
       return mem;
     }
