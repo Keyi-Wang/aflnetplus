@@ -6423,20 +6423,20 @@ static void perform_dry_run(char** argv) {
           if(i_has_new_bits()){
             u32 i_cmd_id, j_cmd_id;
             char *i_cmd, *j_cmd;
-            const char del[2] = " ";
+            // const char del[2] = " ";
 
             it = kl_begin(kl_messages);
             for(u32 cnt = 0; cnt < i; cnt++){
               it = kl_next(it);
             }
-            i_cmd = strtok(kl_val(it)->mdata, del);
+            i_cmd = get_cmd_from_m_data(kl_val(it)->mdata, kl_val(it)->msize);
             // printf("i_cmd:%s\n",i_cmd);
 
             it = kl_begin(kl_messages_except_j);
             for(u32 cnt = 0; cnt < j; cnt++){
               it = kl_next(it);
             }
-            j_cmd = strtok(kl_val(it)->mdata, del);
+            j_cmd = get_cmd_from_m_data(kl_val(it)->mdata, kl_val(it)->msize);
             // printf("j_cmd:%s\n",j_cmd);
 
             i_cmd_id = cmd_in_message_unit_pool(&cmd_message_unit_pool, i_cmd);
