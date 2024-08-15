@@ -648,6 +648,39 @@ void init_relation_table_cmd(){
       ACTF("print init relation table..");
 }
 
+void pre_defined_relation_table_cmd(){
+    // ACTF("init relation table..");
+    relation_table = (u8**)malloc(str_list.count * sizeof(u8*));
+    if (relation_table == NULL) {
+      fprintf(stderr, "Relation table memory allocation failed\n");
+      return 1;
+    }
+
+    // 分配内存给每行
+    for (u32 i = 0; i < str_list.count; i++) {
+        relation_table[i] = (u8*)calloc(str_list.count, sizeof(u8));
+        if (relation_table[i] == NULL) {
+            fprintf(stderr, "Relation table memory allocation failed\n");
+            // 释放之前分配的内存
+            for (int j = 0; j < i; j++) {
+                free(relation_table[j]);
+            }
+            free(relation_table);
+            return 1;
+        }
+        // memset(relation_table[i], 0, cmd_id * sizeof(u8));
+    }
+
+    //assignment
+    relation_table = {{},
+    {}};
+
+    trace_bits_focus_i = (u8*)malloc(MAP_SIZE * sizeof(u8));
+    trace_bits_focus_i_except_j = (u8*)malloc(MAP_SIZE * sizeof(u8));
+    debug_relation_table_cmd(str_list.count);
+    ACTF("print init relation table..");
+}
+
 void expand_RT(u32 old_message_t_id){
   relation_table = (u8**)realloc(relation_table, message_t_id * sizeof(u8*));
     if (relation_table == NULL) {
@@ -747,6 +780,28 @@ void init_message_pool_by_cmd(cmd_message_unit_pool_t *pool, int capacity) {
   if(pool->cmds==NULL) FATAL("malloc for message_pool_cmd failed!");
   pool->count = 0;
   pool->capacity = capacity;
+}
+
+void pre_defined_message_pool_by_cmd(cmd_message_unit_pool_t *pool) {
+  pool->cmds = malloc(str_list.count * sizeof(cmd_t*));
+  if(pool->cmds==NULL) FATAL("malloc for message_pool_cmd failed!");
+  pool->count = str_list.count;
+  pool->capacity = str_list.count;
+  char *cmd;
+  for(int i = 0; i < str_list.count; i++){
+    cmd = str_list.strs[i];
+    cmd_t *new_cmd;
+    new_cmd = ck_alloc(sizeof(cmd_t));
+    if(new_cmd==NULL) FATAL("malloc failed!");
+    new_cmd->id = cmd_id++;
+    new_cmd->cmd_name = cmd;
+    new_cmd->count = 0;
+    new_cmd->capacity = DEFAULT_POOL_CAPACITY;
+    new_cmd->messages = ck_alloc(new_cmd->capacity * sizeof(message_t*));
+    pool->cmds[pool->count++] = new_cmd;
+  }
+  // printf("cmd:%s\n",cmd);
+
 }
 
 char* get_cmd_from_message(message_t *message){
@@ -6970,8 +7025,10 @@ static u8 save_if_interesting(char** argv, void* mem, u32 len, u8 fault) {
           
           // debug_trace_bits_focus_i_except_j("/home/keyi/aflnetplus/trace_bits_focus_i_except_j_logfile.log",i,j);
           if(i_has_new_bits()){
+            if((j_id != UINT32_MAX) && (i_id != UINT32_MAX)){
+              update_relation(relation_table, j_id, i_id); /* i relies on j*/
+            }
             
-            update_relation(relation_table, j_id, i_id); /* i relies on j*/
           }
 
         }
@@ -12776,8 +12833,11 @@ int main(int argc, char** argv) {
   setup_ipsm();
 
   setup_dirs_fds();
+
+  if (cmd_dir) read_strings_from_file(cmd_dir, &str_list);
   // init_message_pool(&message_unit_pool, 50);
-  init_message_pool_by_cmd(&cmd_message_unit_pool, 50);
+  // init_message_pool_by_cmd(&cmd_message_unit_pool, 50);
+  pre_defined_message_pool_by_cmd(&cmd_message_unit_pool);
   read_testcases();
   // debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
   debug_message_pool_cmd(&cmd_message_unit_pool, "/home/keyi/aflnetplus/mup_logfile_cmd.log");
@@ -12786,7 +12846,7 @@ int main(int argc, char** argv) {
   pivot_inputs();
 
   if (extras_dir) load_extras(extras_dir);
-  if (cmd_dir) read_strings_from_file(cmd_dir, &str_list);
+  
 
   if (!timeout_given) find_timeout();
 
