@@ -760,7 +760,7 @@ void expand_RT_cmd(int old_cmd_id) {
         // memset(relation_table[i], 0, cmd_id * sizeof(u8));
     }
 
-    debug_relation_table_cmd(new_cmd_id);
+    // debug_relation_table_cmd(new_cmd_id);
     // ACTF("print init relation table..");
 }
 
@@ -7027,6 +7027,7 @@ static u8 save_if_interesting(char** argv, void* mem, u32 len, u8 fault) {
           if(i_has_new_bits()){
             if((j_id != UINT32_MAX) && (i_id != UINT32_MAX)){
               update_relation(relation_table, j_id, i_id); /* i relies on j*/
+              debug_relation_table_cmd(str_list.count);
             }
             
           }
