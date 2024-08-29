@@ -12859,8 +12859,8 @@ int main(int argc, char** argv) {
   pre_defined_message_pool_by_cmd(&cmd_message_unit_pool);
   if(syntax_aware_mode) {
     // init_relation_table();
-    // init_relation_table_cmd();
-    pre_defined_relation_table_cmd();
+    init_relation_table_cmd();
+    // pre_defined_relation_table_cmd();
   }
   debug_message_pool_cmd(&cmd_message_unit_pool, "/home/ubuntu/aflnet/mup_logfile_cmd.log");
   read_testcases();
