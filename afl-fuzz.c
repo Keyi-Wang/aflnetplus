@@ -12856,16 +12856,17 @@ int main(int argc, char** argv) {
   if (cmd_dir) read_strings_from_file(cmd_dir, &str_list);
   // init_message_pool(&message_unit_pool, 50);
   // init_message_pool_by_cmd(&cmd_message_unit_pool, 50);
-  pre_defined_message_pool_by_cmd(&cmd_message_unit_pool);
+ 
   if(syntax_aware_mode) {
     // init_relation_table();
+    pre_defined_message_pool_by_cmd(&cmd_message_unit_pool);
     init_relation_table_cmd();
     // pre_defined_relation_table_cmd();
   }
-  debug_message_pool_cmd(&cmd_message_unit_pool, "/home/ubuntu/aflnet/mup_logfile_cmd.log");
+  // debug_message_pool_cmd(&cmd_message_unit_pool, "/home/ubuntu/aflnet/mup_logfile_cmd.log");
   read_testcases();
   // debug_print_message_pool_to_file(&message_unit_pool, "/home/keyi/aflnetplus/mup_logfile.log");
-  debug_message_pool_cmd(&cmd_message_unit_pool, "/home/ubuntu/aflnet/mup_logfile_cmd.log");
+  // debug_message_pool_cmd(&cmd_message_unit_pool, "/home/ubuntu/aflnet/mup_logfile_cmd.log");
   load_auto();
 
   pivot_inputs();
